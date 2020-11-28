@@ -16,6 +16,7 @@ public class DataBase {
         return answers;
     }
 
+
     public void setTheAnswers(String a, String b, String c, String d){
         answers = new ArrayList<String>();
         answers.add(a);

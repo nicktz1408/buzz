@@ -157,7 +157,7 @@ public class Main {
         if (answer.equals("yes")) {
             while (currentRound < numberOfRounds) {
                 System.out.println("Round "+(currentRound+1));
-                System.out.println("Which type of game do you want to play? Σωστή Απάντηση or Ποντάρισμα?");
+                System.out.println("Which type of game do you want to play? Σωστή Απάντηση or Ποντάρισμα?[Σωστή Απάντηση / Ποντάρισμα]");
 
                 String answer1 = input.nextLine();
                 while(currentQuetions < numberOfQuetions) {
@@ -183,6 +183,7 @@ public class Main {
                             playerPoints += 1000;
                         } else {
                             System.out.println("Your answer is incorrect");
+                            System.out.println("The correct answer is "+"'"+game.get(randomQuetions.get(4*currentRound+currentQuetions)).getTheRightAnswer()+"'"+"\n");
                         }
 
 
@@ -214,6 +215,7 @@ public class Main {
                             playerPoints += betPoints;
                         } else {
                             System.out.println("Your answer is incorrect");
+                            System.out.println("The correct answer is "+"'"+game.get(randomQuetions.get(4*currentRound+currentQuetions)).getTheRightAnswer()+"'"+"\n");
                             playerPoints -= betPoints;
                         }
                         currentRound++;

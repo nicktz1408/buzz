@@ -2,14 +2,17 @@ import java.util.*;
 
 
 public class Main {
-
+    /**
+     * The entry point of our command-line application
+     * @param args potential arguments provided to the execution command of our appliation on the terminal
+     */
     public static void main(String[] args) {
         final int numberOfRounds = 5;
         final int numberOfQuetions = 4;
         int currentQuetions = 0;
         int currentRound = 0;
 
-
+        // Initialize the questions
         DataBase database1 = new DataBase();
         DataBase database2 = new DataBase();
         DataBase database3 = new DataBase();
@@ -33,6 +36,7 @@ public class Main {
 
         HashMap<Integer, DataBase> game = new HashMap<>();
 
+        // Setup the questions
         database1.setTheQuetionCategory("Ποιός αιχμαλώτισε τον Πατριάρχη Ιεροσολύμων?", "Hostory");
         database1.setTheAnswers("Αντίχοος Β'","Βαρτάσης","Ρατισλάβος","Χοσρόης");
         database1.setTheRightAnswer("Χοσρόης");
@@ -133,6 +137,7 @@ public class Main {
         database20.setTheRightAnswer("Proxima Centauri");
         game.put(20, database20);
 
+        // Shuffle the question order
         ArrayList<Integer> randomQuetions = new ArrayList<>();
         for(int i=0;i<game.size();i++){
             randomQuetions.add(i+1);
@@ -142,7 +147,7 @@ public class Main {
 
 
 
-
+        // Start the game
         int playerPoints = 0;
 
 

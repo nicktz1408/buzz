@@ -1,6 +1,5 @@
 import java.util.*;
 
-
 public class Main {
     /**
      * The entry point of our command-line application
@@ -137,7 +136,7 @@ public class Main {
         database20.setTheRightAnswer("Proxima Centauri");
         game.put(20, database20);
 
-        // Shuffle the question order
+        // Shuffle the questions order
         ArrayList<Integer> randomQuetions = new ArrayList<>();
         for(int i=0;i<game.size();i++){
             randomQuetions.add(i+1);
@@ -159,13 +158,14 @@ public class Main {
         Scanner input = new Scanner(System.in);
         String answer = input.nextLine();
 
+        // Main logic of the game
         if (answer.equals("yes")) {
-            while (currentRound < numberOfRounds) {
+            while (currentRound < numberOfRounds) { // counting of the # of rounds
                 System.out.println("Round "+(currentRound+1));
                 System.out.println("Which type of game do you want to play? Σωστή Απάντηση or Ποντάρισμα?[Σωστή Απάντηση / Ποντάρισμα]");
 
                 String answer1 = input.nextLine();
-                while(currentQuetions < numberOfQuetions) {
+                while(currentQuetions < numberOfQuetions) { // counting the # of questions for each round
                     if (answer1.equals("Σωστή Απάντηση")) {
                         int i = 1;
                         boolean play = true;

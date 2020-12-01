@@ -8,7 +8,6 @@ public class Main {
     public static void main(String[] args) {
         final int numberOfRounds = 5;
         final int numberOfQuetions = 4;
-        int currentQuetions = 0;
         int currentRound = 0;
 
         // Initialize the questions
@@ -165,30 +164,33 @@ public class Main {
                 System.out.println("Which type of game do you want to play? Σωστή Απάντηση or Ποντάρισμα?[Σωστή Απάντηση / Ποντάρισμα]");
 
                 String answer1 = input.nextLine();
-                while(currentQuetions < numberOfQuetions) { // counting the # of questions for each round
+
+                int currentQuetions = 1;
+
+                while(currentQuetions <= numberOfQuetions) { // counting the # of questions for each round
                     if (answer1.equals("Σωστή Απάντηση")) {
                         int i = 1;
                         boolean play = true;
                         //Random rand = new Random();
-                        System.out.println("Quetion #" + (currentQuetions+1) + ": ");
+                        System.out.println("Quetion #" + currentQuetions + ": ");
                         //int randomNumber = rand.nextInt(game.size());
 
 
-                        String question = game.get(randomQuetions.get(4*currentRound+currentQuetions)).getTheQuetion();
+                        String question = game.get(randomQuetions.get(4*currentRound+currentQuetions - 1)).getTheQuetion();
                         System.out.println(question);
-                        (game.get(randomQuetions.get(4*currentRound+currentQuetions))).randomOrderAnswers();
+                        (game.get(randomQuetions.get(4*currentRound+currentQuetions - 1))).randomOrderAnswers();
 
 
                         System.out.println("Give me your answer [1,2,3,4]: ");
 
                         int b = input.nextInt();
-                        String userAnswer = (String) game.get(randomQuetions.get(4*currentRound+currentQuetions)).getTheAnswers().get(b - 1);
-                        if (userAnswer.equals(game.get(randomQuetions.get(4*currentRound+currentQuetions)).getTheRightAnswer())) {
+                        String userAnswer = (String) game.get(randomQuetions.get(4*currentRound+currentQuetions - 1)).getTheAnswers().get(b - 1);
+                        if (userAnswer.equals(game.get(randomQuetions.get(4*currentRound+currentQuetions - 1)).getTheRightAnswer())) {
                             System.out.println("Your answer is correct!");
                             playerPoints += 1000;
                         } else {
                             System.out.println("Your answer is incorrect");
-                            System.out.println("The correct answer is "+"'"+game.get(randomQuetions.get(4*currentRound+currentQuetions)).getTheRightAnswer()+"'");
+                            System.out.println("The correct answer is "+"'"+game.get(randomQuetions.get(4*currentRound+currentQuetions - 1)).getTheRightAnswer()+"'");
                         }
                         System.out.println("Current Score: " + playerPoints + "\n");
                     } else if (answer1.equals("Ποντάρισμα")) {
@@ -198,40 +200,42 @@ public class Main {
                         //Random rand = new Random();
 
                         //int randomNumber = rand.nextInt(game.size());
-                        String cat = game.get(randomQuetions.get(4*currentRound+currentQuetions)).getCategory();
+                        String cat = game.get(randomQuetions.get(4*currentRound+currentQuetions - 1)).getCategory();
                         System.out.println("The question is about " + cat);
                         System.out.println("How points do you like to bet? 250, 500, 750 or 1000");
-                        betPoints = input.nextInt();
+
+                        do {
+                            betPoints = input.nextInt();
+                        } while(betPoints != 250 && betPoints != 500 && betPoints != 750 && betPoints != 1000);
+
                         System.out.println("Quetion #" + currentQuetions + ": ");
 
 
-                        String question = game.get(randomQuetions.get(4*currentRound+currentQuetions)).getTheQuetion();
+                        String question = game.get(randomQuetions.get(4*currentRound+currentQuetions - 1)).getTheQuetion();
                         System.out.println(question);
-                        (game.get(randomQuetions.get(4*currentRound+currentQuetions))).randomOrderAnswers();
+                        (game.get(randomQuetions.get(4*currentRound+currentQuetions - 1))).randomOrderAnswers();
 
 
                         System.out.println("Give me your answer [1,2,3,4]: ");
 
                         int b = input.nextInt();
-                        String userAnswer = (String) game.get(randomQuetions.get(4*currentRound+currentQuetions)).getTheAnswers().get(b - 1);
-                        if (userAnswer.equals(game.get(randomQuetions.get(4*currentRound+currentQuetions)).getTheRightAnswer())) {
+                        String userAnswer = (String) game.get(randomQuetions.get(4*currentRound+currentQuetions - 1)).getTheAnswers().get(b - 1);
+                        if (userAnswer.equals(game.get(randomQuetions.get(4*currentRound+currentQuetions - 1)).getTheRightAnswer())) {
                             System.out.println("Your answer is correct!");
                             playerPoints += betPoints;
                         } else {
                             System.out.println("Your answer is incorrect");
-                            System.out.println("The correct answer is "+"'"+game.get(randomQuetions.get(4*currentRound+currentQuetions)).getTheRightAnswer()+"'");
+                            System.out.println("The correct answer is "+"'"+game.get(randomQuetions.get(4*currentRound+currentQuetions - 1)).getTheRightAnswer()+"'");
                             playerPoints -= betPoints;
                         }
                         System.out.println("Current Score: " + playerPoints + "\n");
-
-                        currentRound++;
                     } else {
                         System.out.println("Wrong Game");
                         System.exit(1);
                     }
+
                     currentQuetions++;
                 }
-                currentQuetions = 1;
                 currentRound++;
                 input.nextLine();
             }

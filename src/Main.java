@@ -169,17 +169,11 @@ public class Main {
 
                 while(currentQuetions <= numberOfQuetions) { // counting the # of questions for each round
                     if (answer1.equals("Σωστή Απάντηση")) {
-                        int i = 1;
-                        boolean play = true;
-                        //Random rand = new Random();
                         System.out.println("Quetion #" + currentQuetions + ": ");
-                        //int randomNumber = rand.nextInt(game.size());
-
 
                         String question = game.get(randomQuetions.get(4*currentRound+currentQuetions - 1)).getTheQuetion();
                         System.out.println(question);
                         (game.get(randomQuetions.get(4*currentRound+currentQuetions - 1))).randomOrderAnswers();
-
 
                         System.out.println("Give me your answer [1,2,3,4]: ");
 
@@ -194,27 +188,21 @@ public class Main {
                         }
                         System.out.println("Current Score: " + playerPoints + "\n");
                     } else if (answer1.equals("Ποντάρισμα")) {
-                        int i = 1;
                         int betPoints;
-                        boolean play = true;
-                        //Random rand = new Random();
 
-                        //int randomNumber = rand.nextInt(game.size());
                         String cat = game.get(randomQuetions.get(4*currentRound+currentQuetions - 1)).getCategory();
                         System.out.println("The question is about " + cat);
                         System.out.println("How points do you like to bet? 250, 500, 750 or 1000");
 
                         do {
-                            betPoints = input.nextInt();
+                            betPoints = input.nextInt(); // prompt to input the desired bet
                         } while(betPoints != 250 && betPoints != 500 && betPoints != 750 && betPoints != 1000);
 
                         System.out.println("Quetion #" + currentQuetions + ": ");
 
-
                         String question = game.get(randomQuetions.get(4*currentRound+currentQuetions - 1)).getTheQuetion();
                         System.out.println(question);
                         (game.get(randomQuetions.get(4*currentRound+currentQuetions - 1))).randomOrderAnswers();
-
 
                         System.out.println("Give me your answer [1,2,3,4]: ");
 

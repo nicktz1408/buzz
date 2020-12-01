@@ -188,10 +188,9 @@ public class Main {
                             playerPoints += 1000;
                         } else {
                             System.out.println("Your answer is incorrect");
-                            System.out.println("The correct answer is "+"'"+game.get(randomQuetions.get(4*currentRound+currentQuetions)).getTheRightAnswer()+"'"+"\n");
+                            System.out.println("The correct answer is "+"'"+game.get(randomQuetions.get(4*currentRound+currentQuetions)).getTheRightAnswer()+"'");
                         }
-
-
+                        System.out.println("Current Score: " + playerPoints + "\n");
                     } else if (answer1.equals("Ποντάρισμα")) {
                         int i = 1;
                         int betPoints;
@@ -220,9 +219,11 @@ public class Main {
                             playerPoints += betPoints;
                         } else {
                             System.out.println("Your answer is incorrect");
-                            System.out.println("The correct answer is "+"'"+game.get(randomQuetions.get(4*currentRound+currentQuetions)).getTheRightAnswer()+"'"+"\n");
+                            System.out.println("The correct answer is "+"'"+game.get(randomQuetions.get(4*currentRound+currentQuetions)).getTheRightAnswer()+"'");
                             playerPoints -= betPoints;
                         }
+                        System.out.println("Current Score: " + playerPoints + "\n");
+
                         currentRound++;
                     } else {
                         System.out.println("Wrong Game");

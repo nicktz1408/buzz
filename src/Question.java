@@ -41,4 +41,8 @@ public class Question {
     public void setRightAnswerIndex(int index) {
         this.rightAnswerIndex = index;
     }
+
+    public boolean isAnswerCorrect(int index) {
+        return index == this.rightAnswerIndex;
+    }
 }

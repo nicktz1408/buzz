@@ -1,7 +1,12 @@
 import java.util.*;
+import GameLogic.*;
 
 
 public class Main {
+
+    public static void buildGame() {
+        gameFacade
+    }
 
     public static void main(String[] args) {
         final int numberOfRounds = 5;

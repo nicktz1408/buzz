@@ -1,3 +1,5 @@
+package GameLogic;
+
 public enum FetchNextQuestionStatus {
     NEXT_QUESTION,
     NEXT_ROUND,

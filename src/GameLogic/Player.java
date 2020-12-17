@@ -1,3 +1,5 @@
+package GameLogic;
+
 public class Player {
 
     void setScore(int score) {

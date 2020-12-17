@@ -1,3 +1,5 @@
+package GameLogic;
+
 public interface RoundInterface {
     Question getCurrentQuestion();
     boolean fetchNextQuestion();

@@ -1,3 +1,5 @@
+package GameLogic;
+
 public class RightQuestionRound extends PredefinedQuestionsRound {
     private final String ROUND_NAME = "Σωστή Απάντηση";
 

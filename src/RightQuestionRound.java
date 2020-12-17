@@ -1,4 +1,10 @@
 public class RightQuestionRound extends PredefinedQuestionsRound {
+    private final String ROUND_NAME = "Σωστή Απάντηση";
+
+    public String getRoundName() {
+        return this.ROUND_NAME;
+    }
+
     public void answerQuestion(Player player, int answerIndex) {
         int scoreToAdd = 0;
 

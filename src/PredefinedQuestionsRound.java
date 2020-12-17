@@ -28,6 +28,4 @@ public abstract class PredefinedQuestionsRound implements RoundInterface {
     public void addQuestion(Question question) {
         questionsList.add(question);
     }
-    
-    public abstract void answerQuestion();
 }

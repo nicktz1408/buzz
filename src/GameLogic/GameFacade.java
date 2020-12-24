@@ -12,18 +12,6 @@ public class GameFacade {
         this.roundList = new ArrayList<RoundInterface>();
     }
 
-    public Question getSampleQuestion() {
-        Question myQuestion = new Question();
-
-        myQuestion.setQuestionText("Ερώτηση Χ");
-        myQuestion.addAnswer("Answer 1");
-        myQuestion.addAnswer("Answer 2");
-        myQuestion.addAnswer("Answer 3");
-        myQuestion.addAnswer("Answer 4");
-
-        return myQuestion;
-    }
-
     public void addRound(RoundInterface round) {
         roundList.add(round);
     }

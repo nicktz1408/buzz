@@ -1,6 +1,6 @@
 package GameLogic;
 
-public class RightQuestionRound extends PredefinedQuestionsRound {
+public class RightQuestionRound extends FixedQuestionsRound {
     private final String ROUND_NAME = "Σωστή Απάντηση";
 
     public String getRoundName() {

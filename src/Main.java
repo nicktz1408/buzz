@@ -4,10 +4,6 @@ import GameLogic.*;
 
 public class Main {
 
-    public static void buildGame() {
-        gameFacade
-    }
-
     public static void main(String[] args) {
         final int numberOfRounds = 5;
         final int numberOfQuetions = 4;
@@ -37,6 +33,7 @@ public class Main {
         DataBase database20 = new DataBase();
 
         HashMap<Integer, DataBase> game = new HashMap<>();
+
 
         database1.setTheQuetionCategory("Ποιός αιχμαλώτισε τον Πατριάρχη Ιεροσολύμων?", "Hostory");
         database1.setTheAnswers("Αντίχοος Β'","Βαρτάσης","Ρατισλάβος","Χοσρόης");

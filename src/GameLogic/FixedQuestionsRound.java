@@ -3,11 +3,11 @@ package GameLogic;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PredefinedQuestionsRound implements RoundInterface {
+public abstract class FixedQuestionsRound implements RoundInterface {
     private int currQuestionIndex;
     private List<Question> questionsList;
 
-    public PredefinedQuestionsRound() {
+    public FixedQuestionsRound() {
         currQuestionIndex = 0;
         questionsList = new ArrayList<Question>();
     }

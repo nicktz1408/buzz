@@ -6,10 +6,19 @@ import java.util.ArrayList;
 public class Question {
     private int rightAnswerIndex;
     private String questionText;
+    private String category;
     private List<String> answersList;
 
     public Question() {
         this.answersList = new ArrayList<String>();
+    }
+
+    public String getCategory() {
+        return this.category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getQuestionText() {

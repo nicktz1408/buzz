@@ -1,6 +1,7 @@
 package GameLogic;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ public class QuestionRepository {
 
     public QuestionRepository() throws IOException {
         filename = "Questions.txt";
+        this.questions = new ArrayList<String[]>();
 
         this.parseFile();
     }
@@ -35,7 +37,9 @@ public class QuestionRepository {
     }
 
     private void parseFile() throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader("/home/manolis/Desktop/buzzquizworld-thelamogia/Qustions"));
+        String currentDirectory = new File(".").getCanonicalPath();
+
+        BufferedReader br = new BufferedReader(new FileReader(currentDirectory + "/buzzquizworld-thelamogia/src/Questions.txt"));
         String data;
         while ((data = br.readLine()) != null) {
 

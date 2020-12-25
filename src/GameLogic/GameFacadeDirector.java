@@ -22,6 +22,7 @@ public class GameFacadeDirector {
 
             myQuestions.add(
                     questionBuilder
+                            .setCategory(currQuestion[0])
                             .setQuestionText(currQuestion[1])
                             .addAnswer(currQuestion[2])
                             .addAnswer(currQuestion[3])

@@ -32,6 +32,14 @@ public class GameFacade {
         return FetchNextQuestionStatus.NEXT_QUESTION;
     }
 
+    public void answerQuestion(Player player, int rightAnswerIndex) {
+        this.getCurrentRound().answerQuestion(player, rightAnswerIndex);
+    }
+
+    public Player registerPlayer() {
+        return new Player();
+    }
+
     private boolean fetchNextRound() {
         this.currRoundIndex++;
 

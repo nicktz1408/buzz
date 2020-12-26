@@ -13,7 +13,7 @@ public abstract class FixedQuestionsRound implements RoundInterface {
     }
 
     public Question getCurrentQuestion() {
-        if(questionsList.size() >= currQuestionIndex) {
+        if(questionsList.size() <= currQuestionIndex) {
             // throw new Exception();
             return null;
         }

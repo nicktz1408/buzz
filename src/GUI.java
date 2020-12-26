@@ -1,3 +1,8 @@
+import GameLogic.FetchNextQuestionStatus;
+import GameLogic.GameFacade;
+import GameLogic.GamePlayer;
+import GameLogic.Question;
+
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -10,13 +15,18 @@ import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+
 public class GUI implements KeyListener{
     private JFrame window;
     private JButton playButton, signInButton, statisticsButton;
     private Player user = new Player("user");
     private JButton answer1;
     public static boolean keyHeld_Q = false, keyHeld_W = false, keyHeld_E = false, keyHeld_R = false, keyHeld_U = false, keyHeld_I = false, keyHeld_O = false, keyHeld_P = false;
-    public GUI(Dimension dim){  // Εδώ πρέπει να προσθέσω μια δευτερη παράμετρο που θα φορτώσει όλα το παιχνίδι
+    private GamePlayer player = new GamePlayer();
+
+
+
+    public GUI(Dimension dim, GameFacade game){  // Εδώ πρέπει να προσθέσω μια δευτερη παράμετρο που θα φορτώσει όλα το παιχνίδι
         window = new JFrame("Buzz Game");
         window.setResizable(true);
         window.setSize(dim);
@@ -43,7 +53,7 @@ public class GUI implements KeyListener{
         playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Dimension dim = new Dimension(200, 150);
-                startPlaying(dim);
+                startPlaying(dim, game);
             }
         });
 
@@ -139,7 +149,7 @@ public class GUI implements KeyListener{
 
 
 
-    public void startPlaying(Dimension dim){
+    public void startPlaying(Dimension dim, GameFacade game){
         window = new JFrame("Buzz Game");
         JPanel panel = new JPanel();
         window.setResizable(false);
@@ -186,7 +196,7 @@ public class GUI implements KeyListener{
                                 window.setVisible(false);
                                 String name = (String) cb.getItemAt(cb.getSelectedIndex());
                                 Dimension dim = new Dimension(800, 500);
-                                initializeAloneGame(dim,1,1,0,name);
+                                initializeAloneGame(dim,game);
                             }
                         });
                     } catch (IOException ioException) {
@@ -223,7 +233,7 @@ public class GUI implements KeyListener{
                                     JOptionPane.showMessageDialog(null, "Οι δύο παίκτες πρέπει να είναι διαφορετικοί");
                                 } else {
                                     Dimension dim = new Dimension(800, 500);
-                                    initialize2Game(dim,1,1,1000,1000,name1, name2);
+                                    initialize2Game(dim,game);
                                 }
                             }
                         });
@@ -285,7 +295,7 @@ public class GUI implements KeyListener{
     }
 
 
-    public void initializeAloneGame(Dimension dim,int currentRound,int currentQuestion, int currentScore, String name){
+    public void initializeAloneGame(Dimension dim,GameFacade game){
 
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
@@ -298,13 +308,13 @@ public class GUI implements KeyListener{
         CompoundBorder compound = new CompoundBorder(line, border);
 
         JPanel panel1 = new JPanel();
-        JLabel label1 = new JLabel("Γύρος "+currentRound);
+        JLabel label1 = new JLabel("Γύρος "+game.getCurrRoundIndex());
         label1.setBorder(compound);
 
-        JLabel label2 = new JLabel("Σκορ "+currentScore);
+        JLabel label2 = new JLabel("Σκορ "+player.getScore());
         label2.setBorder(compound);
 
-        JLabel label3 = new JLabel("Ερώτηση "+currentQuestion);
+        JLabel label3 = new JLabel("Ερώτηση "+game.getCurrentQuestion().getQuestionText());
         label3.setBorder(compound);
 
 
@@ -312,12 +322,22 @@ public class GUI implements KeyListener{
         panel1.add(label3);
         panel1.add(label2);
         frame.add(panel1);
-        CountDown timePanel = new CountDown();
-        frame.add(timePanel);
+
+
 
         JPanel panel2 = new JPanel();
-        JButton nextQuestion = new JButton("Επόμενη Ερώτηση");
-        panel2.add(nextQuestion);
+        JButton answer1 = new JButton(game.getCurrentQuestion().getAnswerAtIndex(0));
+
+        JButton answer2 = new JButton(game.getCurrentQuestion().getAnswerAtIndex(1));
+
+        JButton answer3 = new JButton(game.getCurrentQuestion().getAnswerAtIndex(2));
+
+        JButton answer4 = new JButton(game.getCurrentQuestion().getAnswerAtIndex(3));
+
+        panel2.add(answer1);
+        panel2.add(answer2);
+        panel2.add(answer3);
+        panel2.add(answer4);
         frame.add(panel2);
 
 
@@ -330,22 +350,47 @@ public class GUI implements KeyListener{
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
 
-        nextQuestion.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                label1.setText("Γύρος "+currentRound);
-                label2.setText("Σκορ "+currentScore);
-                label3.setText("Ερώτηση "+currentQuestion);
-
+        ActionListener answerListener = new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int answerIndex = 0;
+                if(e.getSource() == answer1){
+                    answerIndex=0;
+                }else if(e.getSource() == answer2){
+                    answerIndex=1;
+                } else if(e.getSource() == answer3){
+                    answerIndex = 2;
+                } else if(e.getSource() == answer4){
+                    answerIndex = 3;
+                }
+                game.answerQuestion(player, answerIndex);
+                FetchNextQuestionStatus status = game.fetchNextQuestion();
+                if(status == FetchNextQuestionStatus.GAME_FINISHED){
+                    frame.setVisible(false);
+                    JOptionPane.showMessageDialog(new JFrame(),
+                            "Τελείωσες το παιχνίδι με σκορ "+player.getScore(),"Μπράβο!",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+                label1.setText("Γύρος "+game.getCurrRoundIndex());
+                label2.setText("Σκορ "+player.getScore());
+                label3.setText("Ερώτηση "+game.getCurrentQuestion().getQuestionText());
+                answer1.setText(game.getCurrentQuestion().getAnswerAtIndex(0));
+                answer2.setText(game.getCurrentQuestion().getAnswerAtIndex(1));
+                answer3.setText(game.getCurrentQuestion().getAnswerAtIndex(2));
+                answer4.setText(game.getCurrentQuestion().getAnswerAtIndex(3));
 
             }
-        });
 
+        };
+
+        answer1.addActionListener(answerListener);
+        answer2.addActionListener(answerListener);
+        answer3.addActionListener(answerListener);
+        answer4.addActionListener(answerListener);
 
 
     }
 
-    public void initialize2Game(Dimension dim, int currentRound, int currentQuestion, int player1Score, int player2Score, String name1, String name2) {
+    public void initialize2Game(Dimension dim, GameFacade game) {
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
         frame.setSize(dim);
@@ -361,16 +406,16 @@ public class GUI implements KeyListener{
 
 
         JPanel panel1 = new JPanel();
-        JLabel label1 = new JLabel("Γύρος "+currentRound);
+        JLabel label1 = new JLabel("Γύρος ");
         label1.setBorder(compound);
 
-        JLabel label2 = new JLabel("Σκορ "+name2+": "+player2Score);
+        JLabel label2 = new JLabel("Σκορ ");
         label2.setBorder(compound);
 
-        JLabel label4 = new JLabel("Σκορ "+name1+": "+player1Score);
+        JLabel label4 = new JLabel("Σκορ ");
         label4.setBorder(compound);
 
-        JLabel label3 = new JLabel("Ερώτηση "+currentQuestion);
+        JLabel label3 = new JLabel("Ερώτηση ");
         label3.setBorder(compound);
 
         centralPanel.add(label1);
@@ -447,10 +492,10 @@ public class GUI implements KeyListener{
         nextQuestion.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                label1.setText("Γύρος "+currentRound);
-                label2.setText("Σκορ "+name2+": "+player2Score);
-                label3.setText("Ερώτηση "+currentQuestion);
-                label4.setText("Σκορ "+name1+": "+player1Score);
+                label1.setText("Γύρος ");
+                label2.setText("Σκορ "+": ");
+                label3.setText("Ερώτηση ");
+                label4.setText("Σκορ ");
             }
         });
         if(keyHeld_Q){
@@ -489,9 +534,6 @@ public class GUI implements KeyListener{
         }
     }
 
-    public void game(){
-
-    }
 
 
 }

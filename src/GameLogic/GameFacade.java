@@ -32,12 +32,12 @@ public class GameFacade {
         return FetchNextQuestionStatus.NEXT_QUESTION;
     }
 
-    public void answerQuestion(Player player, int rightAnswerIndex) {
+    public void answerQuestion(GamePlayer player, int rightAnswerIndex) {
         this.getCurrentRound().answerQuestion(player, rightAnswerIndex);
     }
 
-    public Player registerPlayer() {
-        return new Player();
+    public GamePlayer registerPlayer() {
+        return new GamePlayer();
     }
 
     private boolean fetchNextRound() {
@@ -46,7 +46,11 @@ public class GameFacade {
         return this.currRoundIndex < this.roundList.size();
     }
 
-    private RoundInterface getCurrentRound() {
+    public RoundInterface getCurrentRound() {
         return this.roundList.get(this.currRoundIndex);
+    }
+
+    public int getCurrRoundIndex(){
+        return this.currRoundIndex+1;
     }
 }

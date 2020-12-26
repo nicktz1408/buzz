@@ -13,17 +13,19 @@ public class QuestionRepository {
 
     private ArrayList<String []> questions;
 
-    private int index = 0;
+    private int index = -1;
 
     public QuestionRepository() throws IOException {
         filename = "Questions.txt";
         this.questions = new ArrayList<String[]>();
 
         this.parseFile();
+        Collections.shuffle(questions, new Random(System.currentTimeMillis()));
     }
 
     public String[] getSingleRandomQuestion() {
-        return questions.get(index++);
+        index = (index+1)%this.questions.size();
+        return questions.get(index);
     }
 
     public ArrayList<String []> getRandomQuestionBatch(int batchSize) {
@@ -39,7 +41,7 @@ public class QuestionRepository {
     private void parseFile() throws IOException {
         String currentDirectory = new File(".").getCanonicalPath();
 
-        BufferedReader br = new BufferedReader(new FileReader(currentDirectory + "/buzzquizworld-thelamogia/src/Questions.txt"));
+        BufferedReader br = new BufferedReader(new FileReader(currentDirectory + "/src/Questions.txt"));
         String data;
         while ((data = br.readLine()) != null) {
 
@@ -47,10 +49,5 @@ public class QuestionRepository {
             questions.add(arrOfStr);
         }
         br.close();
-    }
-
-    public ArrayList<String []> returnRandomOrder() throws IOException {
-        Collections.shuffle(questions, new Random(System.currentTimeMillis()));
-        return questions;
     }
 }

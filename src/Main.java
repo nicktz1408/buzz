@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.io.IOException;
 
+
 import GameLogic.GameFacadeDirector;
 import GameLogic.GameFacade;
 
@@ -10,6 +11,6 @@ public class Main {
         GameFacade game = gameBuilder.buildGame();
 
         Dimension dim = new Dimension(600, 450);
-        GUI gui = new GUI(dim); // πρέπει να περάσω το game σαν παράμετρο στο gui
+        GUI gui = new GUI(dim, game); // πρέπει να περάσω το game σαν παράμετρο στο gui
     }
 }

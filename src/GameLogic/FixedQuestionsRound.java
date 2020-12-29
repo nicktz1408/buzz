@@ -1,5 +1,6 @@
 package GameLogic;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public abstract class FixedQuestionsRound implements RoundInterface {
         return questionsList.get(currQuestionIndex);
     }
 
-    public boolean fetchNextQuestion() {
+    public boolean fetchNextQuestion() throws IOException {
         currQuestionIndex++;
 
         return currQuestionIndex < questionsList.size();

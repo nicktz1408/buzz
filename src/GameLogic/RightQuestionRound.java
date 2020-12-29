@@ -7,7 +7,8 @@ public class RightQuestionRound extends FixedQuestionsRound {
         return this.ROUND_NAME;
     }
 
-    public void answerQuestion(GamePlayer player, int answerIndex) {
+    @Override
+    public void answerQuestion(GamePlayer player, int answerIndex, Object... additionalRequestData) {
         int scoreToAdd = 0;
 
         if(answerIndex == this.getCurrentQuestion().getRightAnswerIndex()) {

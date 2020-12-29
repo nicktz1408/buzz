@@ -6,7 +6,7 @@ public class QuickAnswerRound extends FixedQuestionsRound{
 
 
     @Override
-    public void answerQuestion(GamePlayer player, int answerIndex) {
+    public void answerQuestion(GamePlayer player, int answerIndex, Object... additionalRequestData) {
         double scoreToAdd = 0;
 
         if(answerIndex == this.getCurrentQuestion().getRightAnswerIndex()) {

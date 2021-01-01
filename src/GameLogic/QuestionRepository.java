@@ -15,7 +15,17 @@ public class QuestionRepository {
 
     private int index = -1;
 
-    public QuestionRepository() throws IOException {
+    private static QuestionRepository singleInstance = null;
+
+    // static method to create instance of Singleton class
+    public static QuestionRepository getInstance() {
+        if (singleInstance == null)
+            singleInstance = new QuestionRepository();
+
+        return singleInstance;
+    }
+
+    private QuestionRepository() {
         filename = "Questions.txt";
         this.questions = new ArrayList<String[]>();
 
@@ -23,13 +33,38 @@ public class QuestionRepository {
         Collections.shuffle(questions, new Random(System.currentTimeMillis()));
     }
 
-    public String[] getSingleRandomQuestion() {
-        index = (index+1)%this.questions.size();
-        return questions.get(index);
+    Question buildQuestion(String[] questionData) {
+        if(questionData.length == 7) { // normal question
+            return Question.builder()
+                    .setCategory(questionData[0])
+                    .setQuestionText(questionData[1])
+                    .addAnswer(questionData[2])
+                    .addAnswer(questionData[3])
+                    .addAnswer(questionData[4])
+                    .addAnswer(questionData[5])
+                    .setRightAnswerIndex(Integer.parseInt(questionData[6]))
+                    .build();
+        } else { // question with image
+            return QuestionWithImage.builder()
+                    .setCategory(questionData[0])
+                    .setQuestionText(questionData[1])
+                    .addAnswer(questionData[2])
+                    .addAnswer(questionData[3])
+                    .addAnswer(questionData[4])
+                    .addAnswer(questionData[5])
+                    .setRightAnswerIndex(Integer.parseInt(questionData[6]))
+                    .setImagePath(questionData[7])
+                    .build();
+        }
     }
 
-    public ArrayList<String []> getRandomQuestionBatch(int batchSize) {
-        ArrayList<String []> batch = new ArrayList<String []>();
+    public Question getSingleRandomQuestion() {
+        index = (index+1)%this.questions.size();
+        return this.buildQuestion(questions.get(index));
+    }
+
+    public ArrayList<Question> getRandomQuestionBatch(int batchSize) {
+        ArrayList<Question> batch = new ArrayList<>();
 
         for(int i = 1; i <= batchSize; i++) {
             batch.add(getSingleRandomQuestion());
@@ -38,16 +73,20 @@ public class QuestionRepository {
         return batch;
     }
 
-    private void parseFile() throws IOException {
-        String currentDirectory = new File(".").getCanonicalPath();
+    private void parseFile() {
+        try {
+            String currentDirectory = new File(".").getCanonicalPath();
 
-        BufferedReader br = new BufferedReader(new FileReader(currentDirectory + "/src/Questions.txt"));
-        String data;
-        while ((data = br.readLine()) != null) {
+            BufferedReader br = new BufferedReader(new FileReader(currentDirectory + "/src/Questions.txt"));
+            String data;
+            while ((data = br.readLine()) != null) {
 
-            String[] arrOfStr = data.split("-", 7);
-            questions.add(arrOfStr);
+                String[] arrOfStr = data.split("-", 7);
+                questions.add(arrOfStr);
+            }
+            br.close();
+        } catch(IOException e) {
+            System.out.println("An error has occurred while reading the Questions file!");
         }
-        br.close();
     }
 }

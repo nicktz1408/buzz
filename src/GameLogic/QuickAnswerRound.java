@@ -9,7 +9,7 @@ public class QuickAnswerRound extends FixedQuestionsRound{
     public void answerQuestion(GamePlayer player, int answerIndex, Object... additionalRequestData) {
         double scoreToAdd = 0;
 
-        if(answerIndex == this.getCurrentQuestion().getRightAnswerIndex()) {
+        if(answerIndex == this.getCurrentQuestion(player).getRightAnswerIndex()) {
             scoreToAdd = calculateScore();
         }
 
@@ -28,9 +28,9 @@ public class QuickAnswerRound extends FixedQuestionsRound{
         return 500;
     }
     @Override
-    public boolean fetchNextQuestion(){
+    public boolean fetchNextQuestion(GamePlayer player){
         first = false;
-        return super.fetchNextQuestion();
+        return super.fetchNextQuestion(player);
     }
 
     public void setFirst(boolean first){

@@ -16,12 +16,12 @@ public class GameFacade {
         roundList.add(round);
     }
 
-    public Question getCurrentQuestion() {
-        return this.getCurrentRound().getCurrentQuestion();
+    public Question getCurrentQuestion(GamePlayer player) {
+        return this.getCurrentRound().getCurrentQuestion(player);
     }
 
-    public FetchNextQuestionStatus fetchNextQuestion() {
-        if(!this.getCurrentRound().fetchNextQuestion()) { // ran out of question for this round
+    public FetchNextQuestionStatus fetchNextQuestion(GamePlayer player) {
+        if(!this.getCurrentRound().fetchNextQuestion(player)) { // ran out of question for this round
             if(this.fetchNextRound()) { // successfully moved to the next round
                 return FetchNextQuestionStatus.NEXT_ROUND;
             }

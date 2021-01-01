@@ -9,7 +9,7 @@ public class StopClockRound extends FixedQuestionsRound{
         int millisRemaining = (int)additionalRequestData[0];
         double scoreToAdd = 0;
 
-        if(answerIndex == this.getCurrentQuestion().getRightAnswerIndex()) {
+        if(answerIndex == this.getCurrentQuestion(player).getRightAnswerIndex()) {
             scoreToAdd = calculateScore(millisRemaining);
         }
 

@@ -13,7 +13,8 @@ public abstract class FixedQuestionsRound implements RoundInterface {
         questionsList = new ArrayList<Question>();
     }
 
-    public Question getCurrentQuestion() {
+    @Override
+    public Question getCurrentQuestion(GamePlayer player) {
         if(questionsList.size() <= currQuestionIndex) {
             // throw new Exception();
             return null;
@@ -22,7 +23,8 @@ public abstract class FixedQuestionsRound implements RoundInterface {
         return questionsList.get(currQuestionIndex);
     }
 
-    public boolean fetchNextQuestion() throws IOException {
+    @Override
+    public boolean fetchNextQuestion(GamePlayer player) {
         currQuestionIndex++;
 
         return currQuestionIndex < questionsList.size();

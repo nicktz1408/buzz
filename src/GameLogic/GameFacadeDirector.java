@@ -9,29 +9,11 @@ public class GameFacadeDirector {
     }
 
     public GameFacade buildGame() throws IOException {
-        QuestionRepository questionRepository = new QuestionRepository();
-        QuestionBuilder questionBuilder = new QuestionBuilder();
+        QuestionRepository questionRepository = QuestionRepository.getInstance();
         FixedQuestionsRoundBuilder roundBuilder = new FixedQuestionsRoundBuilder();
         RoundFactory roundFactory = new RoundFactory();
 
-        ArrayList<String []> questions = questionRepository.getRandomQuestionBatch(30);
-        ArrayList<Question> myQuestions = new ArrayList<Question>();
-
-        for(int i = 0; i < questions.size(); i++) {
-            String []currQuestion = questions.get(i);
-
-            myQuestions.add(
-                    questionBuilder
-                            .setCategory(currQuestion[0])
-                            .setQuestionText(currQuestion[1])
-                            .addAnswer(currQuestion[2])
-                            .addAnswer(currQuestion[3])
-                            .addAnswer(currQuestion[4])
-                            .addAnswer(currQuestion[5])
-                            .setRightAnswerIndex(Integer.parseInt(currQuestion[6]))
-                            .build()
-            );
-        }
+        ArrayList<Question> myQuestions = questionRepository.getRandomQuestionBatch(30);
 
         GameFacadeBuilder gameFacadeBuilder = new GameFacadeBuilder();
 

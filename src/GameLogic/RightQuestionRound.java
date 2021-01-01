@@ -11,7 +11,7 @@ public class RightQuestionRound extends FixedQuestionsRound {
     public void answerQuestion(GamePlayer player, int answerIndex, Object... additionalRequestData) {
         int scoreToAdd = 0;
 
-        if(answerIndex == this.getCurrentQuestion().getRightAnswerIndex()) {
+        if(answerIndex == this.getCurrentQuestion(player).getRightAnswerIndex()) {
             scoreToAdd = calculateScore();
         }
 

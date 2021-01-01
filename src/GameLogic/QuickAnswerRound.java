@@ -1,7 +1,7 @@
 package GameLogic;
 
 public class QuickAnswerRound extends FixedQuestionsRound{
-    private final String ROUND_NAME="Γρήγορη Απάντηση";
+    private final int ROUND_NAME= 4;
     private boolean first;
 
 
@@ -17,7 +17,7 @@ public class QuickAnswerRound extends FixedQuestionsRound{
     }
 
     @Override
-    public String getRoundName() {
+    public int getRoundName() {
         return this.ROUND_NAME;
     }
 

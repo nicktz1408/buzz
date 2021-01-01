@@ -1,12 +1,10 @@
 package GameLogic;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+
 
 public class ThermometerRound implements RoundInterface{
-    private final String ROUND_NAME = "Θερμόμετρο";
+    private final int ROUND_NAME = 5;
     private HashMap<GamePlayer, PlayerStatus> playerData = new HashMap<>();
 
     class PlayerStatus {
@@ -44,7 +42,7 @@ public class ThermometerRound implements RoundInterface{
     }
 
     @Override
-    public String getRoundName() {
+    public int getRoundName() {
         return this.ROUND_NAME;
     }
 

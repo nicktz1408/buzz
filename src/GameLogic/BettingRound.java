@@ -1,7 +1,7 @@
 package GameLogic;
 
 public class BettingRound extends FixedQuestionsRound{
-    private final String ROUND_NAME = "Ποντάρισμα";
+    private final int ROUND_NAME = 3;
 
     @Override
     public void answerQuestion(GamePlayer player, int answerIndex, Object... additionalRequestData) {
@@ -16,7 +16,7 @@ public class BettingRound extends FixedQuestionsRound{
     }
 
     @Override
-    public String getRoundName() {
+    public int getRoundName() {
         return this.ROUND_NAME;
     }
 }

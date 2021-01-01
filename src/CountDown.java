@@ -39,4 +39,8 @@ class CountDown extends JPanel {
         timer.stop();
         int remainingTime = second*1000+millliSecond;
     }
+
+    public int getMilli(){
+        return millliSecond;
+    }
 }

@@ -1,7 +1,7 @@
 package GameLogic;
 
 public class StopClockRound extends FixedQuestionsRound{
-    private final String ROUND_NAME = "Σταμάτησε το Χρονόμετρο";
+    private final int ROUND_NAME = 2;
     private int milli;
 
     @Override
@@ -17,7 +17,7 @@ public class StopClockRound extends FixedQuestionsRound{
     }
 
     @Override
-    public String getRoundName() {
+    public int getRoundName() {
         return this.ROUND_NAME;
     }
 

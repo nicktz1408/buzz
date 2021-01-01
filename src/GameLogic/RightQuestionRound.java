@@ -1,9 +1,9 @@
 package GameLogic;
 
 public class RightQuestionRound extends FixedQuestionsRound {
-    private final String ROUND_NAME = "Σωστή Απάντηση";
+    private final int ROUND_NAME = 1;
 
-    public String getRoundName() {
+    public int getRoundName() {
         return this.ROUND_NAME;
     }
 

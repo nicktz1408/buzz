@@ -27,7 +27,7 @@ public class GameFacadeDirector {
                         .addQuestion(myQuestions.get(4))
                         .build())
                 .addRound(roundBuilder
-                        .type(roundFactory.getRightQuestionAnswerRound())
+                        .type(roundFactory.getStopClockRound())
                         .addQuestion(myQuestions.get(5))
                         .addQuestion(myQuestions.get(6))
                         .addQuestion(myQuestions.get(7))
@@ -35,7 +35,7 @@ public class GameFacadeDirector {
                         .addQuestion(myQuestions.get(9))
                         .build())
                 .addRound(roundBuilder
-                        .type(roundFactory.getRightQuestionAnswerRound())
+                        .type(roundFactory.getBettingRound())
                         .addQuestion(myQuestions.get(10))
                         .addQuestion(myQuestions.get(11))
                         .addQuestion(myQuestions.get(12))

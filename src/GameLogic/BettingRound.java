@@ -8,7 +8,7 @@ public class BettingRound extends FixedQuestionsRound{
         int betSize = (int)additionalRequestData[0];
         int scoreToAdd = betSize;
 
-        if(answerIndex == this.getCurrentQuestion().getRightAnswerIndex()) {
+        if(answerIndex == this.getCurrentQuestion(player).getRightAnswerIndex()) {
             player.setScore(player.getScore() + scoreToAdd);
         } else{
             player.setScore(player.getScore() - scoreToAdd);

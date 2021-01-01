@@ -41,9 +41,12 @@ public class GameFacade {
     }
 
     private boolean fetchNextRound() {
-        this.currRoundIndex++;
-
-        return this.currRoundIndex < this.roundList.size();
+        if(this.currRoundIndex < this.roundList.size() - 1){
+            this.currRoundIndex++;
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public RoundInterface getCurrentRound() {

@@ -1,6 +1,4 @@
-import GameLogic.FetchNextQuestionStatus;
-import GameLogic.GameFacade;
-import GameLogic.GamePlayer;
+import GameLogic.*;
 import GameLogic.Question;
 
 import javax.swing.*;
@@ -22,11 +20,12 @@ public class GUI implements KeyListener{
     private Player user = new Player("user");
     private JButton answer1;
     public static boolean keyHeld_Q = false, keyHeld_W = false, keyHeld_E = false, keyHeld_R = false, keyHeld_U = false, keyHeld_I = false, keyHeld_O = false, keyHeld_P = false;
-    private GamePlayer player = new GamePlayer();
+    private GamePlayer player1 = new GamePlayer();
+    private GamePlayer player2 = new GamePlayer();
 
 
 
-    public GUI(Dimension dim, GameFacade game){  // Εδώ πρέπει να προσθέσω μια δευτερη παράμετρο που θα φορτώσει όλα το παιχνίδι
+    public GUI(Dimension dim){  // Εδώ πρέπει να προσθέσω μια δευτερη παράμετρο που θα φορτώσει όλα το παιχνίδι
         window = new JFrame("Buzz Game");
         window.setResizable(true);
         window.setSize(dim);
@@ -53,7 +52,7 @@ public class GUI implements KeyListener{
         playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Dimension dim = new Dimension(200, 150);
-                startPlaying(dim, game);
+                startPlaying(dim);
             }
         });
 
@@ -149,13 +148,16 @@ public class GUI implements KeyListener{
 
 
 
-    public void startPlaying(Dimension dim, GameFacade game){
+    public void startPlaying(Dimension dim){
         window = new JFrame("Buzz Game");
         JPanel panel = new JPanel();
         window.setResizable(false);
         window.setSize(dim);
         window.setMinimumSize(dim);
         window.setLayout(new GridLayout(10,1));
+
+
+        GameFacade game = new GameFacadeDirector().buildGame();
 
         JRadioButton r1 = new JRadioButton("'Ενας παίκτης");
         JRadioButton r2 = new JRadioButton("Δύο παίκτες");
@@ -311,13 +313,15 @@ public class GUI implements KeyListener{
         JLabel label1 = new JLabel("Γύρος "+game.getCurrRoundIndex());
         label1.setBorder(compound);
 
-        JLabel label2 = new JLabel("Σκορ "+player.getScore());
+        JLabel label2 = new JLabel("Σκορ "+player1.getScore());
         label2.setBorder(compound);
 
-        JLabel label3 = new JLabel("Ερώτηση "+game.getCurrentQuestion().getQuestionText());
+        JLabel label3 = new JLabel("Ερώτηση "+game.getCurrentQuestion(player1).getQuestionText());
         label3.setBorder(compound);
 
+        JLabel label4 = new JLabel("Τύπος Γύρου:"+game.getCurrentRound().getRoundName());
 
+        panel1.add(label4);
         panel1.add(label1);
         panel1.add(label3);
         panel1.add(label2);
@@ -326,13 +330,13 @@ public class GUI implements KeyListener{
 
 
         JPanel panel2 = new JPanel();
-        JButton answer1 = new JButton(game.getCurrentQuestion().getAnswerAtIndex(0));
+        JButton answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
 
-        JButton answer2 = new JButton(game.getCurrentQuestion().getAnswerAtIndex(1));
+        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
 
-        JButton answer3 = new JButton(game.getCurrentQuestion().getAnswerAtIndex(2));
+        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
 
-        JButton answer4 = new JButton(game.getCurrentQuestion().getAnswerAtIndex(3));
+        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
 
         panel2.add(answer1);
         panel2.add(answer2);
@@ -362,21 +366,23 @@ public class GUI implements KeyListener{
                 } else if(e.getSource() == answer4){
                     answerIndex = 3;
                 }
-                game.answerQuestion(player, answerIndex);
-                FetchNextQuestionStatus status = game.fetchNextQuestion();
+                game.answerQuestion(player1, answerIndex);
+                FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                 if(status == FetchNextQuestionStatus.GAME_FINISHED){
                     frame.setVisible(false);
                     JOptionPane.showMessageDialog(new JFrame(),
-                            "Τελείωσες το παιχνίδι με σκορ "+player.getScore(),"Μπράβο!",
+                            "Τελείωσες το παιχνίδι με σκορ "+player1.getScore(),"Μπράβο!",
                             JOptionPane.INFORMATION_MESSAGE);
+                }else {
+                    label4.setText("Τύπος Γύρου:" + game.getCurrentRound().getRoundName());
+                    label1.setText("Γύρος " + game.getCurrRoundIndex());
+                    label2.setText("Σκορ " + player1.getScore());
+                    label3.setText("Ερώτηση " + game.getCurrentQuestion(player1).getQuestionText());
+                    answer1.setText(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+                    answer2.setText(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
+                    answer3.setText(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
+                    answer4.setText(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
                 }
-                label1.setText("Γύρος "+game.getCurrRoundIndex());
-                label2.setText("Σκορ "+player.getScore());
-                label3.setText("Ερώτηση "+game.getCurrentQuestion().getQuestionText());
-                answer1.setText(game.getCurrentQuestion().getAnswerAtIndex(0));
-                answer2.setText(game.getCurrentQuestion().getAnswerAtIndex(1));
-                answer3.setText(game.getCurrentQuestion().getAnswerAtIndex(2));
-                answer4.setText(game.getCurrentQuestion().getAnswerAtIndex(3));
 
             }
 
@@ -502,6 +508,10 @@ public class GUI implements KeyListener{
             label1.setText("Pressed b");
         }
 
+
+    }
+
+    public void BetRound(Dimension dim){
 
     }
 

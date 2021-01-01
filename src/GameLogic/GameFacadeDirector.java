@@ -8,7 +8,7 @@ public class GameFacadeDirector {
 
     }
 
-    public GameFacade buildGame() throws IOException {
+    public GameFacade buildGame(){
         QuestionRepository questionRepository = QuestionRepository.getInstance();
         FixedQuestionsRoundBuilder roundBuilder = new FixedQuestionsRoundBuilder();
         RoundFactory roundFactory = new RoundFactory();

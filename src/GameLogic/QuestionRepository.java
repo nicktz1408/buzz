@@ -81,7 +81,7 @@ public class QuestionRepository {
             String data;
             while ((data = br.readLine()) != null) {
 
-                String[] arrOfStr = data.split("-", 7);
+                String[] arrOfStr = data.split("-");
                 questions.add(arrOfStr);
             }
             br.close();

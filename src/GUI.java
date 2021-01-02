@@ -187,57 +187,77 @@ public class GUI{
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if(!pressed1) {
-                    switch (e.getKeyChar()) {
-                        case 'q':
-                            pressed1 = true;
-                            answerIndex = 0;
-                            break;
-                        case 'w':
-                            pressed1 = true;
-                            answerIndex = 1;
-                            break;
-                        case 'e':
-                            pressed1 = true;
-                            answerIndex = 2;
-                            break;
-                        case 'r':
-                            pressed1 = true;
-                            answerIndex = 3;
-                            break;
-                    }
-                    if(pressed1){
-                        game.answerQuestion(player1, answerIndex);
-                        game.fetchNextQuestion(player1);
-                    }
+                boolean hasFinished = false;
+                int answerIndex = -1;
 
+                switch (e.getKeyChar()) {
+                    case 'q':
+                        answerIndex = 0;
+                        break;
+                    case 'w':
+                        answerIndex = 1;
+                        break;
+                    case 'e':
+                        answerIndex = 2;
+                        break;
+                    case 'r':
+                        answerIndex = 3;
+                        break;
                 }
-                if(!pressed2) {
+
+                if(answerIndex != -1) {
+                    game.answerQuestion(player1, answerIndex);
+
+                    hasFinished = game.fetchNextQuestion(player1) == FetchNextQuestionStatus.GAME_FINISHED;
+                }
+
+                if(answerIndex == -1) { // user1 has not answered
                     switch (e.getKeyChar()) {
                         case 'u':
-                            pressed2 = true;
                             answerIndex = 0;
                             break;
                         case 'i':
-                            pressed2 = true;
                             answerIndex = 1;
                             break;
                         case 'o':
-                            pressed2 = true;
                             answerIndex = 2;
                             break;
                         case 'p':
-                            pressed2 = true;
                             answerIndex = 3;
                             break;
                     }
-                    if(pressed2) {
+
+                    if(answerIndex != -1) {
                         game.answerQuestion(player2, answerIndex);
-                        game.fetchNextQuestion(player2);
+
+                        hasFinished = game.fetchNextQuestion(player2) == FetchNextQuestionStatus.GAME_FINISHED;
                     }
                 }
 
+                if(game.getCurrentRound() instanceof ThermometerRound) {
+                    System.out.println("Total right 1:" + ((ThermometerRound) game.getCurrentRound()).getPlayerWins(player1));
+                    System.out.println("Total right 2:" + ((ThermometerRound) game.getCurrentRound()).getPlayerWins(player2));
+                }
 
+
+                if(hasFinished){
+                    frame.setVisible(false);
+                    JOptionPane.showMessageDialog(new JFrame(),
+                            "Τελείωσες το παιχνίδι με σκορ "+player1.getScore(),"Μπράβο!",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    try {
+                        user1.newData(user1.getName(), (int) player1.getScore());
+                    } catch (IOException ioException) {
+                        ioException.printStackTrace();
+                    } catch (ClassNotFoundException classNotFoundException) {
+                        classNotFoundException.printStackTrace();
+                    }
+                    player1 = new GamePlayer();
+                    player2 = new GamePlayer();
+                }else {
+                    frame.setVisible(false);
+                    checktheTypeOfRound(game, false);
+                }
             }
 
             @Override
@@ -257,13 +277,13 @@ public class GUI{
         answer4.addKeyListener(myListener);
         JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer5.addKeyListener(myListener);
-        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+        JButton answer6 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(0));
         answer6.addKeyListener(myListener);
-        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
+        JButton answer7 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(1));
         answer7.addKeyListener(myListener);
-        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
+        JButton answer8 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(2));
         answer8.addKeyListener(myListener);
-        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
+        answer1 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(3));
         answer1.addKeyListener(myListener);
 
 

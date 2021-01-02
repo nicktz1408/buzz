@@ -54,15 +54,19 @@ public class ThermometerRound implements RoundInterface{
     @Override
     public boolean fetchNextQuestion(GamePlayer player) {
         if(checkWin(player)) {
-            return true;
+            return false;
         } else {
             this.getPlayerData(player).setCurrentQuestion(this.getRandomQuestion());
 
-            return false;
+            return true;
         }
     }
 
-    public int calculateScore() {
+    public int getPlayerWins(GamePlayer player) {
+        return this.getPlayerData(player).getRightAnswers();
+    }
+
+    private int calculateScore() {
         return 5000;
     }
 

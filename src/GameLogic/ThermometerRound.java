@@ -2,19 +2,31 @@ package GameLogic;
 
 import java.util.HashMap;
 
-
+/**
+ * Class for the Thermometer Round Type (θερμόμετρο)
+ */
 public class ThermometerRound implements RoundInterface{
     private final int ROUND_NAME = 5;
-    private HashMap<GamePlayer, PlayerStatus> playerData = new HashMap<>();
+    private HashMap<GamePlayer, PlayerData> playerData = new HashMap<>();
 
-    class PlayerStatus {
+    /**
+     * Inner class used to store data associated with a given user and needed for our class to work right
+     * (stores the # of questions answered right and the current Question of the player)
+     */
+    class PlayerData {
         int rightAnswers;
         Question currentQuestion;
 
+        /**
+         * @param rightAnswers the value of rightAnswers to bet set (usually it increases it by 1)
+         */
         void setRightAnswers(int rightAnswers) {
             this.rightAnswers = rightAnswers;
         }
 
+        /**
+         * @return the questions the player has answered right
+         */
         int getRightAnswers() {
             return this.rightAnswers;
         }
@@ -81,14 +93,14 @@ public class ThermometerRound implements RoundInterface{
     }
 
     private void createNewPlayerData(GamePlayer player) {
-        PlayerStatus playerStatus = new PlayerStatus();
+        PlayerData playerStatus = new PlayerData();
         playerData.put(player, playerStatus);
 
         playerStatus.setRightAnswers(0);
         playerStatus.setCurrentQuestion(this.getRandomQuestion());
     }
 
-    private PlayerStatus getPlayerData(GamePlayer player) {
+    private PlayerData getPlayerData(GamePlayer player) {
         if(!this.playerData.containsKey(player)) {
             this.createNewPlayerData(player);
         }

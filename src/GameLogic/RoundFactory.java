@@ -16,4 +16,12 @@ public class RoundFactory {
     public BettingRound getBettingRound(){
         return new BettingRound();
     }
+
+    public QuickAnswerRound getQuickAnswerRound() {
+        return new QuickAnswerRound();
+    }
+
+    public ThermometerRound getThermometerRound() {
+        return new ThermometerRound();
+    }
 }

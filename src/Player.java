@@ -87,14 +87,9 @@ public class Player implements  Serializable{
         return wins;
     }
 
-    public void increaseWins(){
-        wins++;
-    }
-    public void setHighScore(int highScore){
-        this.highScore = highScore;
-    }
 
-    public void newData(String aName, int highScore) throws IOException, ClassNotFoundException {
+
+    public void newDataAlone(String aName, int highScore) throws IOException, ClassNotFoundException {
         String currentDirectory = new File(".").getCanonicalPath();
         BufferedReader in = new BufferedReader(new FileReader(currentDirectory + "/Players"));
         BufferedWriter out = new BufferedWriter(new FileWriter(currentDirectory + "/TempPlayers"));
@@ -111,19 +106,37 @@ public class Player implements  Serializable{
             out.write(output);
             out.newLine();
             }
+
             out.close();
             in.close();
             new File(currentDirectory + "/TempPlayers").renameTo(new File(currentDirectory + "/Players"));
+
+    }
+
+
+    public void newDataWithTwoPlayers(String aName, boolean win) throws  IOException{
+        String currentDirectory = new File(".").getCanonicalPath();
+        BufferedReader in = new BufferedReader(new FileReader(currentDirectory + "/Players"));
+        BufferedWriter out = new BufferedWriter(new FileWriter(currentDirectory + "/TempPlayers"));
+        String data;
+        while ((data =  in.readLine()) != null) {
+            String[] arrOfStr = data.split(" ", 5);
+            if (arrOfStr[0].equals(aName)) {
+                arrOfStr[4] = String.valueOf(Integer.parseInt(arrOfStr[4]) + 1);
+                if(win){
+                    arrOfStr[3] = String.valueOf(Integer.parseInt(arrOfStr[3]) + 1);
+                }
+            }
+            String output = arrOfStr[0]+" "+arrOfStr[1]+" "+ arrOfStr[2]+" "+arrOfStr[3]+" "+arrOfStr[4];
+            out.write(output);
+            out.newLine();
         }
-
-
-    public void increaseTotalGamesAlone(){
-        totalGamesAlone++;
+        out.close();
+        in.close();
+        new File(currentDirectory + "/TempPlayers").renameTo(new File(currentDirectory + "/Players"));
     }
 
-    public void increaseTotalGamesFriends(){
-        totalGAmesFriends++;
-    }
+
 
 
 

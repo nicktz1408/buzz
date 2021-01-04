@@ -28,7 +28,7 @@ public class GameFacadeDirector {
                         .addQuestion(myQuestions.get(3))
                         .addQuestion(myQuestions.get(4))
                         .build())
-                .addRound(roundBuilder
+                /*.addRound(roundBuilder
                         .type(roundFactory.getStopClockRound())
                         .addQuestion(myQuestions.get(5))
                         .addQuestion(myQuestions.get(6))
@@ -43,7 +43,7 @@ public class GameFacadeDirector {
                         .addQuestion(myQuestions.get(12))
                         .addQuestion(myQuestions.get(13))
                         .addQuestion(myQuestions.get(14))
-                        .build())
+                        .build())*/
                 .addRound(roundFactory.getThermometerRound())
                 /*.addRound(roundBuilder
                         .type(roundFactory.getRightQuestionAnswerRound())

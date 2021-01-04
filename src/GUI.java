@@ -95,7 +95,7 @@ public class GUI{
                 if(solo) {
                     stopTheClockRound(dim, game);
                 }else{
-                    //stopTheClock2Round(dim, game);
+                    stopTheClock2Round(dim, game);
                 }
                 break;
             case 3:
@@ -118,6 +118,231 @@ public class GUI{
                 }
                 break;
         }
+    }
+
+    private void stopTheClock2Round(Dimension dim, GameFacade game) {
+        JFrame frame = new JFrame("Buzz Game");
+        frame.setResizable(true);
+        frame.setSize(dim);
+        frame.setMinimumSize(dim);
+        frame.setLayout(new FlowLayout(FlowLayout.CENTER));
+        frame.setLayout(new GridLayout(3,2));
+        EmptyBorder border = new EmptyBorder(5, 20, 5, 20);
+        LineBorder line = new LineBorder(Color.blue, 2, true);
+        LineBorder lineQuestion = new LineBorder(Color.red,2,true);
+        CompoundBorder compound = new CompoundBorder(line, border);
+        CompoundBorder compoundQuestion = new CompoundBorder(lineQuestion, border);
+
+        JPanel centralPanel = new JPanel();
+        CountDown clock = new CountDown();
+        JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
+        label1.setBorder(compound);
+
+        JLabel label2 = new JLabel("Σκορ 1ου παίκτη: "+(int)player1.getScore());
+        label2.setBorder(compound);
+
+        JLabel label4 = new JLabel("Σκορ 2ου παίκτη: "+(int)player2.getScore());
+        label4.setBorder(compound);
+
+        JLabel label5 = new JLabel("Τύπος Γύρου: "+getRoundName(game.getCurrentRound().getRoundName()));
+        label5.setBorder(compound);
+
+
+        JLabel question = new JLabel("Ερώτηση: "+game.getCurrentQuestion(player1).getQuestionText());
+        question.setBorder(compoundQuestion);
+
+
+        centralPanel.add(label5);
+        centralPanel.add(label1);
+        centralPanel.add(label2);
+        centralPanel.add(label4);
+        centralPanel.add(clock);
+        centralPanel.add(question);
+
+
+        JPanel panel2 = new JPanel();
+
+        JPanel panel1 = new JPanel();
+        panel1.setBackground(Color.orange);
+
+
+        panel2.add(question);
+        if(game.getCurrentQuestion(player1) instanceof QuestionWithImage){
+            String imgName =  ((QuestionWithImage) game.getCurrentQuestion(player1)).getImagePath();
+            URL imageURL = getClass().getResource("Images/" +imgName);
+            if (imageURL != null) {
+                icon = new ImageIcon(imageURL);
+
+            }
+
+            JLabel labelWithIcon = new JLabel(new ImageIcon(icon.getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT)));
+            panel2.add(labelWithIcon);
+        }
+
+
+        JPanel panel4 = new JPanel();
+        JPanel panel5 = new JPanel();
+        panel4.setBackground(Color.orange);
+        panel5.setBackground(Color.green);
+
+
+
+
+
+
+
+
+
+        KeyListener myListener = new KeyListener() {
+            int answerIndex = 0;
+            boolean pressed1 = false;
+            boolean pressed2 = false;
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(!pressed1) {
+                    switch (e.getKeyChar()) {
+                        case 'q':
+                            pressed1 = true;
+                            answerIndex = 0;
+                            break;
+                        case 'w':
+                            pressed1 = true;
+                            answerIndex = 1;
+                            break;
+                        case 'e':
+                            pressed1 = true;
+                            answerIndex = 2;
+                            break;
+                        case 'r':
+                            pressed1 = true;
+                            answerIndex = 3;
+                            break;
+                    }
+                    if(pressed1){
+                        game.answerQuestion(player1, answerIndex);
+
+                    }
+
+                }
+                if(!pressed2) {
+                    switch (e.getKeyChar()) {
+                        case 'u':
+                            pressed2 = true;
+                            answerIndex = 0;
+                            break;
+                        case 'i':
+                            pressed2 = true;
+                            answerIndex = 1;
+                            break;
+                        case 'o':
+                            pressed2 = true;
+                            answerIndex = 2;
+                            break;
+                        case 'p':
+                            pressed2 = true;
+                            answerIndex = 3;
+                            break;
+                    }
+                    if(pressed2) {
+                        game.answerQuestion(player2, answerIndex);
+                    }
+                }
+
+                if(pressed1 && pressed2){
+                    game.fetchNextQuestion(player1);
+                    frame.setVisible(false);
+                    FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
+                    if(status == FetchNextQuestionStatus.GAME_FINISHED){
+                        frame.setVisible(false);
+                        if(player1.getScore()>player2.getScore()){
+                            JOptionPane.showMessageDialog(new JFrame(),
+                                    "Σκόρ "+user1.getName()+": "+player1.getScore()+"\n"+"Σκορ "+user2.getName()+": "+player2.getScore()+"\n"+"Νικητής ο παίκτης "+user1.getName()+"!","Μπράβο!",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            try {
+                                user1.newDataWithTwoPlayers(user1.getName(), true);
+                                user2.newDataWithTwoPlayers(user2.getName(), false);
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
+
+                        }else {
+                            JOptionPane.showMessageDialog(new JFrame(),
+                                    "Σκόρ " + user1.getName() + ": " + player1.getScore() + "\n" + "Σκορ " + user2.getName() + ": " + player2.getScore() + "\n" + "Νικητής ο παίκτης " + user2.getName() + "!", "Μπράβο!",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            try {
+                                user1.newDataWithTwoPlayers(user1.getName(), false);
+                                user2.newDataWithTwoPlayers(user2.getName(), true);
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
+                        }
+                        player1 = new GamePlayer();
+                        player2 = new GamePlayer();
+                    }else {
+                        checktheTypeOfRound(game, false);
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        };
+
+
+        frame.addKeyListener(myListener);
+
+        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+        answer2.addKeyListener(myListener);
+        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
+        answer3.addKeyListener(myListener);
+        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
+        answer4.addKeyListener(myListener);
+        JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
+        answer5.addKeyListener(myListener);
+        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+        answer6.addKeyListener(myListener);
+        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
+        answer7.addKeyListener(myListener);
+        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
+        answer8.addKeyListener(myListener);
+        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
+        answer1.addKeyListener(myListener);
+
+
+        panel4.add(answer2);
+        panel4.add(answer3);
+        panel4.add(answer4);
+        panel4.add(answer5);
+        panel5.add(answer6);
+        panel5.add(answer7);
+        panel5.add(answer8);
+        panel5.add(answer1);
+
+        JSplitPane jsp1 = new JSplitPane();
+        jsp1.setLayout(new GridLayout(2,2));
+        jsp1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, panel4, panel5);
+        jsp1.setDividerLocation(dim.width / 2);
+
+
+
+
+        frame.add(centralPanel);
+        frame.add(panel2);
+        frame.add(jsp1);
+
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
     }
 
     private void quickAnswerRound(Dimension dim, GameFacade game) {
@@ -909,7 +1134,7 @@ public class GUI{
         window.setLayout(new GridLayout(5,1));
 
 
-        GameFacade game = new GameFacadeDirector().buildGame();
+
 
         JRadioButton r1 = new JRadioButton("'Ενας παίκτης");
         JRadioButton r2 = new JRadioButton("Δύο παίκτες");
@@ -933,7 +1158,7 @@ public class GUI{
         play.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(r1.isSelected()){
-
+                    GameFacade game = new GameFacadeDirector().buildSoloGame();
                     JPanel panel2 = new JPanel();
                     JLabel label = new JLabel("Όνομα Παίκτη:", SwingConstants.CENTER);
                     String[] pl = new String[0];
@@ -961,7 +1186,7 @@ public class GUI{
                     }
                     JComboBox cb =new JComboBox(pl);
                 } else if(r2.isSelected()){
-
+                    GameFacade game = new GameFacadeDirector().buildTwoPlayersGame();
                     JPanel panel2 = new JPanel();
                     JPanel panel3 = new JPanel();
                     JPanel panel4 = new JPanel();
@@ -1310,7 +1535,7 @@ public class GUI{
                 }
 
                 if(pressed1 && pressed2){
-                    game.fetchNextQuestion(player1);
+                    //game.fetchNextQuestion(player1);
                     frame.setVisible(false);
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                     if(status == FetchNextQuestionStatus.GAME_FINISHED){

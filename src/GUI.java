@@ -1,5 +1,4 @@
 import GameLogic.*;
-import GameLogic.Question;
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -133,7 +132,7 @@ public class GUI{
 
 
         JPanel panel1 = new JPanel();
-        JLabel label1 = new JLabel("Γύρος "+game.getCurrRoundIndex());
+        JLabel label1 = new JLabel("Γύρος "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
         JLabel label2 = new JLabel("Σκορ "+player1.getScore());
@@ -345,7 +344,7 @@ public class GUI{
 
 
         JPanel panel1 = new JPanel();
-        JLabel label1 = new JLabel("Γύρος "+game.getCurrRoundIndex());
+        JLabel label1 = new JLabel("Γύρος "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
         JLabel label2 = new JLabel("Σκορ "+player1.getScore());
@@ -560,7 +559,7 @@ public class GUI{
         CompoundBorder compoundQuestion = new CompoundBorder(lineQuestion, border);
 
         JPanel panel1 = new JPanel();
-        JLabel label1 = new JLabel("Γύρος: "+game.getCurrRoundIndex());
+        JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
         JLabel label2 = new JLabel("Σκορ: "+player1.getScore());
@@ -681,7 +680,7 @@ public class GUI{
         CompoundBorder compoundQuestion = new CompoundBorder(lineQuestion, border);
 
         JPanel panel1 = new JPanel();
-        JLabel label1 = new JLabel("Γύρος: "+game.getCurrRoundIndex());
+        JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
         JLabel label2 = new JLabel("Σκορ: "+player1.getScore());
@@ -1046,7 +1045,7 @@ public class GUI{
         CompoundBorder compoundQuestion = new CompoundBorder(lineQuestion,border);
 
         JPanel panel1 = new JPanel();
-        JLabel label1 = new JLabel("Γύρος: "+game.getCurrRoundIndex());
+        JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
         JLabel label2 = new JLabel("Σκορ: "+player1.getScore());
@@ -1169,7 +1168,7 @@ public class GUI{
 
 
         JPanel panel1 = new JPanel();
-        JLabel label1 = new JLabel("Γύρος: "+game.getCurrRoundIndex());
+        JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
         JLabel label2 = new JLabel("Σκορ 1ου παίκτη: "+(int)player1.getScore());

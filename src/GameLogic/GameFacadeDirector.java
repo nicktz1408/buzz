@@ -1,13 +1,15 @@
 package GameLogic;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * Responsible to build the entire GameFacade structure from scratch
+ */
 public class GameFacadeDirector {
-    public GameFacadeDirector() {
-
-    }
-
+    /**
+     *
+     * @return
+     */
     public GameFacade buildGame(){
         QuestionRepository questionRepository = QuestionRepository.getInstance();
         FixedQuestionsRoundBuilder roundBuilder = new FixedQuestionsRoundBuilder();
@@ -19,7 +21,7 @@ public class GameFacadeDirector {
 
         return gameFacadeBuilder
                 .addRound(roundBuilder
-                        .type(roundFactory.getRightQuestionAnswerRound())
+                        .type(roundFactory.getRightQuestionRound())
                         .addQuestion(myQuestions.get(0))
                         .addQuestion(myQuestions.get(1))
                         .addQuestion(myQuestions.get(2))
@@ -82,7 +84,7 @@ public class GameFacadeDirector {
 
         return gameFacadeBuilder
                 .addRound(roundBuilder
-                        .type(roundFactory.getRightQuestionAnswerRound())
+                        .type(roundFactory.getRightQuestionRound())
                         .addQuestion(myQuestions.get(0))
                         .addQuestion(myQuestions.get(1))
                         .addQuestion(myQuestions.get(2))

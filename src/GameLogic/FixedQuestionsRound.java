@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that encapsulates repeated functionality among rounds that feature common Questions for each Player
+ */
 public abstract class FixedQuestionsRound implements RoundInterface {
-    private int currQuestionIndex;
+    private int currentQuestionIndex;
     private List<Question> questionsList;
 
     public FixedQuestionsRound() {
-        currQuestionIndex = 0;
+        currentQuestionIndex = 0;
         questionsList = new ArrayList<Question>();
     }
 
@@ -20,12 +23,12 @@ public abstract class FixedQuestionsRound implements RoundInterface {
      */
     @Override
     public Question getCurrentQuestion(GamePlayer player) {
-        if(questionsList.size() <= currQuestionIndex) {
+        if(questionsList.size() <= currentQuestionIndex) {
             // throw new Exception();
             return null;
         }
 
-        return questionsList.get(currQuestionIndex);
+        return questionsList.get(currentQuestionIndex);
     }
 
     /**
@@ -35,9 +38,9 @@ public abstract class FixedQuestionsRound implements RoundInterface {
      */
     @Override
     public boolean fetchNextQuestion(GamePlayer player) {
-        currQuestionIndex++;
+        currentQuestionIndex++;
 
-        return currQuestionIndex < questionsList.size();
+        return currentQuestionIndex < questionsList.size();
     }
 
     /**

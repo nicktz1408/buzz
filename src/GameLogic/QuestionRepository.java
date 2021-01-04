@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+/**
+ * Singleton class that wraps the functionality of getting random questions from the corresponding file on the disk
+ */
 public class QuestionRepository {
     private String filename;
 
@@ -17,7 +20,12 @@ public class QuestionRepository {
 
     private static QuestionRepository singleInstance = null;
 
-    // static method to create instance of Singleton class
+    /**
+     * Returns a reference to our internal QuestionRepository object, in accordance to the Singleton design
+     * pattern (allows us to use the same object from many different places without breaking the order of the
+     * questions - for more details, refer to https://refactoring.guru/design-patterns/singleton)
+     * @return a reference to our internal object
+     */
     public static QuestionRepository getInstance() {
         if (singleInstance == null)
             singleInstance = new QuestionRepository();
@@ -25,6 +33,9 @@ public class QuestionRepository {
         return singleInstance;
     }
 
+    /**
+     * Loads the Questions from the disk to the working memory
+     */
     private QuestionRepository() {
         filename = "Questions.txt";
         this.questions = new ArrayList<String[]>();
@@ -58,11 +69,20 @@ public class QuestionRepository {
         }
     }
 
+    /**
+     *
+     * @return a single, random Question
+     */
     public Question getSingleRandomQuestion() {
         index = (index+1)%this.questions.size();
         return this.buildQuestion(questions.get(index));
     }
 
+    /**
+     *
+     * @param batchSize the size of Questions to be returned
+     * @return a batch of random Questions
+     */
     public ArrayList<Question> getRandomQuestionBatch(int batchSize) {
         ArrayList<Question> batch = new ArrayList<>();
 
@@ -73,6 +93,9 @@ public class QuestionRepository {
         return batch;
     }
 
+    /**
+     * Utility function that loads the entire file from the disk and stores it to the questions ArrayList
+     */
     private void parseFile() {
         try {
             String currentDirectory = new File(".").getCanonicalPath();

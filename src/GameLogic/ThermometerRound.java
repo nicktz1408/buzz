@@ -18,28 +18,42 @@ public class ThermometerRound implements RoundInterface{
         Question currentQuestion;
 
         /**
-         * @param rightAnswers the value of rightAnswers to bet set (usually it increases it by 1)
+         * @param rightAnswers the value of rightAnswers to bet set (usually it is being increased it by 1)
          */
         void setRightAnswers(int rightAnswers) {
             this.rightAnswers = rightAnswers;
         }
 
         /**
-         * @return the questions the player has answered right
+         * @return the number of questions the Player has answered correctly
          */
         int getRightAnswers() {
             return this.rightAnswers;
         }
 
+        /**
+         *
+         * @param currentQuestion the current Question to be set for the Player
+         */
         void setCurrentQuestion(Question currentQuestion) {
             this.currentQuestion = currentQuestion;
         }
 
+        /**
+         *
+         * @return the current Question of the Player
+         */
         Question getCurrentQuestion() {
             return this.currentQuestion;
         }
     }
 
+    /**
+     *
+     * @param player the player that answers the question
+     * @param answerIndex the chosen index of the answer
+     * @param additionalRequestData {int betSize} a single parameter for the amount of the bet by the player
+     */
     @Override
     public void answerQuestion(GamePlayer player, int answerIndex, Object... additionalRequestData) {
         double scoreToAdd = 0;
@@ -53,16 +67,25 @@ public class ThermometerRound implements RoundInterface{
         }
     }
 
+    /**
+     * @return the round id
+     */
     @Override
     public int getRoundName() {
         return this.ROUND_NAME;
     }
+
 
     @Override
     public Question getCurrentQuestion(GamePlayer player) {
         return this.getPlayerData(player).getCurrentQuestion();
     }
 
+    /**
+     * Instructs the class to fetch the next question for the given Player
+     * @param player the Player whose question will be updated
+     * @return true if the round has finished (a winner has been concluded), false otherwise
+     */
     @Override
     public boolean fetchNextQuestion(GamePlayer player) {
         if(checkWin(player)) {
@@ -74,24 +97,46 @@ public class ThermometerRound implements RoundInterface{
         }
     }
 
+    /**
+     * Retrieves the # of correct answers of the Player
+     * @param player the Player
+     * @return the number of correct answers of the given Player
+     */
     public int getPlayerWins(GamePlayer player) {
         return this.getPlayerData(player).getRightAnswers();
     }
 
+    /**
+     * Utility function to calculate the score bestowed to the given plater
+     * @return the value of the points to be bestowed
+     */
     private int calculateScore() {
         return 5000;
     }
 
+    /**
+     * Utility function to increase the count of correct answers of the given Player
+     * @param player the associated Player
+     */
     private void  increaseRightAnswer(GamePlayer player){
         int currWins = this.getPlayerData(player).getRightAnswers();
 
         this.getPlayerData(player).setRightAnswers(currWins + 1);
     }
 
+    /**
+     * Utility function to determine wheter the given Player has won the game (accumulated >= 5 correct answers)
+     * @param player the associated Player
+     * @return whether they won or lost
+     */
     private boolean checkWin(GamePlayer player){
         return this.getPlayerData(player).getRightAnswers() >= 5;
     }
 
+    /**
+     * Utility function to create a new entry for the player and add it to the HashMap
+     * @param player the Player to create the entry for
+     */
     private void createNewPlayerData(GamePlayer player) {
         PlayerData playerStatus = new PlayerData();
         playerData.put(player, playerStatus);
@@ -100,6 +145,11 @@ public class ThermometerRound implements RoundInterface{
         playerStatus.setCurrentQuestion(this.getRandomQuestion());
     }
 
+    /**
+     * Utility function to get the associated PlayerData of the given player from the HashMap
+     * @param player the Player whose data will be retrieved
+     * @return the associated PlayerData object
+     */
     private PlayerData getPlayerData(GamePlayer player) {
         if(!this.playerData.containsKey(player)) {
             this.createNewPlayerData(player);
@@ -108,6 +158,10 @@ public class ThermometerRound implements RoundInterface{
         return this.playerData.get(player);
     }
 
+    /**
+     * Utility function to get a random question from the QuestionRepository
+     * @return a random Question
+     */
     private Question getRandomQuestion() {
         return QuestionRepository.getInstance().getSingleRandomQuestion();
     }

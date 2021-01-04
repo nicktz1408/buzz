@@ -138,13 +138,13 @@ public class GUI{
 
 
         JPanel panel1 = new JPanel();
-        JLabel label1 = new JLabel("Γύρος "+game.getCurrRoundIndex());
+        JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
-        JLabel label2 = new JLabel("Σκορ "+player1.getScore());
+        JLabel label2 = new JLabel("Σκορ: "+player1.getScore());
         label2.setBorder(compound);
 
-        JLabel label4 = new JLabel("Σκορ "+player2.getScore());
+        JLabel label4 = new JLabel("Σκορ: "+player2.getScore());
         label4.setBorder(compound);
 
         JLabel label5 = new JLabel("Τύπος Γύρου: "+getRoundName(game.getCurrentRound().getRoundName()));
@@ -351,7 +351,7 @@ public class GUI{
 
 
         JPanel panel1 = new JPanel();
-        JLabel label1 = new JLabel("Γύρος "+game.getCurrRoundIndex());
+        JLabel label1 = new JLabel("Γύρος "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
         JLabel label2 = new JLabel("Σκορ "+player1.getScore());
@@ -566,7 +566,7 @@ public class GUI{
         CompoundBorder compoundQuestion = new CompoundBorder(lineQuestion, border);
 
         JPanel panel1 = new JPanel();
-        JLabel label1 = new JLabel("Γύρος: "+game.getCurrRoundIndex());
+        JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
         JLabel label2 = new JLabel("Σκορ: "+player1.getScore());
@@ -697,7 +697,7 @@ public class GUI{
         CompoundBorder compoundQuestion = new CompoundBorder(lineQuestion, border);
 
         JPanel panel1 = new JPanel();
-        JLabel label1 = new JLabel("Γύρος: "+game.getCurrRoundIndex());
+        JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
         JLabel label2 = new JLabel("Σκορ: "+player1.getScore());
@@ -933,6 +933,7 @@ public class GUI{
         play.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if(r1.isSelected()){
+
                     JPanel panel2 = new JPanel();
                     JLabel label = new JLabel("Όνομα Παίκτη:", SwingConstants.CENTER);
                     String[] pl = new String[0];
@@ -960,6 +961,7 @@ public class GUI{
                     }
                     JComboBox cb =new JComboBox(pl);
                 } else if(r2.isSelected()){
+
                     JPanel panel2 = new JPanel();
                     JPanel panel3 = new JPanel();
                     JPanel panel4 = new JPanel();
@@ -1068,7 +1070,7 @@ public class GUI{
         CompoundBorder compoundQuestion = new CompoundBorder(lineQuestion,border);
 
         JPanel panel1 = new JPanel();
-        JLabel label1 = new JLabel("Γύρος: "+game.getCurrRoundIndex());
+        JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
         JLabel label2 = new JLabel("Σκορ: "+player1.getScore());
@@ -1163,14 +1165,11 @@ public class GUI{
                     } catch (IOException | ClassNotFoundException ioException) {
                         ioException.printStackTrace();
                     }
-
                 }else {
                     frame.setVisible(false);
                     checktheTypeOfRound(game, true);
                 }
-
             }
-
         };
 
         answer1.addActionListener(answerListener);
@@ -1193,7 +1192,7 @@ public class GUI{
         CompoundBorder compoundQuestion = new CompoundBorder(lineQuestion, border);
 
         JPanel centralPanel = new JPanel();
-        JLabel label1 = new JLabel("Γύρος: "+game.getCurrRoundIndex());
+        JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
         JLabel label2 = new JLabel("Σκορ 1ου παίκτη: "+(int)player1.getScore());

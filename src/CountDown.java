@@ -18,7 +18,7 @@ class CountDown extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 millliSecond -= 1;
-                if (second>0) {
+                if (second>-1) {
                     if(millliSecond==0) {
                         millliSecond = 999;
                         second--;
@@ -37,10 +37,13 @@ class CountDown extends JPanel {
 
     public void buttonClicked(){
         timer.stop();
-        int remainingTime = second*1000+millliSecond;
     }
 
-    public int getMilli(){
-        return millliSecond;
+
+    public int getRemainingTime() {
+        return second*1000+millliSecond;
+    }
+    public int getSecond(){
+        return second;
     }
 }

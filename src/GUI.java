@@ -1,5 +1,5 @@
 import GameLogic.*;
-import GameLogic.Question;
+
 
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
@@ -24,6 +24,7 @@ public class GUI{
     private Player user1 = new Player("user1");
     private Player user2 = new Player("user2");
     private ImageIcon icon;
+    private int bet;
 
 
 
@@ -91,13 +92,17 @@ public class GUI{
                 }
                 break;
             case 2:
-
-                stopTheClockRound(dim, game);
+                if(solo) {
+                    stopTheClockRound(dim, game);
+                }else{
+                    //stopTheClock2Round(dim, game);
+                }
                 break;
             case 3:
                 if(solo){
-                    bettingRound(dim, game);
-                }else {
+                    Dimension dimBet = new Dimension(200,150);
+                    bettingChoises(dimBet, game);
+                }else{
                     //betting2Round(dim, game);
                 }
 
@@ -154,7 +159,7 @@ public class GUI{
         centralPanel.add(label1);
         centralPanel.add(label4);
         centralPanel.add(label2);
-        centralPanel.add(question);
+        //centralPanel.add(question);
 
 
         JPanel panel2 = new JPanel();
@@ -162,7 +167,8 @@ public class GUI{
 
         panel1.setBackground(Color.orange);
 
-        panel2.setBackground(Color.green);
+        //panel2.setBackground(Color.green);
+        panel2.add(question);
         JSplitPane jsp = new JSplitPane();
         jsp.setLayout(new GridLayout(2,2));
 
@@ -317,7 +323,7 @@ public class GUI{
 
 
         frame.add(centralPanel);
-        //frame.add(jsp);
+        frame.add(panel2);
         frame.add(jsp1);
 
         frame.pack();
@@ -552,7 +558,7 @@ public class GUI{
         frame.setSize(dim);
         frame.setMinimumSize(dim);
         frame.setLayout(new FlowLayout(FlowLayout.CENTER));
-        frame.setLayout(new GridLayout(4,3));
+        frame.setLayout(new GridLayout(3,3));
         EmptyBorder border = new EmptyBorder(5, 20, 5, 20);
         LineBorder line = new LineBorder(Color.blue, 2, true);
         LineBorder lineQuestion = new LineBorder(Color.red,2,true);
@@ -575,6 +581,18 @@ public class GUI{
         JLabel label5 = new JLabel("Κατηγορία ερώτησης: " +  game.getCurrentQuestion(player1).getCategory());
         label5.setBorder(compound);
 
+
+
+
+        panel1.add(label4);
+        panel1.add(label1);
+        panel1.add(label5);
+        panel1.add(label2);
+        frame.add(panel1);
+
+        JPanel panel2 = new JPanel();
+        panel2.add(label3);
+
         if(game.getCurrentQuestion(player1) instanceof QuestionWithImage){
             String imgName =  ((QuestionWithImage) game.getCurrentQuestion(player1)).getImagePath();
 
@@ -583,22 +601,20 @@ public class GUI{
                 icon = new ImageIcon(imageURL);
             }
 
-            JLabel labelWithIcon = new JLabel();
-            labelWithIcon.setIcon(icon);
-            labelWithIcon.setBounds(100, 100, 50, 50);
-            panel1.add(labelWithIcon);
+            JLabel labelWithIcon = new JLabel(new ImageIcon(icon.getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT)));
+            panel2.add(labelWithIcon);
         }
 
-        panel1.add(label4);
-        panel1.add(label1);
-        panel1.add(label5);
-        panel1.add(label3);
-        panel1.add(label2);
-        frame.add(panel1);
 
 
 
-        JPanel panel2 = new JPanel();
+
+
+        frame.add(panel2);
+
+
+
+        JPanel panel3 = new JPanel();
         JButton answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
 
         JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
@@ -607,11 +623,11 @@ public class GUI{
 
         JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
 
-        panel2.add(answer1);
-        panel2.add(answer2);
-        panel2.add(answer3);
-        panel2.add(answer4);
-        frame.add(panel2);
+        panel3.add(answer1);
+        panel3.add(answer2);
+        panel3.add(answer3);
+        panel3.add(answer4);
+        frame.add(panel3);
 
 
 
@@ -635,7 +651,7 @@ public class GUI{
                 } else if(e.getSource() == answer4){
                     answerIndex = 3;
                 }
-                game.answerQuestion(player1, answerIndex, 500);
+                game.answerQuestion(player1, answerIndex, bet);
                 FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                 if(status == FetchNextQuestionStatus.GAME_FINISHED){
                     frame.setVisible(false);
@@ -673,7 +689,7 @@ public class GUI{
         frame.setSize(dim);
         frame.setMinimumSize(dim);
         frame.setLayout(new FlowLayout(FlowLayout.CENTER));
-        frame.setLayout(new GridLayout(4,3));
+        frame.setLayout(new GridLayout(3,3));
         EmptyBorder border = new EmptyBorder(5, 20, 5, 20);
         LineBorder line = new LineBorder(Color.blue, 2, true);
         LineBorder lineQuestion = new LineBorder(Color.red,2,true);
@@ -696,7 +712,19 @@ public class GUI{
         JLabel label5 = new JLabel("Κατηγορία ερώτησης: " +  game.getCurrentQuestion(player1).getCategory());
         label5.setBorder(compound);
 
+        panel1.add(label4);
+        panel1.add(label1);
+        panel1.add(label5);
+        panel1.add(label2);
+        CountDown clock = new CountDown();
+        clock.setBorder(compound);
 
+        panel1.add(clock);
+        frame.add(panel1);
+
+
+        JPanel panel2 = new JPanel();
+        panel2.add(label3);
         if(game.getCurrentQuestion(player1) instanceof QuestionWithImage){
             String imgName =  ((QuestionWithImage) game.getCurrentQuestion(player1)).getImagePath();
             URL imageURL = getClass().getResource("Images/" +imgName);
@@ -704,26 +732,20 @@ public class GUI{
                 icon = new ImageIcon(imageURL);
             }
 
-            JLabel labelWithIcon = new JLabel();
-            labelWithIcon.setIcon(icon);
-            labelWithIcon.setBounds(100, 100, 50, 50);
-            panel1.add(labelWithIcon);
+            JLabel labelWithIcon = new JLabel(new ImageIcon(icon.getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT)));
+            panel2.add(labelWithIcon);
         }
 
-        CountDown clock = new CountDown();
-        clock.setBorder(compound);
-
-        panel1.add(label4);
-        panel1.add(label1);
-        panel1.add(label5);
-        panel1.add(label3);
-        panel1.add(label2);
-        panel1.add(clock);
-
-        frame.add(panel1);
 
 
-        JPanel panel2 = new JPanel();
+
+
+
+
+        frame.add(panel2);
+
+
+        JPanel panel3 = new JPanel();
         JButton answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
 
         JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
@@ -732,11 +754,11 @@ public class GUI{
 
         JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
 
-        panel2.add(answer1);
-        panel2.add(answer2);
-        panel2.add(answer3);
-        panel2.add(answer4);
-        frame.add(panel2);
+        panel3.add(answer1);
+        panel3.add(answer2);
+        panel3.add(answer3);
+        panel3.add(answer4);
+        frame.add(panel3);
 
 
 
@@ -747,6 +769,8 @@ public class GUI{
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
+
+
 
         ActionListener answerListener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -761,7 +785,7 @@ public class GUI{
                 } else if(e.getSource() == answer4){
                     answerIndex = 3;
                 }
-                int remaining = clock.getMilli();
+                int remaining = clock.getRemainingTime();
                 game.answerQuestion(player1, answerIndex, remaining);
 
                 FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
@@ -775,10 +799,8 @@ public class GUI{
                         user1.newDataAlone(user1.getName(), (int) player1.getScore());
                         player1 = new GamePlayer();
                         player2 = new GamePlayer();
-                    } catch (IOException ioException) {
+                    } catch (IOException | ClassNotFoundException ioException) {
                         ioException.printStackTrace();
-                    } catch (ClassNotFoundException classNotFoundException) {
-                        classNotFoundException.printStackTrace();
                     }
                 }else {
                     frame.setVisible(false);
@@ -884,7 +906,7 @@ public class GUI{
         window.setResizable(false);
         window.setSize(dim);
         window.setMinimumSize(dim);
-        window.setLayout(new GridLayout(10,1));
+        window.setLayout(new GridLayout(5,1));
 
 
         GameFacade game = new GameFacadeDirector().buildGame();
@@ -1038,7 +1060,7 @@ public class GUI{
         frame.setSize(dim);
         frame.setMinimumSize(dim);
         frame.setLayout(new FlowLayout(FlowLayout.CENTER));
-        frame.setLayout(new GridLayout(4,3));
+        frame.setLayout(new GridLayout(3,3));
         EmptyBorder border = new EmptyBorder(5, 20, 5, 20);
         LineBorder line = new LineBorder(Color.blue, 2, true);
         CompoundBorder compound = new CompoundBorder(line, border);
@@ -1061,29 +1083,35 @@ public class GUI{
         JLabel label5 = new JLabel("Κατηγορία ερώτησης: " +  game.getCurrentQuestion(player1).getCategory());
         label5.setBorder(compound);
 
+        panel1.add(label4);
+        panel1.add(label1);
+        panel1.add(label5);
+        panel1.add(label2);
+        frame.add(panel1);
+
+        JPanel panel2 = new JPanel();
+        panel2.add(label3);
+
 
         if(game.getCurrentQuestion(player1) instanceof QuestionWithImage){
             String imgName =  ((QuestionWithImage) game.getCurrentQuestion(player1)).getImagePath();
             URL imageURL = getClass().getResource("Images/" +imgName);
             if (imageURL != null) {
                 icon = new ImageIcon(imageURL);
+
             }
 
-            JLabel labelWithIcon = new JLabel();
-            labelWithIcon.setIcon(icon);
-            labelWithIcon.setBounds(100, 100, 50, 50);
-            panel1.add(labelWithIcon);
+            JLabel labelWithIcon = new JLabel(new ImageIcon(icon.getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT)));
+            panel2.add(labelWithIcon);
         }
-        panel1.add(label4);
-        panel1.add(label1);
-        panel1.add(label5);
-        panel1.add(label3);
-        panel1.add(label2);
-        frame.add(panel1);
 
 
 
-        JPanel panel2 = new JPanel();
+
+        frame.add(panel2);
+
+
+        JPanel panel3 = new JPanel();
         JButton answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
 
         JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
@@ -1092,11 +1120,11 @@ public class GUI{
 
         JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
 
-        panel2.add(answer1);
-        panel2.add(answer2);
-        panel2.add(answer3);
-        panel2.add(answer4);
-        frame.add(panel2);
+        panel3.add(answer1);
+        panel3.add(answer2);
+        panel3.add(answer3);
+        panel3.add(answer4);
+        frame.add(panel3);
 
 
 
@@ -1165,10 +1193,6 @@ public class GUI{
         CompoundBorder compoundQuestion = new CompoundBorder(lineQuestion, border);
 
         JPanel centralPanel = new JPanel();
-
-
-
-        JPanel panel1 = new JPanel();
         JLabel label1 = new JLabel("Γύρος: "+game.getCurrRoundIndex());
         label1.setBorder(compound);
 
@@ -1195,17 +1219,23 @@ public class GUI{
 
         JPanel panel2 = new JPanel();
 
-
+        JPanel panel1 = new JPanel();
         panel1.setBackground(Color.orange);
 
-        //panel2.setBackground(Color.green);
+
         panel2.add(question);
-        JSplitPane jsp = new JSplitPane();
-        jsp.setLayout(new GridLayout(2,2));
+        if(game.getCurrentQuestion(player1) instanceof QuestionWithImage){
+            String imgName =  ((QuestionWithImage) game.getCurrentQuestion(player1)).getImagePath();
+            URL imageURL = getClass().getResource("Images/" +imgName);
+            if (imageURL != null) {
+                icon = new ImageIcon(imageURL);
 
+            }
 
-        jsp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, panel1, panel2);
-        jsp.setDividerLocation(dim.width / 2);
+            JLabel labelWithIcon = new JLabel(new ImageIcon(icon.getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT)));
+            panel2.add(labelWithIcon);
+        }
+
 
         JPanel panel4 = new JPanel();
         JPanel panel5 = new JPanel();
@@ -1394,4 +1424,77 @@ public class GUI{
         return null;
     }
 
+
+
+    public void bettingChoises(Dimension dim, GameFacade game){
+        window = new JFrame("Buzz Game");
+        JPanel panel = new JPanel();
+        window.setResizable(false);
+        window.setSize(dim);
+        window.setMinimumSize(dim);
+        window.setLayout(new GridLayout(5,1));
+
+
+
+        JPanel panel1 = new JPanel();
+        JLabel label = new JLabel("Η επόμενη ερώτηση ανήκει στην κατηγορία "+game.getCurrentQuestion(player1).getCategory());
+        panel1.add(label);
+
+
+        JPanel panel2 = new JPanel();
+        JButton bet1 = new JButton("250");
+        JButton bet2 = new JButton("500");
+        JButton bet3 = new JButton("750");
+        JButton bet4 = new JButton("1000");
+        panel2.add(bet1);
+        panel2.add(bet2);
+        panel2.add(bet3);
+        panel2.add(bet4);
+
+        window.add(panel1);
+        window.add(panel2);
+
+        window.pack();
+        window.setLocationRelativeTo(null);
+        window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        window.setVisible(true);
+
+        bet1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                window.setVisible(false);
+                bet = 250;
+                Dimension dimension = new Dimension(800,500);
+                bettingRound(dimension, game);
+            }
+        });
+        bet2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                window.setVisible(false);
+                bet = 500;
+                Dimension dimension = new Dimension(800,500);
+                bettingRound(dimension, game);
+            }
+        });
+        bet3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                window.setVisible(false);
+                bet = 750;
+                Dimension dimension = new Dimension(800,500);
+                bettingRound(dimension, game);
+            }
+        });
+        bet4.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                window.setVisible(false);
+                bet = 1000;
+                Dimension dimension = new Dimension(800,500);
+                bettingRound(dimension, game);
+            }
+        });
+
+    }
 }

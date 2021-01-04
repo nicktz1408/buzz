@@ -13,7 +13,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 
-
+/**
+ * Class used for the GUI
+ */
 public class GUI{
     private JFrame window;
     private JButton playButton, signInButton, statisticsButton;
@@ -78,7 +80,11 @@ public class GUI{
     }
 
 
-
+    /**
+     * Routes the GUI to the right screen based on the round type and single/multiplayer
+     * @param game reference to our GameFacade
+     * @param solo true if 1 player, false if 2 players
+     */
     public void checktheTypeOfRound(GameFacade game, boolean solo){
         Dimension dim = new Dimension(800, 500);
         switch (game.getCurrentRound().getRoundName()){
@@ -114,6 +120,11 @@ public class GUI{
         }
     }
 
+    /**
+     * Sets up the screen of the QuickAnswerRound (only for 2 players)
+     * @param dim
+     * @param game reference to our GameFacade
+     */
     private void quickAnswerRound(Dimension dim, GameFacade game) {
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
@@ -326,6 +337,11 @@ public class GUI{
 
     }
 
+    /**
+     * Sets up the screen of the ThermometerRound (only for 2 players)
+     * @param dim
+     * @param game reference to our GameFacade
+     */
     private void thermometerRound(Dimension dim, GameFacade game) {
         Frame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
@@ -545,6 +561,11 @@ public class GUI{
         frame.setVisible(true);
     }
 
+    /**
+     * Sets up the screen of the BettingRound for 1 player
+     * @param dim
+     * @param game reference to our GameFacade
+     */
     public void bettingRound(Dimension dim, GameFacade game){
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
@@ -666,6 +687,11 @@ public class GUI{
         answer4.addActionListener(answerListener);
     }
 
+    /**
+     * Sets up the screen of the StopTheClockRound for 1 player
+     * @param dim
+     * @param game reference to our GameFacade
+     */
     public void stopTheClockRound(Dimension dim, GameFacade game){
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
@@ -795,6 +821,10 @@ public class GUI{
     }
 
 
+    /**
+     * Sets up the screen of the statistics page
+     * @param dim
+     */
     public void statisticsGui(Dimension dim) throws IOException {
         window = new JFrame("Buzz Game");
         window.setResizable(true);
@@ -876,7 +906,10 @@ public class GUI{
     }
 
 
-
+    /**
+     * Sets up the screen of the new game page (that configures and starts a new game)
+     * @param dim
+     */
     public void startPlaying(Dimension dim){
         window = new JFrame("Buzz Game");
         JPanel panel = new JPanel();
@@ -982,6 +1015,10 @@ public class GUI{
         });
     }
 
+    /**
+     * Sets up the screen of registration page
+     * @param dim
+     */
     public void afterCheckSignIn(Dimension dim){
         window = new JFrame("Buzz Game");
         window.setSize(dim);
@@ -1029,7 +1066,11 @@ public class GUI{
         });
     }
 
-
+    /**
+     * Sets up the screen of the RightQuestionRound for 1 player
+     * @param dim
+     * @param game reference to our GameFacade
+     */
     public void initializeAloneGame(Dimension dim,GameFacade game){
 
         JFrame frame = new JFrame("Buzz Game");
@@ -1150,6 +1191,11 @@ public class GUI{
         answer4.addActionListener(answerListener);
     }
 
+    /**
+     * Sets up the screen of the QuickAnswerRound for 2 players
+     * @param dim
+     * @param game reference to our GameFacade
+     */
     public void initialize2Game(Dimension dim, GameFacade game) {
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
@@ -1376,7 +1422,10 @@ public class GUI{
 
     }
 
-
+    /**
+     * Utility function to display the round name based on its id
+     * @param roundId the provided roundId
+     */
     public String getRoundName(int roundId){
         switch (roundId){
             case 1:

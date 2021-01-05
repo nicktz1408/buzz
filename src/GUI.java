@@ -1,6 +1,4 @@
 import GameLogic.*;
-
-
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -57,21 +55,32 @@ public class GUI{
 
         playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                URL url = getClass().getResource("ButtonClick.wav");
+                AudioClip clip = Applet.newAudioClip(url);
+                clip.play();
                 Dimension dim = new Dimension(200, 150);
                 startPlaying(dim);
+
             }
         });
 
         signInButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                URL url = getClass().getResource("ButtonClick.wav");
+                AudioClip clip = Applet.newAudioClip(url);
+                clip.play();
                 Dimension dim = new Dimension(100, 50);
                 afterCheckSignIn(dim);
+
             }
         });
 
         statisticsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                URL url = getClass().getResource("ButtonClick.wav");
+                AudioClip clip = Applet.newAudioClip(url);
+                clip.play();
                 Dimension dim = new Dimension(600, 450);
                 try {
                     statisticsGui(dim);
@@ -136,7 +145,42 @@ public class GUI{
         CompoundBorder compoundQuestion = new CompoundBorder(lineQuestion, border);
 
         JPanel centralPanel = new JPanel();
-        CountDown clock = new CountDown();
+        CountDown clock = new CountDown() {
+            @Override
+            public void onFinish() {
+                frame.setVisible(false);
+                FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
+                if(status == FetchNextQuestionStatus.GAME_FINISHED){
+                    frame.setVisible(false);
+                    if(player1.getScore()>player2.getScore()){
+                        JOptionPane.showMessageDialog(new JFrame(),
+                                "Σκόρ "+user1.getName()+": "+player1.getScore()+"\n"+"Σκορ "+user2.getName()+": "+player2.getScore()+"\n"+"Νικητής ο παίκτης "+user1.getName()+"!","Μπράβο!",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        try {
+                            user1.newDataWithTwoPlayers(user1.getName(), true);
+                            user2.newDataWithTwoPlayers(user2.getName(), false);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+
+                    }else {
+                        JOptionPane.showMessageDialog(new JFrame(),
+                                "Σκόρ " + user1.getName() + ": " + player1.getScore() + "\n" + "Σκορ " + user2.getName() + ": " + player2.getScore() + "\n" + "Νικητής ο παίκτης " + user2.getName() + "!", "Μπράβο!",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        try {
+                            user1.newDataWithTwoPlayers(user1.getName(), false);
+                            user2.newDataWithTwoPlayers(user2.getName(), true);
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                    }
+                    player1 = new GamePlayer();
+                    player2 = new GamePlayer();
+                }else {
+                    checktheTypeOfRound(game, false);
+                }
+            }
+        };
         clock.setBorder(compound);
 
 
@@ -954,7 +998,30 @@ public class GUI{
         panel1.add(label1);
         panel1.add(label5);
         panel1.add(label2);
-        CountDown clock = new CountDown();
+        CountDown clock = new CountDown() {
+            @Override
+            public void onFinish() {
+                frame.setVisible(false);
+                FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
+                if (status == FetchNextQuestionStatus.GAME_FINISHED) {
+                    frame.setVisible(false);
+                    JOptionPane.showMessageDialog(new JFrame(),
+                            "Σκόρ " + user1.getName() + ": " + player1.getScore() + "\n" + "Σκορ " + user2.getName() + ": " + player2.getScore() + "\n" + "Νικητής ο παίκτης " + user1.getName() + "!", "Μπράβο!",
+                            JOptionPane.INFORMATION_MESSAGE);
+
+                    try {
+                        user1.newDataAlone(user1.getName(), (int) player1.getScore());
+                    } catch (ClassNotFoundException | IOException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    player1 = new GamePlayer();
+                    player2 = new GamePlayer();
+                } else {
+                    checktheTypeOfRound(game, true);
+                }
+            }};
         clock.setBorder(compound);
 
         panel1.add(clock);
@@ -1113,6 +1180,9 @@ public class GUI{
 
         show.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                URL url = getClass().getResource("ButtonClick.wav");
+                AudioClip clip = Applet.newAudioClip(url);
+                clip.play();
                 String textFieldValue = (String) cb.getItemAt(cb.getSelectedIndex());
                 Player player = new Player(textFieldValue);
                 try {
@@ -1170,6 +1240,9 @@ public class GUI{
 
         play.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                URL url = getClass().getResource("ButtonClick.wav");
+                AudioClip clip = Applet.newAudioClip(url);
+                clip.play();
                 if(r1.isSelected()){
                     GameFacade game = new GameFacadeDirector().buildSoloGame();
                     JPanel panel2 = new JPanel();
@@ -1186,6 +1259,9 @@ public class GUI{
                         window.setVisible(true);
                         run.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
+                                URL url = getClass().getResource("ButtonClick.wav");
+                                AudioClip clip = Applet.newAudioClip(url);
+                                clip.play();
                                 window.setVisible(false);
                                 String name = (String) cb.getItemAt(cb.getSelectedIndex());
                                 user1.setName(name);
@@ -1223,6 +1299,9 @@ public class GUI{
                         window.setVisible(true);
                         run.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
+                                URL url = getClass().getResource("ButtonClick.wav");
+                                AudioClip clip = Applet.newAudioClip(url);
+                                clip.play();
                                 String name1 = (String) cb.getItemAt(cb.getSelectedIndex());
                                 user1.setName(name1);
                                 String name2 = (String) cb2.getItemAt(cb2.getSelectedIndex());
@@ -1271,6 +1350,9 @@ public class GUI{
 
         SUBMIT.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                URL url = getClass().getResource("ButtonClick.wav");
+                AudioClip clip = Applet.newAudioClip(url);
+                clip.play();
                 String textFieldValue = text1.getText();
                 Player player = new Player(textFieldValue);
                 try {

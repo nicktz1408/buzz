@@ -1,3 +1,6 @@
+import GameLogic.GameFacade;
+import GameLogic.GamePlayer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -27,6 +30,7 @@ class CountDown extends JPanel {
                 } else {
                     ((Timer) (e.getSource())).stop();
                     label.setText("Ο χρόνος τελείωσε");
+
                 }
             }
         });
@@ -45,5 +49,9 @@ class CountDown extends JPanel {
     }
     public int getSecond(){
         return second;
+    }
+
+    public int getMillliSecond() {
+        return millliSecond;
     }
 }

@@ -104,7 +104,7 @@ public class GameFacadeDirector {
                         .addQuestion(myQuestions.get(questionIndex++))
                         .build())
                 .addRound(roundBuilder
-                        .type(roundFactory.getStopClockRound())
+                        .type(roundFactory.getBettingRound())
                         .addQuestion(myQuestions.get(questionIndex++))
                         .addQuestion(myQuestions.get(questionIndex++))
                         .addQuestion(myQuestions.get(questionIndex++))

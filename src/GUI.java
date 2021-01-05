@@ -5,6 +5,8 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,11 +26,12 @@ public class GUI{
     private Player user1 = new Player("user1");
     private Player user2 = new Player("user2");
     private ImageIcon icon;
-    private int bet;
+    private int betPlayer1 = 0;
+    private int betPlayer2 = 0;
 
 
 
-    public GUI(Dimension dim){  // Εδώ πρέπει να προσθέσω μια δευτερη παράμετρο που θα φορτώσει όλα το παιχνίδι
+    public GUI(Dimension dim){
         window = new JFrame("Buzz Game");
         window.setResizable(true);
         window.setSize(dim);
@@ -99,13 +102,12 @@ public class GUI{
                 }
                 break;
             case 3:
+                Dimension dimBet = new Dimension(200,150);
                 if(solo){
-                    Dimension dimBet = new Dimension(200,150);
                     bettingChoises(dimBet, game);
                 }else{
-                    //betting2Round(dim, game);
+                    bettingChoissesForTwoPlayers(dim, game);
                 }
-
                 break;
             case 4:
                 if(!solo) {
@@ -135,6 +137,9 @@ public class GUI{
 
         JPanel centralPanel = new JPanel();
         CountDown clock = new CountDown();
+        clock.setBorder(compound);
+
+
         JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
@@ -157,7 +162,6 @@ public class GUI{
         centralPanel.add(label2);
         centralPanel.add(label4);
         centralPanel.add(clock);
-        centralPanel.add(question);
 
 
         JPanel panel2 = new JPanel();
@@ -194,9 +198,10 @@ public class GUI{
 
 
         KeyListener myListener = new KeyListener() {
-            int answerIndex = 0;
+            int answerIndex = -1;
             boolean pressed1 = false;
             boolean pressed2 = false;
+            int time1, time2;
             @Override
             public void keyTyped(KeyEvent e) {
 
@@ -224,7 +229,8 @@ public class GUI{
                             break;
                     }
                     if(pressed1){
-                        game.answerQuestion(player1, answerIndex);
+                        time1 = clock.getRemainingTime();
+                        game.answerQuestion(player1, answerIndex, time1);
 
                     }
 
@@ -249,12 +255,14 @@ public class GUI{
                             break;
                     }
                     if(pressed2) {
-                        game.answerQuestion(player2, answerIndex);
+                        time2 = clock.getRemainingTime();
+                        game.answerQuestion(player2, answerIndex, time2);
+
                     }
                 }
 
-                if(pressed1 && pressed2){
-                    game.fetchNextQuestion(player1);
+                if((pressed1 && pressed2) || (clock.getSecond()==0 && clock.getMillliSecond()==1)){
+                    clock.buttonClicked();
                     frame.setVisible(false);
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                     if(status == FetchNextQuestionStatus.GAME_FINISHED){
@@ -384,7 +392,7 @@ public class GUI{
         centralPanel.add(label1);
         centralPanel.add(label4);
         centralPanel.add(label2);
-        //centralPanel.add(question);
+
 
 
         JPanel panel2 = new JPanel();
@@ -392,7 +400,7 @@ public class GUI{
 
         panel1.setBackground(Color.orange);
 
-        //panel2.setBackground(Color.green);
+
         panel2.add(question);
         JSplitPane jsp = new JSplitPane();
         jsp.setLayout(new GridLayout(2,2));
@@ -576,35 +584,40 @@ public class GUI{
 
 
         JPanel panel1 = new JPanel();
-        JLabel label1 = new JLabel("Γύρος "+game.getCurrentRoundIndex());
+        JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
-        JLabel label2 = new JLabel("Σκορ "+player1.getScore());
+        JLabel label2 = new JLabel("Σκορ 1ου παίκτη: "+player1.getScore());
         label2.setBorder(compound);
 
-        JLabel label4 = new JLabel("Σκορ "+player2.getScore());
+        JLabel label4 = new JLabel("Σκορ 2ου παίκτη: "+player2.getScore());
         label4.setBorder(compound);
 
         JLabel label5 = new JLabel("Τύπος Γύρου: "+getRoundName(game.getCurrentRound().getRoundName()));
         label5.setBorder(compound);
 
-        JLabel question = new JLabel("Ερώτηση: "+game.getCurrentQuestion(player1).getQuestionText());
-        question.setBorder(compoundQuestion);
+        JLabel question1 = new JLabel("Ερώτηση: "+game.getCurrentQuestion(player1).getQuestionText());
+        question1.setBorder(compoundQuestion);
+
+        JLabel question2 = new JLabel("Ερώτηση: "+game.getCurrentQuestion(player2).getQuestionText());
+        question2.setBorder(compoundQuestion);
+
 
 
         centralPanel.add(label5);
         centralPanel.add(label1);
         centralPanel.add(label4);
         centralPanel.add(label2);
-        centralPanel.add(question);
 
 
         JPanel panel2 = new JPanel();
 
 
         panel1.setBackground(Color.orange);
+        panel1.add(question1);
 
         panel2.setBackground(Color.green);
+        panel2.add(question2);
         JSplitPane jsp = new JSplitPane();
         jsp.setLayout(new GridLayout(2,2));
 
@@ -876,7 +889,7 @@ public class GUI{
                 } else if(e.getSource() == answer4){
                     answerIndex = 3;
                 }
-                game.answerQuestion(player1, answerIndex, bet);
+                game.answerQuestion(player1, answerIndex, betPlayer1);
                 FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                 if(status == FetchNextQuestionStatus.GAME_FINISHED){
                     frame.setVisible(false);
@@ -1535,7 +1548,6 @@ public class GUI{
                 }
 
                 if(pressed1 && pressed2){
-                    //game.fetchNextQuestion(player1);
                     frame.setVisible(false);
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                     if(status == FetchNextQuestionStatus.GAME_FINISHED){
@@ -1652,7 +1664,6 @@ public class GUI{
 
     public void bettingChoises(Dimension dim, GameFacade game){
         window = new JFrame("Buzz Game");
-        JPanel panel = new JPanel();
         window.setResizable(false);
         window.setSize(dim);
         window.setMinimumSize(dim);
@@ -1666,17 +1677,25 @@ public class GUI{
 
 
         JPanel panel2 = new JPanel();
+        JLabel label2 = new JLabel("Πόσους πόντους θέλεις να ποντάρεις? ");
+        panel2.add(label2);
+
+
+
+
+        JPanel panel3 = new JPanel();
         JButton bet1 = new JButton("250");
         JButton bet2 = new JButton("500");
         JButton bet3 = new JButton("750");
         JButton bet4 = new JButton("1000");
-        panel2.add(bet1);
-        panel2.add(bet2);
-        panel2.add(bet3);
-        panel2.add(bet4);
+        panel3.add(bet1);
+        panel3.add(bet2);
+        panel3.add(bet3);
+        panel3.add(bet4);
 
         window.add(panel1);
         window.add(panel2);
+        window.add(panel3);
 
         window.pack();
         window.setLocationRelativeTo(null);
@@ -1687,7 +1706,7 @@ public class GUI{
             @Override
             public void actionPerformed(ActionEvent e) {
                 window.setVisible(false);
-                bet = 250;
+                betPlayer1 = 250;
                 Dimension dimension = new Dimension(800,500);
                 bettingRound(dimension, game);
             }
@@ -1696,7 +1715,7 @@ public class GUI{
             @Override
             public void actionPerformed(ActionEvent e) {
                 window.setVisible(false);
-                bet = 500;
+                betPlayer1 = 500;
                 Dimension dimension = new Dimension(800,500);
                 bettingRound(dimension, game);
             }
@@ -1705,7 +1724,7 @@ public class GUI{
             @Override
             public void actionPerformed(ActionEvent e) {
                 window.setVisible(false);
-                bet = 750;
+                betPlayer1 = 750;
                 Dimension dimension = new Dimension(800,500);
                 bettingRound(dimension, game);
             }
@@ -1714,11 +1733,366 @@ public class GUI{
             @Override
             public void actionPerformed(ActionEvent e) {
                 window.setVisible(false);
-                bet = 1000;
+                betPlayer1 = 1000;
                 Dimension dimension = new Dimension(800,500);
                 bettingRound(dimension, game);
             }
         });
 
+    }
+
+
+    public void bettingChoissesForTwoPlayers(Dimension dim, GameFacade game){
+
+        window = new JFrame("Buzz Game");
+        window.setResizable(false);
+        window.setSize(dim);
+        window.setMinimumSize(dim);
+        window.setLayout(new GridLayout(5,1));
+
+
+
+        JPanel panel1 = new JPanel();
+        JLabel label = new JLabel("Η επόμενη ερώτηση ανήκει στην κατηγορία "+game.getCurrentQuestion(player1).getCategory());
+        panel1.add(label);
+
+
+        JPanel panel2 = new JPanel();
+        JLabel label2 = new JLabel("Πόσους πόντους θέλεις να ποντάρεις "+user1.getName()+"?");
+        panel2.add(label2);
+
+        JLabel label3 = new JLabel("Πόσους πόντους θέλεις να ποντάρεις "+user2.getName()+"?");
+
+
+
+        JPanel panel3 = new JPanel();
+        JButton bet1 = new JButton("250");
+
+        JButton bet2 = new JButton("500");
+        JButton bet3 = new JButton("750");
+        JButton bet4 = new JButton("1000");
+        JButton bet5 = new JButton("250");
+        JButton bet6 = new JButton("500");
+        JButton bet7 = new JButton("750");
+        JButton bet8 = new JButton("1000");
+        panel2.add(bet1);
+        panel2.add(bet2);
+        panel2.add(bet3);
+        panel2.add(bet4);
+
+        panel3.add(label3);
+        panel3.add(bet5);
+        panel3.add(bet6);
+        panel3.add(bet7);
+        panel3.add(bet8);
+
+
+
+        window.add(panel1);
+        window.add(panel2);
+        window.add(panel3);
+
+        window.pack();
+        window.setLocationRelativeTo(null);
+        window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        window.setVisible(true);
+
+        KeyListener myListener = new KeyListener() {
+            boolean pressed1 = false;
+            boolean pressed2 = false;
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(!pressed1) {
+                    switch (e.getKeyChar()) {
+                        case 'q':
+                            pressed1 = true;
+                            betPlayer1 =250;
+                            break;
+                        case 'w':
+                            pressed1 = true;
+                            betPlayer1 = 500;
+                            break;
+                        case 'e':
+                            pressed1 = true;
+                            betPlayer1 = 750;
+                            break;
+                        case 'r':
+                            pressed1 = true;
+                            betPlayer1 = 1000;
+                            break;
+                    }
+
+
+                }
+                if(!pressed2) {
+                    switch (e.getKeyChar()) {
+                        case 'u':
+                            pressed2 = true;
+                            betPlayer2 = 250;
+                            break;
+                        case 'i':
+                            pressed2 = true;
+                            betPlayer2 = 500;
+                            break;
+                        case 'o':
+                            pressed2 = true;
+                            betPlayer2 = 750;
+                            break;
+                        case 'p':
+                            pressed2 = true;
+                            betPlayer2 = 1000;
+                            break;
+                    }
+                }
+
+                if(pressed1 && pressed2){
+                    window.setVisible(false);
+                    Dimension dimension = new Dimension(800, 500);
+                    betting2Round(dimension, game);
+                }
+
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        };
+
+        bet1.addKeyListener(myListener);
+        bet2.addKeyListener(myListener);
+        bet3.addKeyListener(myListener);
+        bet4.addKeyListener(myListener);
+        bet5.addKeyListener(myListener);
+        bet6.addKeyListener(myListener);
+        bet7.addKeyListener(myListener);
+        bet8.addKeyListener(myListener);
+
+    }
+
+    private void betting2Round(Dimension dimension, GameFacade game) {
+        JFrame frame = new JFrame("Buzz Game");
+        frame.setResizable(true);
+        frame.setSize(dimension);
+        frame.setMinimumSize(dimension);
+        frame.setLayout(new FlowLayout(FlowLayout.CENTER));
+        frame.setLayout(new GridLayout(3,2));
+        EmptyBorder border = new EmptyBorder(5, 20, 5, 20);
+        LineBorder line = new LineBorder(Color.blue, 2, true);
+        LineBorder lineQuestion = new LineBorder(Color.red,2,true);
+        CompoundBorder compound = new CompoundBorder(line, border);
+        CompoundBorder compoundQuestion = new CompoundBorder(lineQuestion, border);
+
+        JPanel centralPanel = new JPanel();
+        JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
+        label1.setBorder(compound);
+
+        JLabel label2 = new JLabel("Σκορ 1ου παίκτη: "+(int)player1.getScore());
+        label2.setBorder(compound);
+
+        JLabel label4 = new JLabel("Σκορ 2ου παίκτη: "+(int)player2.getScore());
+        label4.setBorder(compound);
+
+        JLabel label5 = new JLabel("Τύπος Γύρου: "+getRoundName(game.getCurrentRound().getRoundName()));
+        label5.setBorder(compound);
+
+
+        JLabel question = new JLabel("Ερώτηση: "+game.getCurrentQuestion(player1).getQuestionText());
+        question.setBorder(compoundQuestion);
+
+
+        centralPanel.add(label5);
+        centralPanel.add(label1);
+        centralPanel.add(label2);
+        centralPanel.add(label4);
+
+
+        JPanel panel2 = new JPanel();
+
+        JPanel panel1 = new JPanel();
+        panel1.setBackground(Color.orange);
+
+
+        panel2.add(question);
+        if(game.getCurrentQuestion(player1) instanceof QuestionWithImage){
+            String imgName =  ((QuestionWithImage) game.getCurrentQuestion(player1)).getImagePath();
+            URL imageURL = getClass().getResource("Images/" +imgName);
+            if (imageURL != null) {
+                icon = new ImageIcon(imageURL);
+
+            }
+
+            JLabel labelWithIcon = new JLabel(new ImageIcon(icon.getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT)));
+            panel2.add(labelWithIcon);
+        }
+
+
+        JPanel panel4 = new JPanel();
+        JPanel panel5 = new JPanel();
+        panel4.setBackground(Color.orange);
+        panel5.setBackground(Color.green);
+
+
+
+
+
+
+
+
+
+        KeyListener myListener = new KeyListener() {
+            int answerIndex = 0;
+            boolean pressed1 = false;
+            boolean pressed2 = false;
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(!pressed1) {
+                    switch (e.getKeyChar()) {
+                        case 'q':
+                            pressed1 = true;
+                            answerIndex = 0;
+                            break;
+                        case 'w':
+                            pressed1 = true;
+                            answerIndex = 1;
+                            break;
+                        case 'e':
+                            pressed1 = true;
+                            answerIndex = 2;
+                            break;
+                        case 'r':
+                            pressed1 = true;
+                            answerIndex = 3;
+                            break;
+                    }
+                    if(pressed1){
+                        game.answerQuestion(player1, answerIndex, betPlayer1);
+
+                    }
+
+                }
+                if(!pressed2) {
+                    switch (e.getKeyChar()) {
+                        case 'u':
+                            pressed2 = true;
+                            answerIndex = 0;
+                            break;
+                        case 'i':
+                            pressed2 = true;
+                            answerIndex = 1;
+                            break;
+                        case 'o':
+                            pressed2 = true;
+                            answerIndex = 2;
+                            break;
+                        case 'p':
+                            pressed2 = true;
+                            answerIndex = 3;
+                            break;
+                    }
+                    if(pressed2) {
+                        game.answerQuestion(player2, answerIndex, betPlayer2);
+                    }
+                }
+
+                if(pressed1 && pressed2){
+                    frame.setVisible(false);
+                    FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
+                    if(status == FetchNextQuestionStatus.GAME_FINISHED){
+                        if(player1.getScore()>player2.getScore()){
+                            JOptionPane.showMessageDialog(new JFrame(),
+                                    "Σκόρ "+user1.getName()+": "+player1.getScore()+"\n"+"Σκορ "+user2.getName()+": "+player2.getScore()+"\n"+"Νικητής ο παίκτης "+user1.getName()+"!","Μπράβο!",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            try {
+                                user1.newDataWithTwoPlayers(user1.getName(), true);
+                                user2.newDataWithTwoPlayers(user2.getName(), false);
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
+
+                        }else {
+                            JOptionPane.showMessageDialog(new JFrame(),
+                                    "Σκόρ " + user1.getName() + ": " + player1.getScore() + "\n" + "Σκορ " + user2.getName() + ": " + player2.getScore() + "\n" + "Νικητής ο παίκτης " + user2.getName() + "!", "Μπράβο!",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            try {
+                                user1.newDataWithTwoPlayers(user1.getName(), false);
+                                user2.newDataWithTwoPlayers(user2.getName(), true);
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
+                        }
+                        player1 = new GamePlayer();
+                        player2 = new GamePlayer();
+                    }else {
+                        checktheTypeOfRound(game, false);
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        };
+
+
+        frame.addKeyListener(myListener);
+
+        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+        answer2.addKeyListener(myListener);
+        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
+        answer3.addKeyListener(myListener);
+        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
+        answer4.addKeyListener(myListener);
+        JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
+        answer5.addKeyListener(myListener);
+        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+        answer6.addKeyListener(myListener);
+        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
+        answer7.addKeyListener(myListener);
+        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
+        answer8.addKeyListener(myListener);
+        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
+        answer1.addKeyListener(myListener);
+
+
+        panel4.add(answer2);
+        panel4.add(answer3);
+        panel4.add(answer4);
+        panel4.add(answer5);
+        panel5.add(answer6);
+        panel5.add(answer7);
+        panel5.add(answer8);
+        panel5.add(answer1);
+
+        JSplitPane jsp1 = new JSplitPane();
+        jsp1.setLayout(new GridLayout(2,2));
+        jsp1 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, panel4, panel5);
+        jsp1.setDividerLocation(dimension.width / 2);
+
+
+
+
+        frame.add(centralPanel);
+        frame.add(panel2);
+        frame.add(jsp1);
+
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
     }
 }

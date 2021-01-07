@@ -14,8 +14,7 @@ public class BettingRound extends FixedQuestionsRound{
      */
     @Override
     public void answerQuestion(GamePlayer player, int answerIndex, Object... additionalRequestData) {
-        int betSize = (int)additionalRequestData[0];
-        int scoreToAdd = betSize;
+        int scoreToAdd = (int)additionalRequestData[0];
 
         if(answerIndex == this.getCurrentQuestion(player).getRightAnswerIndex()) {
             player.setScore(player.getScore() + scoreToAdd);

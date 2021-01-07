@@ -8,7 +8,6 @@ abstract class CountDown extends JPanel {
     Timer timer;
     int second = 5;
     int milliSecond = 1;
-    private int remainingTime = 0;
 
     public CountDown() {
         label = new JLabel("Υπολοιπόμενος χρόνος: "+second);

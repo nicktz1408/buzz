@@ -7,7 +7,7 @@ import java.util.HashMap;
  */
 public class ThermometerRound implements RoundInterface{
     private final int ROUND_NAME = 5;
-    private HashMap<GamePlayer, PlayerData> playerData = new HashMap<>();
+    private final HashMap<GamePlayer, PlayerData> playerData = new HashMap<>();
 
     /**
      * Inner class used to store data associated with a given user and needed for our class to work right
@@ -56,7 +56,7 @@ public class ThermometerRound implements RoundInterface{
      */
     @Override
     public void answerQuestion(GamePlayer player, int answerIndex, Object... additionalRequestData) {
-        double scoreToAdd = 0;
+        double scoreToAdd;
 
         if(answerIndex == this.getCurrentQuestion(player).getRightAnswerIndex()) {
             increaseRightAnswer(player);

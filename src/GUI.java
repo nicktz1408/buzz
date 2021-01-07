@@ -17,12 +17,12 @@ import java.net.URL;
 
 public class GUI{
     private JFrame window;
-    private JButton playButton, signInButton, statisticsButton;
+    private final JButton playButton, signInButton, statisticsButton;
     private JButton answer1;
     private GamePlayer player1 = new GamePlayer();
     private GamePlayer player2 = new GamePlayer();
-    private Player user1 = new Player("user1");
-    private Player user2 = new Player("user2");
+    private final Player user1 = new Player("user1");
+    private final Player user2 = new Player("user2");
     private ImageIcon icon;
     private int betPlayer1 = 0;
     private int betPlayer2 = 0;
@@ -683,9 +683,6 @@ public class GUI{
 
 
         KeyListener myListener = new KeyListener() {
-            int answerIndex = 0;
-            boolean pressed1 = false;
-            boolean pressed2 = false;
             @Override
             public void keyTyped(KeyEvent e) {
 
@@ -744,7 +741,6 @@ public class GUI{
                     System.out.println("Total right 1:" + ((ThermometerRound) game.getCurrentRound()).getPlayerWins(player1));
                     System.out.println("Total right 2:" + ((ThermometerRound) game.getCurrentRound()).getPlayerWins(player2));
                 }
-
 
                 if(hasFinished){
                     frame.setVisible(false);
@@ -944,10 +940,8 @@ public class GUI{
                         user1.newDataAlone(user1.getName(), (int)player1.getScore());
                         player1 = new GamePlayer();
                         player2 = new GamePlayer();
-                    } catch (IOException ioException) {
+                    } catch (IOException | ClassNotFoundException ioException) {
                         ioException.printStackTrace();
-                    } catch (ClassNotFoundException classNotFoundException) {
-                        classNotFoundException.printStackTrace();
                     }
                     player1 = new GamePlayer();
                     player2 = new GamePlayer();
@@ -1080,7 +1074,7 @@ public class GUI{
         ActionListener answerListener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 clock.buttonClicked();
-                int answerIndex = 0;
+                int answerIndex = -1;
                 if(e.getSource() == answer1){
                     answerIndex=0;
                 }else if(e.getSource() == answer2){
@@ -1265,7 +1259,6 @@ public class GUI{
                                 window.setVisible(false);
                                 String name = (String) cb.getItemAt(cb.getSelectedIndex());
                                 user1.setName(name);
-                                Dimension dim = new Dimension(800, 500);
                                 window.setVisible(false);
                                 checktheTypeOfRound(game,true);
                             }
@@ -1273,7 +1266,6 @@ public class GUI{
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }
-                    JComboBox cb =new JComboBox(pl);
                 } else if(r2.isSelected()){
                     GameFacade game = new GameFacadeDirector().buildTwoPlayersGame();
                     JPanel panel2 = new JPanel();
@@ -1309,8 +1301,6 @@ public class GUI{
                                 if(name1.equals(name2)){
                                     JOptionPane.showMessageDialog(null, "Οι δύο παίκτες πρέπει να είναι διαφορετικοί");
                                 } else {
-                                    //Dimension dim = new Dimension(800, 500);
-                                    //initialize2Game(dim,game);
                                     window.setVisible(false);
                                     checktheTypeOfRound(game,false);
                                 }
@@ -1460,7 +1450,7 @@ public class GUI{
 
         ActionListener answerListener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int answerIndex = 0;
+                int answerIndex = -1;
                 if(e.getSource() == answer1){
                     answerIndex=0;
                 }else if(e.getSource() == answer2){

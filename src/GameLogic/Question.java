@@ -10,7 +10,7 @@ public class Question {
     private int rightAnswerIndex;
     private String questionText;
     private String category;
-    private List<String> answersList = new ArrayList<>();
+    private final List<String> answersList = new ArrayList<>();
 
     /**
      * Initializes the object from a Question.Builder class

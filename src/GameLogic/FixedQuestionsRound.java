@@ -1,6 +1,4 @@
 package GameLogic;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,11 +7,11 @@ import java.util.List;
  */
 public abstract class FixedQuestionsRound implements RoundInterface {
     private int currentQuestionIndex;
-    private List<Question> questionsList;
+    private final List<Question> questionsList;
 
     public FixedQuestionsRound() {
         currentQuestionIndex = 0;
-        questionsList = new ArrayList<Question>();
+        questionsList = new ArrayList<>();
     }
 
     /**
@@ -34,7 +32,7 @@ public abstract class FixedQuestionsRound implements RoundInterface {
     /**
      * Instructs the system to move to the next question
      * @param player the associated player we need to apply the action on
-     * @return
+     * @return true if there is new question, false if the round is over.
      */
     @Override
     public boolean fetchNextQuestion(GamePlayer player) {

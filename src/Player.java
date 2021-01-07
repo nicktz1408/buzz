@@ -1,15 +1,14 @@
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Player implements  Serializable{
 
     private String name;
-    private int wins;
-    private int totalGamesAlone;
-    private int totalGAmesFriends;
-    private int highScore;
+    private final int wins;
+    private final int totalGamesAlone;
+    private final int totalGAmesFriends;
+    private final int highScore;
 
     public Player(String name)
     {
@@ -174,7 +173,6 @@ public class Player implements  Serializable{
 
 
     public String[] listOfThePlayers() throws IOException {
-        Path file = Paths.get("/home/manolis/Desktop/buzzquizworld-thelamogia/Players");
         String currentDirectory = new File(".").getCanonicalPath();
         BufferedReader br = new BufferedReader(new FileReader(currentDirectory + "/Players"));
 

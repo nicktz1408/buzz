@@ -12,6 +12,10 @@ public class Question {
     private String category;
     private List<String> answersList = new ArrayList<>();
 
+    public Question() {
+
+    }
+
     /**
      * Initializes the object from a Question.Builder class
      * @param builder the Builder to build our Question from
@@ -68,7 +72,11 @@ public class Question {
      * @param index the index of the answer to be returned
      * @return the answer text at the given index
      */
-    public String getAnswerAtIndex(int index) {
+    public String getAnswerAtIndex(int index) throws IndexOutOfBoundsException {
+        if(index >= this.answersList.size()) {
+            throw new IndexOutOfBoundsException();
+        }
+
         return this.answersList.get(index);
     }
 

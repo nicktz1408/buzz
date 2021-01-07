@@ -12,7 +12,6 @@ import java.util.Random;
  * Singleton class that wraps the functionality of getting random questions from the corresponding file on the disk
  */
 public class QuestionRepository {
-    private final String filename;
 
     private final ArrayList<String []> questions;
 
@@ -37,7 +36,6 @@ public class QuestionRepository {
      * Loads the Questions from the disk to the working memory
      */
     private QuestionRepository() {
-        filename = "Questions.txt";
         this.questions = new ArrayList<>();
 
         this.parseFile();

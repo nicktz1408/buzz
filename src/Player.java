@@ -106,9 +106,11 @@ public class Player implements  Serializable{
             out.newLine();
             }
 
-            out.close();
-            in.close();
-            new File(currentDirectory + "/TempPlayers").renameTo(new File(currentDirectory + "/Players"));
+            File temp = new File(currentDirectory + "/TempPlayers");
+            if(temp.renameTo(new File(currentDirectory + "/Players"))){
+                out.close();
+                in.close();
+            }
 
     }
 
@@ -130,9 +132,14 @@ public class Player implements  Serializable{
             out.write(output);
             out.newLine();
         }
-        out.close();
-        in.close();
-        new File(currentDirectory + "/TempPlayers").renameTo(new File(currentDirectory + "/Players"));
+
+        File temp = new File(currentDirectory + "/TempPlayers");
+        if(temp.renameTo(new File(currentDirectory + "/Players"))){
+            out.close();
+            in.close();
+        }
+
+
     }
 
 

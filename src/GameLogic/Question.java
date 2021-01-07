@@ -140,7 +140,6 @@ public class Question {
      * Inner class for the Class' builder
      */
     public abstract static class Builder<T extends Builder<T>> {
-        private Question question;
 
         String category;
         String questionText;

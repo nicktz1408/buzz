@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 
@@ -519,7 +518,6 @@ public class GUI{
                 }
 
                 if(pressed1 && pressed2){
-                    game.fetchNextQuestion(player1);
                     frame.setVisible(false);
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                     if(status == FetchNextQuestionStatus.GAME_FINISHED){
@@ -650,8 +648,8 @@ public class GUI{
 
         centralPanel.add(label5);
         centralPanel.add(label1);
-        centralPanel.add(label4);
         centralPanel.add(label2);
+        centralPanel.add(label4);
 
 
         JPanel panel2 = new JPanel();
@@ -737,10 +735,6 @@ public class GUI{
                     }
                 }
 
-                if(game.getCurrentRound() instanceof ThermometerRound) {
-                    System.out.println("Total right 1:" + ((ThermometerRound) game.getCurrentRound()).getPlayerWins(player1));
-                    System.out.println("Total right 2:" + ((ThermometerRound) game.getCurrentRound()).getPlayerWins(player2));
-                }
 
                 if(hasFinished){
                     frame.setVisible(false);
@@ -919,7 +913,7 @@ public class GUI{
 
         ActionListener answerListener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int answerIndex = 0;
+                int answerIndex = -1;
                 if(e.getSource() == answer1){
                     answerIndex=0;
                 }else if(e.getSource() == answer2){
@@ -1190,10 +1184,8 @@ public class GUI{
                     } else{
                         JOptionPane.showMessageDialog(null, "Λάθος όνομα χρήστη");
                     }
-                } catch (FileNotFoundException fileNotFoundException) {
+                } catch (IOException fileNotFoundException) {
                     fileNotFoundException.printStackTrace();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
                 }
             }
         });
@@ -1241,7 +1233,7 @@ public class GUI{
                     GameFacade game = new GameFacadeDirector().buildSoloGame();
                     JPanel panel2 = new JPanel();
                     JLabel label = new JLabel("Όνομα Παίκτη:", SwingConstants.CENTER);
-                    String[] pl = new String[0];
+                    String[] pl;
                     try {
                         pl = user1.listOfThePlayers();
                         JButton run = new JButton("Ξεκίνα");
@@ -1273,7 +1265,7 @@ public class GUI{
                     JPanel panel4 = new JPanel();
                     JLabel label = new JLabel("Όνομα 1ou Παίκτη:", SwingConstants.CENTER);
                     JLabel label2 = new JLabel("Όνομα 2ou Παίκτη:", SwingConstants.CENTER);
-                    String[] pl = new String[0];
+                    String[] pl;
                     try {
                         pl = user1.listOfThePlayers();
                         JButton run = new JButton("Ξεκινήστε");

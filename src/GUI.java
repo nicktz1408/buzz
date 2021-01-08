@@ -417,10 +417,10 @@ public class GUI{
         JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
-        JLabel label2 = new JLabel("Σκορ: "+player1.getScore());
+        JLabel label2 = new JLabel("Σκορ 1ου πάικτη: "+player1.getScore());
         label2.setBorder(compound);
 
-        JLabel label4 = new JLabel("Σκορ: "+player2.getScore());
+        JLabel label4 = new JLabel("Σκορ 2ου παίκτη: "+player2.getScore());
         label4.setBorder(compound);
 
         JLabel label5 = new JLabel("Τύπος Γύρου: "+getRoundName(game.getCurrentRound().getRoundName()));
@@ -433,18 +433,30 @@ public class GUI{
 
         centralPanel.add(label5);
         centralPanel.add(label1);
-        centralPanel.add(label4);
         centralPanel.add(label2);
+        centralPanel.add(label4);
 
 
 
         JPanel panel2 = new JPanel();
+        panel2.add(question);
+        if(game.getCurrentQuestion(player1) instanceof QuestionWithImage){
+            String imgName =  ((QuestionWithImage) game.getCurrentQuestion(player1)).getImagePath();
+            URL imageURL = getClass().getResource("Images/" +imgName);
+            if (imageURL != null) {
+                icon = new ImageIcon(imageURL);
+
+            }
+
+            JLabel labelWithIcon = new JLabel(new ImageIcon(icon.getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT)));
+            panel2.add(labelWithIcon);
+        }
 
 
         panel1.setBackground(Color.orange);
 
 
-        panel2.add(question);
+
         JSplitPane jsp = new JSplitPane();
         jsp.setLayout(new GridLayout(2,2));
 
@@ -641,8 +653,7 @@ public class GUI{
         JLabel question1 = new JLabel("Ερώτηση: "+game.getCurrentQuestion(player1).getQuestionText());
         question1.setBorder(compoundQuestion);
 
-        JLabel question2 = new JLabel("Ερώτηση: "+game.getCurrentQuestion(player2).getQuestionText());
-        question2.setBorder(compoundQuestion);
+
 
 
 
@@ -652,20 +663,31 @@ public class GUI{
         centralPanel.add(label4);
 
 
-        JPanel panel2 = new JPanel();
 
 
-        panel1.setBackground(Color.orange);
+        JLabel player1Right = new JLabel(String.valueOf(((ThermometerRound)game.getCurrentRound() ) .getPlayerWins(player1)));
+        player1Right.setBorder(compound);
+        JLabel player2Right = new JLabel(String.valueOf(((ThermometerRound)game.getCurrentRound() ) .getPlayerWins(player2)));
+        player2Right.setBorder(compound);
+
+        panel1.add(player1Right);
         panel1.add(question1);
+        if(game.getCurrentQuestion(player1) instanceof QuestionWithImage){
+            String imgName =  ((QuestionWithImage) game.getCurrentQuestion(player1)).getImagePath();
+            URL imageURL = getClass().getResource("Images/" +imgName);
+            if (imageURL != null) {
+                icon = new ImageIcon(imageURL);
 
-        panel2.setBackground(Color.green);
-        panel2.add(question2);
-        JSplitPane jsp = new JSplitPane();
-        jsp.setLayout(new GridLayout(2,2));
+            }
+
+            JLabel labelWithIcon = new JLabel(new ImageIcon(icon.getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT)));
+            panel1.add(labelWithIcon);
+        }
+        panel1.add(player2Right);
 
 
-        jsp = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, panel1, panel2);
-        jsp.setDividerLocation(dim.width / 2);
+
+
 
         JPanel panel4 = new JPanel();
         JPanel panel5 = new JPanel();
@@ -681,6 +703,9 @@ public class GUI{
 
 
         KeyListener myListener = new KeyListener() {
+            int answerIndex = 0;
+            boolean pressed1 = false;
+            boolean pressed2 = false;
             @Override
             public void keyTyped(KeyEvent e) {
 
@@ -688,88 +713,89 @@ public class GUI{
 
             @Override
             public void keyPressed(KeyEvent e) {
-                boolean hasFinished = false;
-                int answerIndex = -1;
-
-                switch (e.getKeyChar()) {
-                    case 'q':
-                        answerIndex = 0;
-                        break;
-                    case 'w':
-                        answerIndex = 1;
-                        break;
-                    case 'e':
-                        answerIndex = 2;
-                        break;
-                    case 'r':
-                        answerIndex = 3;
-                        break;
-                }
-
-                if(answerIndex != -1) {
-                    game.answerQuestion(player1, answerIndex);
-
-                    hasFinished = game.fetchNextQuestion(player1) == FetchNextQuestionStatus.GAME_FINISHED;
-                }
-
-                if(answerIndex == -1) { // user1 has not answered
+                if(!pressed1) {
                     switch (e.getKeyChar()) {
-                        case 'u':
+                        case 'q':
+                            pressed1 = true;
                             answerIndex = 0;
                             break;
-                        case 'i':
+                        case 'w':
+                            pressed1 = true;
                             answerIndex = 1;
                             break;
-                        case 'o':
+                        case 'e':
+                            pressed1 = true;
                             answerIndex = 2;
                             break;
-                        case 'p':
+                        case 'r':
+                            pressed1 = true;
                             answerIndex = 3;
                             break;
                     }
+                    if(pressed1){
+                        game.answerQuestion(player1, answerIndex);
+                    }
 
-                    if(answerIndex != -1) {
+                }
+                if(!pressed2) {
+                    switch (e.getKeyChar()) {
+                        case 'u':
+                            pressed2 = true;
+                            answerIndex = 0;
+                            break;
+                        case 'i':
+                            pressed2 = true;
+                            answerIndex = 1;
+                            break;
+                        case 'o':
+                            pressed2 = true;
+                            answerIndex = 2;
+                            break;
+                        case 'p':
+                            pressed2 = true;
+                            answerIndex = 3;
+                            break;
+                    }
+                    if(pressed2) {
                         game.answerQuestion(player2, answerIndex);
-
-                        hasFinished = game.fetchNextQuestion(player2) == FetchNextQuestionStatus.GAME_FINISHED;
                     }
                 }
 
+                if(pressed1 && pressed2){
+                    frame.setVisible(false);
+                    FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
+                    if(status == FetchNextQuestionStatus.GAME_FINISHED){
+                        frame.setVisible(false);
+                        if(player1.getScore()>player2.getScore()){
+                            JOptionPane.showMessageDialog(new JFrame(),
+                                    "Σκόρ "+user1.getName()+": "+player1.getScore()+"\n"+"Σκορ "+user2.getName()+": "+player2.getScore()+"\n"+"Νικητής ο παίκτης "+user1.getName()+"!","Μπράβο!",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            try {
+                                user1.newDataWithTwoPlayers(user1.getName(), true);
+                                user2.newDataWithTwoPlayers(user2.getName(), false);
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
 
-                if(hasFinished){
-                    frame.setVisible(false);
-                    if(player1.getScore() > player2.getScore()){
-                        JOptionPane.showMessageDialog(new JFrame(),
-                                "Σκόρ "+user1.getName()+": "+player1.getScore()+"\n"+"Σκορ "+user2.getName()+": "+player2.getScore()+"\n"+"Νικητής ο παίκτης "+user1.getName()+"!","Μπράβο!",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        try {
-                            user1.newDataWithTwoPlayers(user1.getName(), true);
-                            user2.newDataWithTwoPlayers(user2.getName(), false);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
+                        }else {
+                            JOptionPane.showMessageDialog(new JFrame(),
+                                    "Σκόρ " + user1.getName() + ": " + player1.getScore() + "\n" + "Σκορ " + user2.getName() + ": " + player2.getScore() + "\n" + "Νικητής ο παίκτης " + user2.getName() + "!", "Μπράβο!",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                            try {
+                                user1.newDataWithTwoPlayers(user1.getName(), false);
+                                user2.newDataWithTwoPlayers(user2.getName(), true);
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
                         }
+                        player1 = new GamePlayer();
+                        player2 = new GamePlayer();
                     }else {
-                        JOptionPane.showMessageDialog(new JFrame(),
-                                "Σκόρ " + user1.getName() + ": " + player1.getScore() + "\n" + "Σκορ " + user2.getName() + ": " + player2.getScore() + "\n" + "Νικητής ο παίκτης " + user2.getName() + "!", "Μπράβο!",
-                                JOptionPane.INFORMATION_MESSAGE);
-                        try {
-                            user1.newDataWithTwoPlayers(user1.getName(), false);
-                            user2.newDataWithTwoPlayers(user2.getName(), true);
-                        } catch (IOException ioException) {
-                            ioException.printStackTrace();
-                        }
+                        frame.setVisible(false);
+                        checktheTypeOfRound(game, false);
                     }
-                    player1 = new GamePlayer();
-                    player2 = new GamePlayer();
-                }else {
-                    frame.setVisible(false);
-                    checktheTypeOfRound(game, false);
                 }
             }
-
-
-
-
 
             @Override
             public void keyReleased(KeyEvent e) {
@@ -788,6 +814,11 @@ public class GUI{
         answer4.addKeyListener(myListener);
         JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer5.addKeyListener(myListener);
+
+
+
+
+
         JButton answer6 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(0));
         answer6.addKeyListener(myListener);
         JButton answer7 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(1));
@@ -816,7 +847,7 @@ public class GUI{
 
 
         frame.add(centralPanel);
-        frame.add(jsp);
+        frame.add(panel1);
         frame.add(jsp1);
 
         frame.pack();

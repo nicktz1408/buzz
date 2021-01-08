@@ -112,6 +112,7 @@ public class GameFacadeDirector {
                         .addQuestion(myQuestions.get(questionIndex++))
                         .build())
                 .addRound(roundFactory.getThermometerRound())
+
                 .addRound(roundBuilder
                         .type(roundFactory.getQuickAnswerRound())
                         .addQuestion(myQuestions.get(questionIndex++))

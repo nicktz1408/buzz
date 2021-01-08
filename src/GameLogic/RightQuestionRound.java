@@ -24,7 +24,6 @@ public class RightQuestionRound extends FixedQuestionsRound {
             scoreToAdd = calculateScore();
         }
 
-        // TODO (@nicktz1408): if codebase grows big enough, replace this with a Command object on Game (ie. gameCommand.addScore(player, score);
         player.setScore(player.getScore() + scoreToAdd);
     }
 

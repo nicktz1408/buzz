@@ -14,6 +14,9 @@ import java.io.IOException;
 import java.net.URL;
 
 
+/**
+ * Class used for the GUI of the Buzz Game
+ */
 public class GUI{
     private JFrame window;
     private final JButton playButton, signInButton, statisticsButton;
@@ -27,7 +30,10 @@ public class GUI{
     private int betPlayer2 = 0;
 
 
-
+    /**
+     * The constructor of the GUI and the first window that pops up.
+     * @param dim the size of the window
+     */
     public GUI(Dimension dim){
         window = new JFrame("Buzz Game");
         window.setResizable(true);
@@ -91,15 +97,19 @@ public class GUI{
     }
 
 
-
+    /**
+     * Routes the GUI to the right screen based on the round type and single/multiplayer
+     * @param game reference to our GameFacade
+     * @param solo true if 1 player, false if 2 players
+     */
     public void checktheTypeOfRound(GameFacade game, boolean solo){
         Dimension dim = new Dimension(800, 500);
         switch (game.getCurrentRound().getRoundName()){
             case 1:
                 if(solo){
-                    initializeAloneGame(dim, game);
+                    rightQuestionRound(dim, game);
                 }else {
-                    initialize2Game(dim, game);
+                    rightQuestionForTwoPlayers(dim, game);
                 }
                 break;
             case 2:
@@ -130,6 +140,14 @@ public class GUI{
         }
     }
 
+
+
+
+    /**
+     * Sets up the screen of the StopTheClock for 2 players
+     * @param dim size of the frame
+     * @param game reference to our GameFacade
+     */
     private void stopTheClock2Round(Dimension dim, GameFacade game) {
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
@@ -231,13 +249,6 @@ public class GUI{
         JPanel panel5 = new JPanel();
         panel4.setBackground(Color.orange);
         panel5.setBackground(Color.green);
-
-
-
-
-
-
-
 
 
         KeyListener myListener = new KeyListener() {
@@ -359,6 +370,9 @@ public class GUI{
         answer4.addKeyListener(myListener);
         JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer5.addKeyListener(myListener);
+
+
+        game.getCurrentQuestion(player1).shuffleAnswers();
         JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
         answer6.addKeyListener(myListener);
         JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
@@ -396,6 +410,14 @@ public class GUI{
         frame.setVisible(true);
     }
 
+
+
+
+    /**
+     * Sets up the screen of the QuickAnswerRound (only for 2 players)
+     * @param dim the size of the window
+     * @param game reference to our GameFacade
+     */
     private void quickAnswerRound(Dimension dim, GameFacade game) {
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
@@ -582,6 +604,10 @@ public class GUI{
         answer4.addKeyListener(myListener);
         JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer5.addKeyListener(myListener);
+
+
+        game.getCurrentQuestion(player1).shuffleAnswers();
+
         JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
         answer6.addKeyListener(myListener);
         JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
@@ -620,6 +646,14 @@ public class GUI{
 
     }
 
+
+
+
+    /**
+     * Sets up the screen of the ThermometerRound (only for 2 players)
+     * @param dim size of the window
+     * @param game reference to our GameFacade
+     */
     private void thermometerRound(Dimension dim, GameFacade game) {
         Frame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
@@ -685,20 +719,10 @@ public class GUI{
         }
         panel1.add(player2Right);
 
-
-
-
-
         JPanel panel4 = new JPanel();
         JPanel panel5 = new JPanel();
         panel4.setBackground(Color.orange);
         panel5.setBackground(Color.green);
-
-
-
-
-
-
 
 
 
@@ -816,7 +840,7 @@ public class GUI{
         answer5.addKeyListener(myListener);
 
 
-
+        game.getCurrentQuestion(player1).shuffleAnswers();
 
 
         JButton answer6 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(0));
@@ -855,6 +879,13 @@ public class GUI{
         frame.setVisible(true);
     }
 
+
+
+    /**
+     * Sets up the screen of the BettingRound for 1 player
+     * @param dim size of the frame
+     * @param game reference to our GameFacade
+     */
     public void bettingRound(Dimension dim, GameFacade game){
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
@@ -984,6 +1015,13 @@ public class GUI{
         answer4.addActionListener(answerListener);
     }
 
+
+
+    /**
+     * Sets up the screen of the StopTheClock for 1 player
+     * @param dim size of the frame
+     * @param game reference to our GameFacade
+     */
     public void stopTheClockRound(Dimension dim, GameFacade game){
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
@@ -1059,10 +1097,6 @@ public class GUI{
             JLabel labelWithIcon = new JLabel(new ImageIcon(icon.getImage().getScaledInstance(150, 150, Image.SCALE_DEFAULT)));
             panel2.add(labelWithIcon);
         }
-
-
-
-
 
 
 
@@ -1142,6 +1176,11 @@ public class GUI{
     }
 
 
+    /**
+     * In this window we show the statistics of a player like the wins in the two players game and high score when he/she players alone
+     * @param dim
+     * @throws IOException
+     */
     public void statisticsGui(Dimension dim) throws IOException {
         window = new JFrame("Buzz Game");
         window.setResizable(true);
@@ -1224,7 +1263,11 @@ public class GUI{
     }
 
 
-
+    /**
+     * In this window it is decided whether the game will be played with two or one players.
+     * And who will these players or player be
+     * @param dim the size of the window
+     */
     public void startPlaying(Dimension dim){
         window = new JFrame("Buzz Game");
         JPanel panel = new JPanel();
@@ -1337,6 +1380,11 @@ public class GUI{
         });
     }
 
+
+    /**
+     * At this point of the application new player is register and he/she give us the nickname that he/she would like to have
+     * @param dim the size of the window
+     */
     public void afterCheckSignIn(Dimension dim){
         window = new JFrame("Buzz Game");
         window.setSize(dim);
@@ -1387,8 +1435,12 @@ public class GUI{
         });
     }
 
-
-    public void initializeAloneGame(Dimension dim,GameFacade game){
+    /**
+     * Sets up the screen of the RightQuestionRound for 1 player
+     * @param dim size of the frame
+     * @param game reference to our GameFacade
+     */
+    public void rightQuestionRound(Dimension dim, GameFacade game){
 
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
@@ -1511,7 +1563,15 @@ public class GUI{
         answer4.addActionListener(answerListener);
     }
 
-    public void initialize2Game(Dimension dim, GameFacade game) {
+
+
+
+    /**
+     * Sets up the screen of the rightQuestionForTwoPlayers for 2 player
+     * @param dim size of the frame
+     * @param game reference to our GameFacade
+     */
+    public void rightQuestionForTwoPlayers(Dimension dim, GameFacade game) {
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
         frame.setSize(dim);
@@ -1573,13 +1633,6 @@ public class GUI{
         JPanel panel5 = new JPanel();
         panel4.setBackground(Color.orange);
         panel5.setBackground(Color.green);
-
-
-
-
-
-
-
 
 
         KeyListener myListener = new KeyListener() {
@@ -1696,6 +1749,11 @@ public class GUI{
         answer4.addKeyListener(myListener);
         JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer5.addKeyListener(myListener);
+
+
+        game.getCurrentQuestion(player1).shuffleAnswers();
+
+
         JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
         answer6.addKeyListener(myListener);
         JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
@@ -1738,7 +1796,11 @@ public class GUI{
 
     }
 
-
+    /**
+     * We convert a number between 1 and 5 to the name of the round.
+     * @param roundId the number id that corresponds to the name of the Round.
+     * @return a String of the name of the Round
+     */
     public String getRoundName(int roundId){
         switch (roundId){
             case 1:
@@ -1756,7 +1818,11 @@ public class GUI{
     }
 
 
-
+    /**
+     * This window shows the betting choices for 1 player BettingRound
+     * @param dim size of the window
+     * @param game reference to our GameFacade
+     */
     public void bettingChoises(Dimension dim, GameFacade game){
         window = new JFrame("Buzz Game");
         window.setResizable(false);
@@ -1833,10 +1899,17 @@ public class GUI{
                 bettingRound(dimension, game);
             }
         });
-
     }
 
 
+
+
+
+    /**
+     * This window shows the betting choices for 2 player BettingRound
+     * @param dim size of the window
+     * @param game reference to our GameFacade
+     */
     public void bettingChoissesForTwoPlayers(Dimension dim, GameFacade game){
 
         window = new JFrame("Buzz Game");
@@ -1971,6 +2044,14 @@ public class GUI{
 
     }
 
+
+
+
+    /**
+     * Sets up the screen of the BettingRound for 2 players
+     * @param dimension size of the frame
+     * @param game reference to our GameFacade
+     */
     private void betting2Round(Dimension dimension, GameFacade game) {
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
@@ -2032,10 +2113,6 @@ public class GUI{
         JPanel panel5 = new JPanel();
         panel4.setBackground(Color.orange);
         panel5.setBackground(Color.green);
-
-
-
-
 
 
 
@@ -2154,6 +2231,10 @@ public class GUI{
         answer4.addKeyListener(myListener);
         JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer5.addKeyListener(myListener);
+
+
+        game.getCurrentQuestion(player1).shuffleAnswers();
+
         JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
         answer6.addKeyListener(myListener);
         JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));

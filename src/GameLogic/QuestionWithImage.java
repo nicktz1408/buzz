@@ -6,6 +6,10 @@ package GameLogic;
 public class QuestionWithImage extends Question {
     private String imagePath;
 
+    public QuestionWithImage() {
+
+    }
+
     /**
      * Initializes the object from a QuestionWithImage.Builder class
      * @param builder the Builder to build our QuestionWithImage from

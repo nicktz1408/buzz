@@ -35,7 +35,7 @@ public class QuestionRepository {
     /**
      * Loads the Questions from the disk to the working memory
      */
-    private QuestionRepository() {
+    protected QuestionRepository() {
         this.questions = new ArrayList<>();
 
         this.parseFile();

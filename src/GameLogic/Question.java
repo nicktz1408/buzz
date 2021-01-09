@@ -1,7 +1,9 @@
 package GameLogic;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Class for the Question (without an associated image)
@@ -10,7 +12,7 @@ public class Question {
     private int rightAnswerIndex;
     private String questionText;
     private String category;
-    private List<String> answersList = new ArrayList<>();
+    private final List<String> answersList = new ArrayList<>();
 
     public Question() {
 
@@ -115,6 +117,13 @@ public class Question {
     }
 
     /**
+     * In this method we shuffle the answers order randomly
+     */
+    public void shuffleAnswers(){
+        Collections.shuffle(this.answersList, new Random(System.currentTimeMillis()));
+    }
+
+    /**
      *
      * @param index the index of the right answer to be set
      */
@@ -148,7 +157,6 @@ public class Question {
      * Inner class for the Class' builder
      */
     public abstract static class Builder<T extends Builder<T>> {
-        private Question question;
 
         String category;
         String questionText;
@@ -210,6 +218,7 @@ public class Question {
          * @return the constructed Question
          */
         public Question build() {
+            Collections.shuffle(this.answersList, new Random(System.currentTimeMillis()));
             return new Question(this);
         }
     }

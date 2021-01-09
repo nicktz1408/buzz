@@ -7,7 +7,16 @@ import java.util.HashMap;
  */
 public class ThermometerRound implements RoundInterface{
     private final int ROUND_NAME = 5;
-    private HashMap<GamePlayer, PlayerData> playerData = new HashMap<>();
+    private final HashMap<GamePlayer, PlayerData> playerData = new HashMap<>();
+    private Question currentQuestion;
+    private boolean hasWon = false;
+
+    public ThermometerRound(){
+        currentQuestion = this.getRandomQuestion();
+    }
+
+
+
 
     /**
      * Inner class used to store data associated with a given user and needed for our class to work right
@@ -15,7 +24,6 @@ public class ThermometerRound implements RoundInterface{
      */
     class PlayerData {
         int rightAnswers;
-        Question currentQuestion;
 
         /**
          * @param rightAnswers the value of rightAnswers to bet set (usually it is being increased it by 1)
@@ -31,22 +39,16 @@ public class ThermometerRound implements RoundInterface{
             return this.rightAnswers;
         }
 
-        /**
-         *
-         * @param currentQuestion the current Question to be set for the Player
-         */
-        void setCurrentQuestion(Question currentQuestion) {
-            this.currentQuestion = currentQuestion;
-        }
 
-        /**
-         *
-         * @return the current Question of the Player
-         */
-        Question getCurrentQuestion() {
-            return this.currentQuestion;
-        }
     }
+    /**
+     *
+     * @param currentQuestion the current Question to be set for the Player
+     */
+    void setCurrentQuestion(Question currentQuestion) {
+        this.currentQuestion = currentQuestion;
+    }
+
 
     /**
      *
@@ -56,14 +58,16 @@ public class ThermometerRound implements RoundInterface{
      */
     @Override
     public void answerQuestion(GamePlayer player, int answerIndex, Object... additionalRequestData) {
-        double scoreToAdd = 0;
+        double scoreToAdd;
 
         if(answerIndex == this.getCurrentQuestion(player).getRightAnswerIndex()) {
             increaseRightAnswer(player);
         }
-        if(checkWin(player)){
+
+        if(getPlayerWins(player) >= 5 && !hasDeterminedWiner()){
             scoreToAdd = calculateScore();
             player.setScore(player.getScore() + scoreToAdd);
+            hasWon = true;
         }
     }
 
@@ -78,7 +82,7 @@ public class ThermometerRound implements RoundInterface{
 
     @Override
     public Question getCurrentQuestion(GamePlayer player) {
-        return this.getPlayerData(player).getCurrentQuestion();
+        return this.currentQuestion;
     }
 
     /**
@@ -88,11 +92,10 @@ public class ThermometerRound implements RoundInterface{
      */
     @Override
     public boolean fetchNextQuestion(GamePlayer player) {
-        if(checkWin(player)) {
+        if(hasDeterminedWiner()) {
             return false;
         } else {
-            this.getPlayerData(player).setCurrentQuestion(this.getRandomQuestion());
-
+            this.setCurrentQuestion(this.getRandomQuestion());
             return true;
         }
     }
@@ -125,13 +128,13 @@ public class ThermometerRound implements RoundInterface{
     }
 
     /**
-     * Utility function to determine wheter the given Player has won the game (accumulated >= 5 correct answers)
-     * @param player the associated Player
+     * Utility function to determine whether the given Player has won the game (accumulated >= 5 correct answers)
      * @return whether they won or lost
      */
-    private boolean checkWin(GamePlayer player){
-        return this.getPlayerData(player).getRightAnswers() >= 5;
+    private boolean hasDeterminedWiner(){
+        return hasWon;
     }
+
 
     /**
      * Utility function to create a new entry for the player and add it to the HashMap
@@ -142,7 +145,6 @@ public class ThermometerRound implements RoundInterface{
         playerData.put(player, playerStatus);
 
         playerStatus.setRightAnswers(0);
-        playerStatus.setCurrentQuestion(this.getRandomQuestion());
     }
 
     /**

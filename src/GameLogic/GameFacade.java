@@ -9,11 +9,11 @@ import java.util.ArrayList;
  */
 public class GameFacade {
     private int currRoundIndex;
-    private List<RoundInterface> roundList;
+    private final List<RoundInterface> roundList;
 
     public GameFacade() {
         this.currRoundIndex = 0;
-        this.roundList = new ArrayList<RoundInterface>();
+        this.roundList = new ArrayList<>();
     }
 
     /**

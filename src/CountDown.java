@@ -3,12 +3,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-class CountDown extends JPanel {
+abstract class CountDown extends JPanel {
     JLabel label;
     Timer timer;
     int second = 5;
-    int millliSecond = 1;
-    private int remainingTime = 0;
+    int milliSecond = 1;
 
     public CountDown() {
         label = new JLabel("Υπολοιπόμενος χρόνος: "+second);
@@ -17,16 +16,17 @@ class CountDown extends JPanel {
         timer = new Timer(1, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                millliSecond -= 1;
+                milliSecond -= 1;
                 if (second>-1) {
-                    if(millliSecond==0) {
-                        millliSecond = 999;
+                    if(milliSecond==0) {
+                        milliSecond = 999;
                         second--;
                     }
-                    label.setText("Υπολοιπόμενος χρόνος: " + second + ": " + millliSecond);
+                    label.setText("Υπολοιπόμενος χρόνος: " + second + ": " + milliSecond);
                 } else {
                     ((Timer) (e.getSource())).stop();
                     label.setText("Ο χρόνος τελείωσε");
+                    onFinish();
                 }
             }
         });
@@ -41,9 +41,15 @@ class CountDown extends JPanel {
 
 
     public int getRemainingTime() {
-        return second*1000+millliSecond;
+        return second*1000+milliSecond;
     }
     public int getSecond(){
         return second;
     }
+
+    public int getMillliSecond() {
+        return milliSecond;
+    }
+
+    public abstract void onFinish();
 }

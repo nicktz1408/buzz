@@ -20,10 +20,10 @@ public class QuickAnswerRound extends FixedQuestionsRound{
 
         if(answerIndex == this.getCurrentQuestion(player).getRightAnswerIndex()) {
             scoreToAdd = calculateScore();
+            isFirst = false; // for when the other player answers
         }
 
         player.setScore(player.getScore() + scoreToAdd);
-        isFirst = false; // for when the 2nd player answers
     }
 
     /**

@@ -5,7 +5,6 @@ package GameLogic;
  */
 public class StopClockRound extends FixedQuestionsRound{
     private final int ROUND_NAME = 2;
-    private int milli;
 
     /**
      * Answers the current question by a given player

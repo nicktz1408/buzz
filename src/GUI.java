@@ -15,11 +15,10 @@ import java.net.URL;
 
 
 /**
- * Class used for the GUI of the Buzz Game
+ * Class that implements the GUI of the Buzz Game
  */
 public class GUI{
     private JFrame window;
-    private final JButton playButton, signInButton, statisticsButton;
     private JButton answer1;
     private GamePlayer player1 = new GamePlayer();
     private GamePlayer player2 = new GamePlayer();
@@ -35,23 +34,26 @@ public class GUI{
      * @param dim the size of the window
      */
     public GUI(Dimension dim){
+        JButton playButton, signInButton, statisticsButton, infoOfGame;
         window = new JFrame("Buzz Game");
         window.setResizable(true);
         window.setSize(dim);
         window.setMinimumSize(dim);
         window.setLayout(new FlowLayout(FlowLayout.CENTER));
-        window.setLayout(new GridLayout(4,1));
+        window.setLayout(new GridLayout(5,1));
 
 
         playButton = new JButton("Παίξε");
         signInButton = new JButton("Εγραφή νέου χρήστη");
-        statisticsButton = new JButton("Στατιστκά");
+        statisticsButton = new JButton("Στατιστικά");
+        infoOfGame = new JButton("Σχετικά");
 
         JLabel label = new JLabel("Μενού", SwingConstants.CENTER);
         window.add(label);
         window.add(playButton);
         window.add(signInButton);
         window.add(statisticsButton);
+        window.add(infoOfGame);
 
         window.pack();
         window.setLocationRelativeTo(null);
@@ -86,7 +88,7 @@ public class GUI{
                 URL url = getClass().getResource("ButtonClick.wav");
                 AudioClip clip = Applet.newAudioClip(url);
                 clip.play();
-                Dimension dim = new Dimension(600, 450);
+                Dimension dim = new Dimension(650, 500);
                 try {
                     statisticsGui(dim);
                 } catch (IOException e) {
@@ -94,6 +96,48 @@ public class GUI{
                 }
             }
         });
+
+
+        infoOfGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                URL url = getClass().getResource("ButtonClick.wav");
+                AudioClip clip = Applet.newAudioClip(url);
+                clip.play();
+                Dimension dim = new Dimension(650, 500);
+                info(dim);
+            }
+        });
+    }
+
+    public void info(Dimension dim){
+        JFrame frame = new JFrame("Buzz Game");
+        frame.setResizable(true);
+        frame.setSize(dim);
+        frame.setMinimumSize(dim);
+        frame.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+
+        JLabel info1 = new JLabel();
+        info1.setText("Το Buzz Game είναι ένα παιχνίδι γνώσεων το οποίο μπορεί να παιχτεί από έναν ή από δύο παίκτες ταυτόχρονα.");
+
+        JLabel info2 = new JLabel();
+        info2.setText("Αν δεν είσαι ήδη εγγεγραμένος ώς παίκτης του παιχνιδιού μπορείς να πατήσεις πάνω στο κουμπί Εγγραφή νέου χρήστη και να συμπληρώσεις το όνομα " +
+                "που επιθυμείς να έχεις στο παιχνίδι.");
+
+        JLabel info3 = new JLabel();
+        info1.setText("Αν είσαι εγγεγραμένος πάικτης και απλώς θέλεις να δεις τις επιδόσεις σου στα παιχνίδια μπορέις να πατήσεις πάνω" +
+                "στο κουμπί Στιστικά και εφόσον βρείς το όνομά σου να δεις τα στατιστικά σου σαν παίκτη");
+
+
+
+
+        frame.add(info1);
+        frame.add(info2);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
     }
 
 
@@ -315,7 +359,7 @@ public class GUI{
                     }
                 }
 
-                if((pressed1 && pressed2) || (clock.getSecond()==0 && clock.getMillliSecond()==1)){
+                if((pressed1 && pressed2) || (clock.getSecond()==0 && clock.getMilliSecond()==1)){
                     clock.buttonClicked();
                     frame.setVisible(false);
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
@@ -1178,8 +1222,8 @@ public class GUI{
 
     /**
      * In this window we show the statistics of a player like the wins in the two players game and high score when he/she players alone
-     * @param dim
-     * @throws IOException
+     * @param dim size of the statistics window
+     * @throws IOException when there is an issue with opening the file with the statistics of the players
      */
     public void statisticsGui(Dimension dim) throws IOException {
         window = new JFrame("Buzz Game");

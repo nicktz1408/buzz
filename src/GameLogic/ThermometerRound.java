@@ -10,8 +10,24 @@ public class ThermometerRound implements RoundInterface{
     private final HashMap<GamePlayer, PlayerData> playerData = new HashMap<>();
     private Question currentQuestion;
     private boolean hasWon = false;
+    private QuestionRepository questionRepository;
 
+    /**
+     * Default constructor to be called
+     */
     public ThermometerRound(){
+        questionRepository = QuestionRepository.getInstance();
+
+        currentQuestion = this.getRandomQuestion();
+    }
+
+    /**
+     * Constructor used for testing
+     * @param questionRepository the mocked QuestionRepository object
+     */
+    public ThermometerRound(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+
         currentQuestion = this.getRandomQuestion();
     }
 
@@ -45,7 +61,7 @@ public class ThermometerRound implements RoundInterface{
      *
      * @param currentQuestion the current Question to be set for the Player
      */
-    void setCurrentQuestion(Question currentQuestion) {
+    private void setCurrentQuestion(Question currentQuestion) {
         this.currentQuestion = currentQuestion;
     }
 
@@ -64,7 +80,7 @@ public class ThermometerRound implements RoundInterface{
             increaseRightAnswer(player);
         }
 
-        if(getPlayerWins(player) >= 5 && !hasDeterminedWiner()){
+        if(getPlayerWins(player) >= 5 && !hasDeterminedWinner()){
             scoreToAdd = calculateScore();
             player.setScore(player.getScore() + scoreToAdd);
             hasWon = true;
@@ -92,7 +108,7 @@ public class ThermometerRound implements RoundInterface{
      */
     @Override
     public boolean fetchNextQuestion(GamePlayer player) {
-        if(hasDeterminedWiner()) {
+        if(hasDeterminedWinner()) {
             return false;
         } else {
             this.setCurrentQuestion(this.getRandomQuestion());
@@ -131,7 +147,7 @@ public class ThermometerRound implements RoundInterface{
      * Utility function to determine whether the given Player has won the game (accumulated >= 5 correct answers)
      * @return whether they won or lost
      */
-    private boolean hasDeterminedWiner(){
+    private boolean hasDeterminedWinner(){
         return hasWon;
     }
 
@@ -165,6 +181,6 @@ public class ThermometerRound implements RoundInterface{
      * @return a random Question
      */
     private Question getRandomQuestion() {
-        return QuestionRepository.getInstance().getSingleRandomQuestion();
+        return this.questionRepository.getSingleRandomQuestion();
     }
 }

@@ -229,7 +229,6 @@ public class Player{
         return false;
     }
 
-
     /**
      * method that return a list of the names of the players for the JComboBox object in the GUI
      * @return a list with all the players

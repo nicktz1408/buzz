@@ -3,6 +3,7 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.text.StyledDocument;
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.*;
@@ -12,6 +13,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.net.URL;
+
 
 
 /**
@@ -994,6 +996,7 @@ public class GUI{
 
         JPanel panel3 = new JPanel();
         JButton answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+        answer1.setBorderPainted(true);
 
         JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
 
@@ -1485,7 +1488,6 @@ public class GUI{
      * @param game reference to our GameFacade
      */
     public void rightQuestionRound(Dimension dim, GameFacade game){
-
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
         frame.setSize(dim);
@@ -1543,7 +1545,10 @@ public class GUI{
 
 
         JPanel panel3 = new JPanel();
+
+
         JButton answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+
 
         JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
 
@@ -1561,14 +1566,9 @@ public class GUI{
 
 
 
-
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
-
         ActionListener answerListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+
+            public void actionPerformed(ActionEvent e){
                 int answerIndex = -1;
                 if(e.getSource() == answer1){
                     answerIndex=0;
@@ -1579,8 +1579,15 @@ public class GUI{
                 } else if(e.getSource() == answer4){
                     answerIndex = 3;
                 }
+
+
                 game.answerQuestion(player1, answerIndex);
                 FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
                 if(status == FetchNextQuestionStatus.GAME_FINISHED){
                     frame.setVisible(false);
                     JOptionPane.showMessageDialog(new JFrame(),
@@ -1605,6 +1612,10 @@ public class GUI{
         answer2.addActionListener(answerListener);
         answer3.addActionListener(answerListener);
         answer4.addActionListener(answerListener);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
     }
 
 
@@ -2315,4 +2326,7 @@ public class GUI{
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
+
+
+
 }

@@ -6,20 +6,19 @@ import javax.swing.border.LineBorder;
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 
+
 /**
- * Class used for the GUI of the Buzz Game
+ * Class that implements the GUI of the Buzz Game
  */
 public class GUI{
     private JFrame window;
-    private final JButton playButton, signInButton, statisticsButton;
     private JButton answer1;
     private GamePlayer player1 = new GamePlayer();
     private GamePlayer player2 = new GamePlayer();
@@ -35,23 +34,26 @@ public class GUI{
      * @param dim the size of the window
      */
     public GUI(Dimension dim){
+        JButton playButton, signInButton, statisticsButton, infoOfGame;
         window = new JFrame("Buzz Game");
         window.setResizable(true);
         window.setSize(dim);
         window.setMinimumSize(dim);
         window.setLayout(new FlowLayout(FlowLayout.CENTER));
-        window.setLayout(new GridLayout(4,1));
+        window.setLayout(new GridLayout(5,1));
 
 
         playButton = new JButton("Παίξε");
         signInButton = new JButton("Εγραφή νέου χρήστη");
-        statisticsButton = new JButton("Στατιστκά");
+        statisticsButton = new JButton("Στατιστικά");
+        infoOfGame = new JButton("Σχετικά");
 
         JLabel label = new JLabel("Μενού", SwingConstants.CENTER);
         window.add(label);
         window.add(playButton);
         window.add(signInButton);
         window.add(statisticsButton);
+        window.add(infoOfGame);
 
         window.pack();
         window.setLocationRelativeTo(null);
@@ -86,11 +88,71 @@ public class GUI{
                 URL url = getClass().getResource("ButtonClick.wav");
                 AudioClip clip = Applet.newAudioClip(url);
                 clip.play();
-                Dimension dim = new Dimension(600, 450);
+                Dimension dim = new Dimension(650, 500);
                 try {
                     statisticsGui(dim);
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+            }
+        });
+
+
+        infoOfGame.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                URL url = getClass().getResource("ButtonClick.wav");
+                AudioClip clip = Applet.newAudioClip(url);
+                clip.play();
+                Dimension dim = new Dimension(650, 500);
+                info(dim);
+            }
+        });
+    }
+
+    /**
+     * Info page for the gameplay and information of the programmer.
+     * @param dim size of the frame
+     */
+    public void info(Dimension dim){
+        JFrame frame = new JFrame("Buzz Game");
+        frame.setResizable(true);
+        frame.setSize(dim);
+        frame.setMinimumSize(dim);
+        frame.setLayout(new FlowLayout(FlowLayout.CENTER));
+
+
+        JLabel info1 = new JLabel();
+        info1.setText("<html><p style=\"width:600px; font-weight: 400; font-size: 13px\">"+"Το <strong>Buzz Game</strong> είναι ένα παιχνίδι γνώσεων το οποίο μπορεί να παιχτεί από έναν ή από δύο παίκτες ταυτόχρονα. Αν δεν είσαι ήδη εγγεγραμένος ώς παίκτης του παιχνιδιού μπορείς να πατήσεις πάνω στο κουμπί <b>Εγγραφή νέου χρήστη</b> και να συμπληρώσεις το όνομα " +
+                "που επιθυμείς να έχεις στο παιχνίδι. Αν είσαι εγγεγραμένος πάικτης και απλώς θέλεις να δεις τις επιδόσεις σου στα παιχνίδια μπορείς να πατήσεις πάνω " +
+                "στο κουμπί <b>Στατιστικά</b> και εφόσον βρείς το όνομά σου να δεις τα στατιστικά σου σαν παίκτη. " +
+                "Αν έχεις σκοπό να πάιξεις το παιχνίδι γνώσεων τότε πρέπει να πατήσεις πάνω στο κουμπί <b>Παίξε</b> να διαλέξεις αν θα συνεχίσεις μόνος σου ή με παρέα " +
+                "και να έρθεις αντιμέτωπος με την πρώτη ερώτηση! <br /><br /> <b>1 παίκτης:</b> επιλέγεις με το ποντίκι την απάντηση που θές και βλέπεις το σκόρ σου. " +
+                "<br /><br /><b>2 παίκτες:</b> ο παίκτης από τα αριστερά(1ος παίκτης) χρησιμοποιεί τα πλήκτρα <b>q, w, e, r</b> και ο πάικτης από τα δεξιά(2ος παίκτης) χρησιμοποιεί τα πλήκτρα " +
+                "<b>u, i, o, p</b> για να επιλέξει την 1η, 2η, 3η, 4η απάντηση αντίστοιχα. <br /><br /><b>Στοιχεία προγραμματιστών:</b> Νικόλαος Τζαβίδας, Εμμανουήλ Ελευθεριάδης φοιτητες Τμήματος " +
+                "Πληροφορικής ΑΠΘ και το project μπορείται να το βρείτε στο <a href=\"https://github.com/auth-csd-oop-2020/buzzquizworld-thelamogia\">github</a>"+"</p></html>");
+
+
+        info1.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        goWebsite(info1);
+        frame.add(info1);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
+    }
+
+    /**
+     * When the JLabel clicked then goes to the browser to our project's github repo.
+     * @param website target JLabel
+     */
+    private void goWebsite(JLabel website) {
+        website.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://github.com/auth-csd-oop-2020/buzzquizworld-thelamogia"));
+                } catch (URISyntaxException | IOException ex) {
                 }
             }
         });
@@ -204,10 +266,10 @@ public class GUI{
         JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
-        JLabel label2 = new JLabel("Σκορ 1ου παίκτη: "+(int)player1.getScore());
+        JLabel label2 = new JLabel("Σκορ "+user1.getName()+": "+(int)player1.getScore());
         label2.setBorder(compound);
 
-        JLabel label4 = new JLabel("Σκορ 2ου παίκτη: "+(int)player2.getScore());
+        JLabel label4 = new JLabel("Σκορ "+user2.getName()+": "+(int)player2.getScore());
         label4.setBorder(compound);
 
         JLabel label5 = new JLabel("Τύπος Γύρου: "+getRoundName(game.getCurrentRound().getRoundName()));
@@ -315,7 +377,7 @@ public class GUI{
                     }
                 }
 
-                if((pressed1 && pressed2) || (clock.getSecond()==0 && clock.getMillliSecond()==1)){
+                if((pressed1 && pressed2) || (clock.getSecond()==0 && clock.getMilliSecond()==1)){
                     clock.buttonClicked();
                     frame.setVisible(false);
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
@@ -439,10 +501,10 @@ public class GUI{
         JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
-        JLabel label2 = new JLabel("Σκορ 1ου πάικτη: "+player1.getScore());
+        JLabel label2 = new JLabel("Σκορ "+user1.getName()+": "+player1.getScore());
         label2.setBorder(compound);
 
-        JLabel label4 = new JLabel("Σκορ 2ου παίκτη: "+player2.getScore());
+        JLabel label4 = new JLabel("Σκορ "+user2.getName()+": "+player2.getScore());
         label4.setBorder(compound);
 
         JLabel label5 = new JLabel("Τύπος Γύρου: "+getRoundName(game.getCurrentRound().getRoundName()));
@@ -675,10 +737,10 @@ public class GUI{
         JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
-        JLabel label2 = new JLabel("Σκορ 1ου παίκτη: "+player1.getScore());
+        JLabel label2 = new JLabel("Σκορ "+user1.getName()+": "+player1.getScore());
         label2.setBorder(compound);
 
-        JLabel label4 = new JLabel("Σκορ 2ου παίκτη: "+player2.getScore());
+        JLabel label4 = new JLabel("Σκορ "+user2.getName()+": "+player2.getScore());
         label4.setBorder(compound);
 
         JLabel label5 = new JLabel("Τύπος Γύρου: "+getRoundName(game.getCurrentRound().getRoundName()));
@@ -950,6 +1012,7 @@ public class GUI{
 
         JPanel panel3 = new JPanel();
         JButton answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+        answer1.setBorderPainted(true);
 
         JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
 
@@ -1178,8 +1241,8 @@ public class GUI{
 
     /**
      * In this window we show the statistics of a player like the wins in the two players game and high score when he/she players alone
-     * @param dim
-     * @throws IOException
+     * @param dim size of the statistics window
+     * @throws IOException when there is an issue with opening the file with the statistics of the players
      */
     public void statisticsGui(Dimension dim) throws IOException {
         window = new JFrame("Buzz Game");
@@ -1441,7 +1504,6 @@ public class GUI{
      * @param game reference to our GameFacade
      */
     public void rightQuestionRound(Dimension dim, GameFacade game){
-
         JFrame frame = new JFrame("Buzz Game");
         frame.setResizable(true);
         frame.setSize(dim);
@@ -1499,7 +1561,7 @@ public class GUI{
 
 
         JPanel panel3 = new JPanel();
-        JButton answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
 
         JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
 
@@ -1518,13 +1580,10 @@ public class GUI{
 
 
 
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setVisible(true);
-
         ActionListener answerListener = new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+
+            public void actionPerformed(ActionEvent e){
+                answer1.setForeground(Color.RED);
                 int answerIndex = -1;
                 if(e.getSource() == answer1){
                     answerIndex=0;
@@ -1535,8 +1594,10 @@ public class GUI{
                 } else if(e.getSource() == answer4){
                     answerIndex = 3;
                 }
+
                 game.answerQuestion(player1, answerIndex);
                 FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
+
                 if(status == FetchNextQuestionStatus.GAME_FINISHED){
                     frame.setVisible(false);
                     JOptionPane.showMessageDialog(new JFrame(),
@@ -1554,6 +1615,7 @@ public class GUI{
                     frame.setVisible(false);
                     checktheTypeOfRound(game, true);
                 }
+
             }
         };
 
@@ -1561,6 +1623,10 @@ public class GUI{
         answer2.addActionListener(answerListener);
         answer3.addActionListener(answerListener);
         answer4.addActionListener(answerListener);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setVisible(true);
     }
 
 
@@ -1588,10 +1654,10 @@ public class GUI{
         JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
-        JLabel label2 = new JLabel("Σκορ 1ου παίκτη: "+(int)player1.getScore());
+        JLabel label2 = new JLabel("Σκορ "+user1.getName()+": "+(int)player1.getScore());
         label2.setBorder(compound);
 
-        JLabel label4 = new JLabel("Σκορ 2ου παίκτη: "+(int)player2.getScore());
+        JLabel label4 = new JLabel("Σκορ "+user2.getName()+": "+(int)player2.getScore());
         label4.setBorder(compound);
 
         JLabel label5 = new JLabel("Τύπος Γύρου: "+getRoundName(game.getCurrentRound().getRoundName()));
@@ -2069,10 +2135,10 @@ public class GUI{
         JLabel label1 = new JLabel("Γύρος: "+game.getCurrentRoundIndex());
         label1.setBorder(compound);
 
-        JLabel label2 = new JLabel("Σκορ 1ου παίκτη: "+(int)player1.getScore());
+        JLabel label2 = new JLabel("Σκορ "+user1.getName()+": "+(int)player1.getScore());
         label2.setBorder(compound);
 
-        JLabel label4 = new JLabel("Σκορ 2ου παίκτη: "+(int)player2.getScore());
+        JLabel label4 = new JLabel("Σκορ "+user2.getName()+": "+(int)player2.getScore());
         label4.setBorder(compound);
 
         JLabel label5 = new JLabel("Τύπος Γύρου: "+getRoundName(game.getCurrentRound().getRoundName()));

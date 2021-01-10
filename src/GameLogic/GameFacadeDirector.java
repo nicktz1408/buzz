@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class GameFacadeDirector {
     /**
      * Builds the GameFacade for a single Player
-     * @return
+     * @return the built GameFacade for 1 player
      */
     public GameFacade buildSoloGame() {
         QuestionRepository questionRepository = QuestionRepository.getInstance();
@@ -74,7 +74,7 @@ public class GameFacadeDirector {
 
     /**
      * Builds the GameFacade for a 2 Players
-     * @return
+     * @return the built GameFacade for 2 players
      */
     public GameFacade buildTwoPlayersGame() {
         QuestionRepository questionRepository = QuestionRepository.getInstance();

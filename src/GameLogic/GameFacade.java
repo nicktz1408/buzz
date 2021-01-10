@@ -26,7 +26,7 @@ public class GameFacade {
 
     /**
      * Shows the current Question associated with the given Player
-     * @param player
+     * @param player the given player
      * @return the Question associated with the given Player
      */
     public Question getCurrentQuestion(GamePlayer player) {
@@ -35,7 +35,7 @@ public class GameFacade {
 
     /**
      * Delegates the fetching the next Question of a given Player
-     * @param player
+     * @param player the given player
      * @return a status that indicates whether the game has proceeded to a new question, to a new round
      * (if the previous round has finished) or wheter it has finished
      */
@@ -54,7 +54,7 @@ public class GameFacade {
     /**
      * Given a Player, answers the current Question (associated with them) and it adjusts the Player's
      * score accordingly
-     * @param player
+     * @param player the given player
      * @param answerIndex the index (0 to 3) of the answer chosen by the Player
      * @param additionalRequestData potential additional data that might be needed by the various round types
      */

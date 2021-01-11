@@ -23,6 +23,7 @@ public class Question {
         this.setQuestionText(builder.questionText);
         this.setAnswersList(builder.answersList);
         this.setRightAnswerIndex(builder.rightAnswerIndex);
+        this.shuffleAnswers();
     }
 
     /**
@@ -112,7 +113,16 @@ public class Question {
      * In this method we shuffle the answers order randomly
      */
     public void shuffleAnswers(){
+        int i=0,finalIndex = 0;
+        String rightAnswer = this.getRightAnswerAsText();
         Collections.shuffle(this.answersList, new Random(System.currentTimeMillis()));
+        for(String answers :answersList){
+            if(answers.equals(rightAnswer)){
+                finalIndex = i;
+            }
+            i++;
+        }
+        this.rightAnswerIndex = finalIndex;
     }
 
     /**
@@ -210,7 +220,7 @@ public class Question {
          * @return the constructed Question
          */
         public Question build() {
-            Collections.shuffle(this.answersList, new Random(System.currentTimeMillis()));
+            //Collections.shuffle(this.answersList, new Random(System.currentTimeMillis()));
             return new Question(this);
         }
     }

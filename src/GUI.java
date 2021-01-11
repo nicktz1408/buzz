@@ -1,4 +1,5 @@
 import GameLogic.*;
+
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -11,7 +12,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-
+import java.util.ArrayList;
+import java.util.Collections;
 
 
 /**
@@ -66,6 +68,8 @@ public class GUI{
                 AudioClip clip = Applet.newAudioClip(url);
                 clip.play();
                 Dimension dim = new Dimension(200, 150);
+                player1 = new GamePlayer();
+                player2 = new GamePlayer();
                 startPlaying(dim);
 
             }
@@ -312,6 +316,24 @@ public class GUI{
         panel4.setBackground(Color.orange);
         panel5.setBackground(Color.green);
 
+        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
+        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
+        JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
+
+        int rightAnswerIndex = game.getCurrentQuestion(player1).getRightAnswerIndex();
+
+        ArrayList<Integer> playerTwoOrder = new ArrayList<>();
+        playerTwoOrder.add(0);
+        playerTwoOrder.add(1);
+        playerTwoOrder.add(2);
+        playerTwoOrder.add(3);
+        Collections.shuffle(playerTwoOrder);
+
+        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(0)));
+        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(1)));
+        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(2)));
+        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(3)));
 
         KeyListener myListener = new KeyListener() {
             int answerIndex = -1;
@@ -372,14 +394,49 @@ public class GUI{
                     }
                     if(pressed2) {
                         time2 = clock.getRemainingTime();
-                        game.answerQuestion(player2, answerIndex, time2);
+                        game.answerQuestion(player2, playerTwoOrder.get(answerIndex), time2);
 
                     }
                 }
 
                 if((pressed1 && pressed2) || (clock.getSecond()==0 && clock.getMilliSecond()==1)){
+                    answer2.setBackground(Color.RED);
+                    answer3.setBackground(Color.RED);
+                    answer4.setBackground(Color.RED);
+                    answer5.setBackground(Color.RED);
+
+                    answer6.setBackground(Color.RED);
+                    answer7.setBackground(Color.RED);
+                    answer8.setBackground(Color.RED);
+                    answer1.setBackground(Color.RED);
+
+                    switch(rightAnswerIndex){
+                        case 0:
+                            answer2.setBackground(Color.GREEN);
+                            break;
+                        case 1:
+                            answer3.setBackground(Color.GREEN);
+                            break;
+                        case 2:
+                            answer4.setBackground(Color.GREEN);
+                            break;
+                        case 3:
+                            answer5.setBackground(Color.GREEN);
+                            break;
+                    }
+
+                    if(rightAnswerIndex == playerTwoOrder.get(0)) {
+                        answer6.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(1)) {
+                        answer7.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(2)) {
+                        answer8.setBackground(Color.GREEN);
+                    } else {
+                        answer1.setBackground(Color.GREEN);
+                    }
+
                     clock.buttonClicked();
-                    frame.setVisible(false);
+
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                     if(status == FetchNextQuestionStatus.GAME_FINISHED){
                         frame.setVisible(false);
@@ -408,7 +465,14 @@ public class GUI{
                         player1 = new GamePlayer();
                         player2 = new GamePlayer();
                     }else {
-                        checktheTypeOfRound(game, false);
+                        new CountDown(1) {
+                            @Override
+                            public void onFinish() {
+                                frame.setVisible(false);
+                                checktheTypeOfRound(game, false);
+                            }
+                        };
+
                     }
                 }
 
@@ -424,24 +488,16 @@ public class GUI{
 
         frame.addKeyListener(myListener);
 
-        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
         answer2.addKeyListener(myListener);
-        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
         answer3.addKeyListener(myListener);
-        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
         answer4.addKeyListener(myListener);
-        JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer5.addKeyListener(myListener);
 
 
-        game.getCurrentQuestion(player1).shuffleAnswers();
-        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+        //game.getCurrentQuestion(player1).shuffleAnswers();
         answer6.addKeyListener(myListener);
-        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
         answer7.addKeyListener(myListener);
-        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
         answer8.addKeyListener(myListener);
-        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer1.addKeyListener(myListener);
 
 
@@ -553,6 +609,25 @@ public class GUI{
         panel4.setBackground(Color.orange);
         panel5.setBackground(Color.green);
 
+        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
+        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
+        JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
+
+        int rightAnswerIndex = game.getCurrentQuestion(player1).getRightAnswerIndex();
+
+        ArrayList<Integer> playerTwoOrder = new ArrayList<>();
+        playerTwoOrder.add(0);
+        playerTwoOrder.add(1);
+        playerTwoOrder.add(2);
+        playerTwoOrder.add(3);
+        Collections.shuffle(playerTwoOrder);
+
+        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(0)));
+        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(1)));
+        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(2)));
+        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(3)));
+
 
         KeyListener myListener = new KeyListener() {
             int answerIndex = 0;
@@ -609,11 +684,46 @@ public class GUI{
                             break;
                     }
                     if(pressed2) {
-                        game.answerQuestion(player2, answerIndex);
+                        game.answerQuestion(player2, playerTwoOrder.get(answerIndex));
                     }
                 }
 
                 if(pressed1 && pressed2){
+                    answer2.setBackground(Color.RED);
+                    answer3.setBackground(Color.RED);
+                    answer4.setBackground(Color.RED);
+                    answer5.setBackground(Color.RED);
+
+                    answer6.setBackground(Color.RED);
+                    answer7.setBackground(Color.RED);
+                    answer8.setBackground(Color.RED);
+                    answer1.setBackground(Color.RED);
+
+                    switch(rightAnswerIndex){
+                        case 0:
+                            answer2.setBackground(Color.GREEN);
+                            break;
+                        case 1:
+                            answer3.setBackground(Color.GREEN);
+                            break;
+                        case 2:
+                            answer4.setBackground(Color.GREEN);
+                            break;
+                        case 3:
+                            answer5.setBackground(Color.GREEN);
+                            break;
+                    }
+
+                    if(rightAnswerIndex == playerTwoOrder.get(0)) {
+                        answer6.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(1)) {
+                        answer7.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(2)) {
+                        answer8.setBackground(Color.GREEN);
+                    } else {
+                        answer1.setBackground(Color.GREEN);
+                    }
+
                     frame.setVisible(false);
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                     if(status == FetchNextQuestionStatus.GAME_FINISHED){
@@ -643,8 +753,14 @@ public class GUI{
                         player1 = new GamePlayer();
                         player2 = new GamePlayer();
                     }else {
-                        frame.setVisible(false);
-                        checktheTypeOfRound(game, false);
+                        new CountDown(1) {
+                            @Override
+                            public void onFinish() {
+                                frame.setVisible(false);
+                                checktheTypeOfRound(game, false);
+                            }
+                        };
+
                     }
                 }
             }
@@ -658,25 +774,16 @@ public class GUI{
 
         frame.addKeyListener(myListener);
 
-        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
         answer2.addKeyListener(myListener);
-        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
         answer3.addKeyListener(myListener);
-        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
         answer4.addKeyListener(myListener);
-        JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer5.addKeyListener(myListener);
 
 
-        game.getCurrentQuestion(player1).shuffleAnswers();
 
-        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
         answer6.addKeyListener(myListener);
-        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
         answer7.addKeyListener(myListener);
-        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
         answer8.addKeyListener(myListener);
-        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer1.addKeyListener(myListener);
 
 
@@ -786,6 +893,25 @@ public class GUI{
         panel4.setBackground(Color.orange);
         panel5.setBackground(Color.green);
 
+        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
+        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
+        JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
+
+        int rightAnswerIndex = game.getCurrentQuestion(player1).getRightAnswerIndex();
+
+        ArrayList<Integer> playerTwoOrder = new ArrayList<>();
+        playerTwoOrder.add(0);
+        playerTwoOrder.add(1);
+        playerTwoOrder.add(2);
+        playerTwoOrder.add(3);
+        Collections.shuffle(playerTwoOrder);
+
+        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(0)));
+        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(1)));
+        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(2)));
+        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(3)));
+
 
 
         KeyListener myListener = new KeyListener() {
@@ -843,12 +969,46 @@ public class GUI{
                             break;
                     }
                     if(pressed2) {
-                        game.answerQuestion(player2, answerIndex);
+                        game.answerQuestion(player2, playerTwoOrder.get(answerIndex));
                     }
                 }
 
                 if(pressed1 && pressed2){
-                    frame.setVisible(false);
+                    answer2.setBackground(Color.RED);
+                    answer3.setBackground(Color.RED);
+                    answer4.setBackground(Color.RED);
+                    answer5.setBackground(Color.RED);
+
+                    answer6.setBackground(Color.RED);
+                    answer7.setBackground(Color.RED);
+                    answer8.setBackground(Color.RED);
+                    answer1.setBackground(Color.RED);
+
+                    switch(rightAnswerIndex){
+                        case 0:
+                            answer2.setBackground(Color.GREEN);
+                            break;
+                        case 1:
+                            answer3.setBackground(Color.GREEN);
+                            break;
+                        case 2:
+                            answer4.setBackground(Color.GREEN);
+                            break;
+                        case 3:
+                            answer5.setBackground(Color.GREEN);
+                            break;
+                    }
+
+                    if(rightAnswerIndex == playerTwoOrder.get(0)) {
+                        answer6.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(1)) {
+                        answer7.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(2)) {
+                        answer8.setBackground(Color.GREEN);
+                    } else {
+                        answer1.setBackground(Color.GREEN);
+                    }
+
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                     if(status == FetchNextQuestionStatus.GAME_FINISHED){
                         frame.setVisible(false);
@@ -877,8 +1037,14 @@ public class GUI{
                         player1 = new GamePlayer();
                         player2 = new GamePlayer();
                     }else {
-                        frame.setVisible(false);
-                        checktheTypeOfRound(game, false);
+                        new CountDown(1) {
+                            @Override
+                            public void onFinish() {
+                                frame.setVisible(false);
+                                checktheTypeOfRound(game, false);
+                            }
+                        };
+
                     }
                 }
             }
@@ -892,26 +1058,17 @@ public class GUI{
 
         frame.addKeyListener(myListener);
 
-        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
         answer2.addKeyListener(myListener);
-        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
         answer3.addKeyListener(myListener);
-        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
         answer4.addKeyListener(myListener);
-        JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer5.addKeyListener(myListener);
 
 
-        game.getCurrentQuestion(player1).shuffleAnswers();
 
 
-        JButton answer6 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(0));
         answer6.addKeyListener(myListener);
-        JButton answer7 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(1));
         answer7.addKeyListener(myListener);
-        JButton answer8 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(2));
         answer8.addKeyListener(myListener);
-        answer1 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(3));
         answer1.addKeyListener(myListener);
 
 
@@ -1038,6 +1195,10 @@ public class GUI{
 
         ActionListener answerListener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                answer1.setBackground(Color.RED);
+                answer2.setBackground(Color.RED);
+                answer3.setBackground(Color.RED);
+                answer4.setBackground(Color.RED);
                 int answerIndex = -1;
                 if(e.getSource() == answer1){
                     answerIndex=0;
@@ -1047,6 +1208,22 @@ public class GUI{
                     answerIndex = 2;
                 } else if(e.getSource() == answer4){
                     answerIndex = 3;
+                }
+
+
+                switch(game.getCurrentQuestion(player1).getRightAnswerIndex()){
+                    case 0:
+                        answer1.setBackground(Color.GREEN);
+                        break;
+                    case 1:
+                        answer2.setBackground(Color.GREEN);
+                        break;
+                    case 2:
+                        answer3.setBackground(Color.GREEN);
+                        break;
+                    case 3:
+                        answer4.setBackground(Color.GREEN);
+                        break;
                 }
                 game.answerQuestion(player1, answerIndex, betPlayer1);
                 FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
@@ -1065,8 +1242,14 @@ public class GUI{
                     player1 = new GamePlayer();
                     player2 = new GamePlayer();
                 }else {
-                    frame.setVisible(false);
-                    checktheTypeOfRound(game, true);
+                    new CountDown(1) {
+                        @Override
+                        public void onFinish() {
+                            frame.setVisible(false);
+                            checktheTypeOfRound(game, true);
+                        }
+                    };
+
                 }
 
             }
@@ -1195,6 +1378,10 @@ public class GUI{
 
         ActionListener answerListener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                answer1.setBackground(Color.RED);
+                answer2.setBackground(Color.RED);
+                answer3.setBackground(Color.RED);
+                answer4.setBackground(Color.RED);
                 clock.buttonClicked();
                 int answerIndex = -1;
                 if(e.getSource() == answer1){
@@ -1206,6 +1393,22 @@ public class GUI{
                 } else if(e.getSource() == answer4){
                     answerIndex = 3;
                 }
+
+                switch(game.getCurrentQuestion(player1).getRightAnswerIndex()){
+                    case 0:
+                        answer1.setBackground(Color.GREEN);
+                        break;
+                    case 1:
+                        answer2.setBackground(Color.GREEN);
+                        break;
+                    case 2:
+                        answer3.setBackground(Color.GREEN);
+                        break;
+                    case 3:
+                        answer4.setBackground(Color.GREEN);
+                        break;
+                }
+
                 int remaining = clock.getRemainingTime();
                 game.answerQuestion(player1, answerIndex, remaining);
 
@@ -1224,8 +1427,14 @@ public class GUI{
                         ioException.printStackTrace();
                     }
                 }else {
-                    frame.setVisible(false);
-                    checktheTypeOfRound(game,true);
+                    new CountDown(1) {
+                        @Override
+                        public void onFinish() {
+                            frame.setVisible(false);
+                            checktheTypeOfRound(game,true);
+                        }
+                    };
+
                 }
 
             }
@@ -1431,6 +1640,8 @@ public class GUI{
                                     JOptionPane.showMessageDialog(null, "Οι δύο παίκτες πρέπει να είναι διαφορετικοί");
                                 } else {
                                     window.setVisible(false);
+                                    player1 = new GamePlayer();
+                                    player2 = new GamePlayer();
                                     checktheTypeOfRound(game,false);
                                 }
                             }
@@ -1580,42 +1791,72 @@ public class GUI{
 
 
 
+
         ActionListener answerListener = new ActionListener() {
 
             public void actionPerformed(ActionEvent e){
-                answer1.setForeground(Color.RED);
+                answer1.setBackground(Color.RED);
+                answer2.setBackground(Color.RED);
+                answer3.setBackground(Color.RED);
+                answer4.setBackground(Color.RED);
                 int answerIndex = -1;
                 if(e.getSource() == answer1){
                     answerIndex=0;
+
                 }else if(e.getSource() == answer2){
                     answerIndex=1;
+
                 } else if(e.getSource() == answer3){
                     answerIndex = 2;
+
                 } else if(e.getSource() == answer4){
                     answerIndex = 3;
+                }
+                switch(game.getCurrentQuestion(player1).getRightAnswerIndex()){
+                    case 0:
+                        answer1.setBackground(Color.GREEN);
+                        break;
+                    case 1:
+                        answer2.setBackground(Color.GREEN);
+                        break;
+                    case 2:
+                        answer3.setBackground(Color.GREEN);
+                        break;
+                    case 3:
+                        answer4.setBackground(Color.GREEN);
+                        break;
                 }
 
                 game.answerQuestion(player1, answerIndex);
                 FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
 
                 if(status == FetchNextQuestionStatus.GAME_FINISHED){
-                    frame.setVisible(false);
-                    JOptionPane.showMessageDialog(new JFrame(),
-                            "Τελείωσες το παιχνίδι με σκορ "+player1.getScore(),"Μπράβο!",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    new CountDown(1) {
+                        @Override
+                        public void onFinish() {
+                            frame.setVisible(false);
+                            JOptionPane.showMessageDialog(new JFrame(),
+                                    "Τελείωσες το παιχνίδι με σκορ "+player1.getScore(),"Μπράβο!",
+                                    JOptionPane.INFORMATION_MESSAGE);
 
-                    try {
-                        user1.newDataAlone(user1.getName(), (int)player1.getScore());
-                        player1 = new GamePlayer();
-                        player2 = new GamePlayer();
-                    } catch (IOException | ClassNotFoundException ioException) {
-                        ioException.printStackTrace();
-                    }
+                            try {
+                                user1.newDataAlone(user1.getName(), (int)player1.getScore());
+                                player1 = new GamePlayer();
+                                player2 = new GamePlayer();
+                            } catch (IOException | ClassNotFoundException ioException) {
+                                ioException.printStackTrace();
+                            }
+                        }
+                    };
                 }else {
-                    frame.setVisible(false);
-                    checktheTypeOfRound(game, true);
+                    new CountDown(1) {
+                        @Override
+                        public void onFinish() {
+                            frame.setVisible(false);
+                            checktheTypeOfRound(game, true);
+                        }
+                    };
                 }
-
             }
         };
 
@@ -1701,6 +1942,34 @@ public class GUI{
         panel5.setBackground(Color.green);
 
 
+
+        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+        answer2.setOpaque(true);
+        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
+        answer3.setOpaque(true);
+        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
+        answer4.setOpaque(true);
+        JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
+        answer5.setOpaque(true);
+        int rightAnswerIndex = game.getCurrentQuestion(player1).getRightAnswerIndex();
+
+        ArrayList<Integer> playerTwoOrder = new ArrayList<>();
+        playerTwoOrder.add(0);
+        playerTwoOrder.add(1);
+        playerTwoOrder.add(2);
+        playerTwoOrder.add(3);
+        Collections.shuffle(playerTwoOrder);
+
+        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(0)));
+        answer6.setOpaque(true);
+        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(1)));
+        answer7.setOpaque(true);
+        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(2)));
+        answer8.setOpaque(true);
+        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(3)));
+        answer1.setOpaque(true);
+
+
         KeyListener myListener = new KeyListener() {
             int answerIndex = 0;
             boolean pressed1 = false;
@@ -1712,6 +1981,7 @@ public class GUI{
 
             @Override
             public void keyPressed(KeyEvent e) {
+
                 if(!pressed1) {
                     switch (e.getKeyChar()) {
                         case 'q':
@@ -1733,7 +2003,6 @@ public class GUI{
                     }
                     if(pressed1){
                         game.answerQuestion(player1, answerIndex);
-
                     }
 
                 }
@@ -1757,41 +2026,87 @@ public class GUI{
                             break;
                     }
                     if(pressed2) {
-                        game.answerQuestion(player2, answerIndex);
+                        game.answerQuestion(player2, playerTwoOrder.get(answerIndex));
                     }
                 }
 
                 if(pressed1 && pressed2){
-                    frame.setVisible(false);
+                    answer2.setBackground(Color.RED);
+                    answer3.setBackground(Color.RED);
+                    answer4.setBackground(Color.RED);
+                    answer5.setBackground(Color.RED);
+
+                    answer6.setBackground(Color.RED);
+                    answer7.setBackground(Color.RED);
+                    answer8.setBackground(Color.RED);
+                    answer1.setBackground(Color.RED);
+
+                    switch(rightAnswerIndex){
+                        case 0:
+                            answer2.setBackground(Color.GREEN);
+                            break;
+                        case 1:
+                            answer3.setBackground(Color.GREEN);
+                            break;
+                        case 2:
+                            answer4.setBackground(Color.GREEN);
+                            break;
+                        case 3:
+                            answer5.setBackground(Color.GREEN);
+                            break;
+                    }
+
+                    if(rightAnswerIndex == playerTwoOrder.get(0)) {
+                        answer6.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(1)) {
+                        answer7.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(2)) {
+                        answer8.setBackground(Color.GREEN);
+                    } else {
+                        answer1.setBackground(Color.GREEN);
+                    }
+
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                     if(status == FetchNextQuestionStatus.GAME_FINISHED){
-                        frame.setVisible(false);
-                        if(player1.getScore()>player2.getScore()){
-                            JOptionPane.showMessageDialog(new JFrame(),
-                                    "Σκόρ "+user1.getName()+": "+player1.getScore()+"\n"+"Σκορ "+user2.getName()+": "+player2.getScore()+"\n"+"Νικητής ο παίκτης "+user1.getName()+"!","Μπράβο!",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                            try {
-                                user1.newDataWithTwoPlayers(user1.getName(), true);
-                                user2.newDataWithTwoPlayers(user2.getName(), false);
-                            } catch (IOException ioException) {
-                                ioException.printStackTrace();
-                            }
+                        new CountDown(1) {
+                            @Override
+                            public void onFinish() {
+                                frame.setVisible(false);
+                                if(player1.getScore()>player2.getScore()){
+                                    JOptionPane.showMessageDialog(new JFrame(),
+                                            "Σκόρ "+user1.getName()+": "+player1.getScore()+"\n"+"Σκορ "+user2.getName()+": "+player2.getScore()+"\n"+"Νικητής ο παίκτης "+user1.getName()+"!","Μπράβο!",
+                                            JOptionPane.INFORMATION_MESSAGE);
+                                    try {
+                                        user1.newDataWithTwoPlayers(user1.getName(), true);
+                                        user2.newDataWithTwoPlayers(user2.getName(), false);
+                                    } catch (IOException ioException) {
+                                        ioException.printStackTrace();
+                                    }
 
-                        }else {
-                            JOptionPane.showMessageDialog(new JFrame(),
-                                    "Σκόρ " + user1.getName() + ": " + player1.getScore() + "\n" + "Σκορ " + user2.getName() + ": " + player2.getScore() + "\n" + "Νικητής ο παίκτης " + user2.getName() + "!", "Μπράβο!",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                            try {
-                                user1.newDataWithTwoPlayers(user1.getName(), false);
-                                user2.newDataWithTwoPlayers(user2.getName(), true);
-                            } catch (IOException ioException) {
-                                ioException.printStackTrace();
+                                }else {
+                                    JOptionPane.showMessageDialog(new JFrame(),
+                                            "Σκόρ " + user1.getName() + ": " + player1.getScore() + "\n" + "Σκορ " + user2.getName() + ": " + player2.getScore() + "\n" + "Νικητής ο παίκτης " + user2.getName() + "!", "Μπράβο!",
+                                            JOptionPane.INFORMATION_MESSAGE);
+                                    try {
+                                        user1.newDataWithTwoPlayers(user1.getName(), false);
+                                        user2.newDataWithTwoPlayers(user2.getName(), true);
+                                    } catch (IOException ioException) {
+                                        ioException.printStackTrace();
+                                    }
+                                }
+                                player1 = new GamePlayer();
+                                player2 = new GamePlayer();
                             }
-                        }
-                        player1 = new GamePlayer();
-                        player2 = new GamePlayer();
+                        };
+
                     }else {
-                        checktheTypeOfRound(game, false);
+                        new CountDown(1) {
+                            @Override
+                            public void onFinish() {
+                                frame.setVisible(false);
+                                checktheTypeOfRound(game, false);
+                            }
+                        };
                     }
                 }
 
@@ -1807,26 +2122,15 @@ public class GUI{
 
         frame.addKeyListener(myListener);
 
-        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+
         answer2.addKeyListener(myListener);
-        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
         answer3.addKeyListener(myListener);
-        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
         answer4.addKeyListener(myListener);
-        JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer5.addKeyListener(myListener);
 
-
-        game.getCurrentQuestion(player1).shuffleAnswers();
-
-
-        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
         answer6.addKeyListener(myListener);
-        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
         answer7.addKeyListener(myListener);
-        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
         answer8.addKeyListener(myListener);
-        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer1.addKeyListener(myListener);
 
 
@@ -2180,6 +2484,26 @@ public class GUI{
         panel4.setBackground(Color.orange);
         panel5.setBackground(Color.green);
 
+        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
+        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
+        JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
+
+        int rightAnswerIndex = game.getCurrentQuestion(player1).getRightAnswerIndex();
+
+        ArrayList<Integer> playerTwoOrder = new ArrayList<>();
+        playerTwoOrder.add(0);
+        playerTwoOrder.add(1);
+        playerTwoOrder.add(2);
+        playerTwoOrder.add(3);
+        Collections.shuffle(playerTwoOrder);
+
+        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(0)));
+        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(1)));
+        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(2)));
+        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(3)));
+
+
 
 
 
@@ -2240,12 +2564,46 @@ public class GUI{
                             break;
                     }
                     if(pressed2) {
-                        game.answerQuestion(player2, answerIndex, betPlayer2);
+                        game.answerQuestion(player2, playerTwoOrder.get(answerIndex), betPlayer2);
                     }
                 }
 
                 if(pressed1 && pressed2){
-                    frame.setVisible(false);
+                    answer2.setBackground(Color.RED);
+                    answer3.setBackground(Color.RED);
+                    answer4.setBackground(Color.RED);
+                    answer5.setBackground(Color.RED);
+
+                    answer6.setBackground(Color.RED);
+                    answer7.setBackground(Color.RED);
+                    answer8.setBackground(Color.RED);
+                    answer1.setBackground(Color.RED);
+
+                    switch(rightAnswerIndex){
+                        case 0:
+                            answer2.setBackground(Color.GREEN);
+                            break;
+                        case 1:
+                            answer3.setBackground(Color.GREEN);
+                            break;
+                        case 2:
+                            answer4.setBackground(Color.GREEN);
+                            break;
+                        case 3:
+                            answer5.setBackground(Color.GREEN);
+                            break;
+                    }
+
+                    if(rightAnswerIndex == playerTwoOrder.get(0)) {
+                        answer6.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(1)) {
+                        answer7.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(2)) {
+                        answer8.setBackground(Color.GREEN);
+                    } else {
+                        answer1.setBackground(Color.GREEN);
+                    }
+
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                     if(status == FetchNextQuestionStatus.GAME_FINISHED){
                         if(player1.getScore()>player2.getScore()){
@@ -2273,7 +2631,14 @@ public class GUI{
                         player1 = new GamePlayer();
                         player2 = new GamePlayer();
                     }else {
-                        checktheTypeOfRound(game, false);
+                        new CountDown(1) {
+                            @Override
+                            public void onFinish() {
+                                frame.setVisible(false);
+                                checktheTypeOfRound(game, false);
+                            }
+                        };
+
                     }
                 }
 
@@ -2289,25 +2654,18 @@ public class GUI{
 
         frame.addKeyListener(myListener);
 
-        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+
         answer2.addKeyListener(myListener);
-        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
         answer3.addKeyListener(myListener);
-        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
         answer4.addKeyListener(myListener);
-        JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer5.addKeyListener(myListener);
 
 
-        game.getCurrentQuestion(player1).shuffleAnswers();
 
-        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+
         answer6.addKeyListener(myListener);
-        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
         answer7.addKeyListener(myListener);
-        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
         answer8.addKeyListener(myListener);
-        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         answer1.addKeyListener(myListener);
 
 

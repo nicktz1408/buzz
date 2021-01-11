@@ -41,6 +41,32 @@ abstract class CountDown extends JPanel {
     }
 
     /**
+     * Timer with custom time delay.
+     * @param sec time delay
+     */
+    public CountDown(int sec){
+        this.second = sec;
+        timer = new Timer(1, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                milliSecond -= 1;
+                if (second>-1) {
+                    if(milliSecond==0) {
+                        milliSecond = 999;
+                        second--;
+                    }
+                } else {
+                    ((Timer) (e.getSource())).stop();
+                    onFinish();
+                }
+            }
+        });
+        timer.setInitialDelay(0);
+        timer.start();
+    }
+
+
+    /**
      * When a button with answer is clicked then the clock stop
      */
     public void buttonClicked(){

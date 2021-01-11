@@ -27,7 +27,10 @@ public class Question {
         this.setQuestionText(builder.questionText);
         this.setAnswersList(builder.answersList);
         this.setRightAnswerIndex(builder.rightAnswerIndex);
-        this.shuffleAnswers();
+
+        if(this.answersList.size() > 0) {
+            this.shuffleAnswers();
+        }
     }
 
     /**

@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
 
 
 /**
@@ -1936,6 +1935,7 @@ public class GUI{
         JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
         JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         int player1Index = game.getCurrentQuestion(player1).getRightAnswerIndex();
+        game.getCurrentQuestion(player1).shuffleAnswers();
 
         JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
         JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
@@ -1954,7 +1954,6 @@ public class GUI{
 
             @Override
             public void keyPressed(KeyEvent e) {
-
                 if(!pressed1) {
                     switch (e.getKeyChar()) {
                         case 'q':
@@ -2102,9 +2101,6 @@ public class GUI{
         answer3.addKeyListener(myListener);
         answer4.addKeyListener(myListener);
         answer5.addKeyListener(myListener);
-
-
-
 
 
 

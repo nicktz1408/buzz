@@ -753,8 +753,14 @@ public class GUI{
                         player1 = new GamePlayer();
                         player2 = new GamePlayer();
                     }else {
-                        frame.setVisible(false);
-                        checktheTypeOfRound(game, false);
+                        new CountDown(1) {
+                            @Override
+                            public void onFinish() {
+                                frame.setVisible(false);
+                                checktheTypeOfRound(game, false);
+                            }
+                        };
+
                     }
                 }
             }
@@ -1825,18 +1831,23 @@ public class GUI{
                 FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
 
                 if(status == FetchNextQuestionStatus.GAME_FINISHED){
-                    frame.setVisible(false);
-                    JOptionPane.showMessageDialog(new JFrame(),
-                            "Τελείωσες το παιχνίδι με σκορ "+player1.getScore(),"Μπράβο!",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    new CountDown(1) {
+                        @Override
+                        public void onFinish() {
+                            frame.setVisible(false);
+                            JOptionPane.showMessageDialog(new JFrame(),
+                                    "Τελείωσες το παιχνίδι με σκορ "+player1.getScore(),"Μπράβο!",
+                                    JOptionPane.INFORMATION_MESSAGE);
 
-                    try {
-                        user1.newDataAlone(user1.getName(), (int)player1.getScore());
-                        player1 = new GamePlayer();
-                        player2 = new GamePlayer();
-                    } catch (IOException | ClassNotFoundException ioException) {
-                        ioException.printStackTrace();
-                    }
+                            try {
+                                user1.newDataAlone(user1.getName(), (int)player1.getScore());
+                                player1 = new GamePlayer();
+                                player2 = new GamePlayer();
+                            } catch (IOException | ClassNotFoundException ioException) {
+                                ioException.printStackTrace();
+                            }
+                        }
+                    };
                 }else {
                     new CountDown(1) {
                         @Override
@@ -2057,31 +2068,37 @@ public class GUI{
 
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                     if(status == FetchNextQuestionStatus.GAME_FINISHED){
-                        frame.setVisible(false);
-                        if(player1.getScore()>player2.getScore()){
-                            JOptionPane.showMessageDialog(new JFrame(),
-                                    "Σκόρ "+user1.getName()+": "+player1.getScore()+"\n"+"Σκορ "+user2.getName()+": "+player2.getScore()+"\n"+"Νικητής ο παίκτης "+user1.getName()+"!","Μπράβο!",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                            try {
-                                user1.newDataWithTwoPlayers(user1.getName(), true);
-                                user2.newDataWithTwoPlayers(user2.getName(), false);
-                            } catch (IOException ioException) {
-                                ioException.printStackTrace();
-                            }
+                        new CountDown(1) {
+                            @Override
+                            public void onFinish() {
+                                frame.setVisible(false);
+                                if(player1.getScore()>player2.getScore()){
+                                    JOptionPane.showMessageDialog(new JFrame(),
+                                            "Σκόρ "+user1.getName()+": "+player1.getScore()+"\n"+"Σκορ "+user2.getName()+": "+player2.getScore()+"\n"+"Νικητής ο παίκτης "+user1.getName()+"!","Μπράβο!",
+                                            JOptionPane.INFORMATION_MESSAGE);
+                                    try {
+                                        user1.newDataWithTwoPlayers(user1.getName(), true);
+                                        user2.newDataWithTwoPlayers(user2.getName(), false);
+                                    } catch (IOException ioException) {
+                                        ioException.printStackTrace();
+                                    }
 
-                        }else {
-                            JOptionPane.showMessageDialog(new JFrame(),
-                                    "Σκόρ " + user1.getName() + ": " + player1.getScore() + "\n" + "Σκορ " + user2.getName() + ": " + player2.getScore() + "\n" + "Νικητής ο παίκτης " + user2.getName() + "!", "Μπράβο!",
-                                    JOptionPane.INFORMATION_MESSAGE);
-                            try {
-                                user1.newDataWithTwoPlayers(user1.getName(), false);
-                                user2.newDataWithTwoPlayers(user2.getName(), true);
-                            } catch (IOException ioException) {
-                                ioException.printStackTrace();
+                                }else {
+                                    JOptionPane.showMessageDialog(new JFrame(),
+                                            "Σκόρ " + user1.getName() + ": " + player1.getScore() + "\n" + "Σκορ " + user2.getName() + ": " + player2.getScore() + "\n" + "Νικητής ο παίκτης " + user2.getName() + "!", "Μπράβο!",
+                                            JOptionPane.INFORMATION_MESSAGE);
+                                    try {
+                                        user1.newDataWithTwoPlayers(user1.getName(), false);
+                                        user2.newDataWithTwoPlayers(user2.getName(), true);
+                                    } catch (IOException ioException) {
+                                        ioException.printStackTrace();
+                                    }
+                                }
+                                player1 = new GamePlayer();
+                                player2 = new GamePlayer();
                             }
-                        }
-                        player1 = new GamePlayer();
-                        player2 = new GamePlayer();
+                        };
+
                     }else {
                         new CountDown(1) {
                             @Override

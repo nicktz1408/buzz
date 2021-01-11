@@ -317,13 +317,10 @@ public class GUI{
         panel5.setBackground(Color.green);
 
         JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
-        answer2.setOpaque(true);
         JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
-        answer3.setOpaque(true);
         JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
-        answer4.setOpaque(true);
         JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
-        answer5.setOpaque(true);
+
         int rightAnswerIndex = game.getCurrentQuestion(player1).getRightAnswerIndex();
 
         ArrayList<Integer> playerTwoOrder = new ArrayList<>();
@@ -334,13 +331,9 @@ public class GUI{
         Collections.shuffle(playerTwoOrder);
 
         JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(0)));
-        answer6.setOpaque(true);
         JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(1)));
-        answer7.setOpaque(true);
         JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(2)));
-        answer8.setOpaque(true);
         answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(3)));
-        answer1.setOpaque(true);
 
         KeyListener myListener = new KeyListener() {
             int answerIndex = -1;
@@ -621,14 +614,19 @@ public class GUI{
         JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
         JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
 
-        int player1Index = game.getCurrentQuestion(player1).getRightAnswerIndex();
-        //game.getCurrentQuestion(player1).shuffleAnswers();
-        int player2Index = game.getCurrentQuestion(player2).getRightAnswerIndex();
+        int rightAnswerIndex = game.getCurrentQuestion(player1).getRightAnswerIndex();
 
-        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
-        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
-        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
-        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
+        ArrayList<Integer> playerTwoOrder = new ArrayList<>();
+        playerTwoOrder.add(0);
+        playerTwoOrder.add(1);
+        playerTwoOrder.add(2);
+        playerTwoOrder.add(3);
+        Collections.shuffle(playerTwoOrder);
+
+        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(0)));
+        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(1)));
+        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(2)));
+        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(3)));
 
 
         KeyListener myListener = new KeyListener() {
@@ -686,12 +684,11 @@ public class GUI{
                             break;
                     }
                     if(pressed2) {
-                        game.answerQuestion(player2, answerIndex);
+                        game.answerQuestion(player2, playerTwoOrder.get(answerIndex));
                     }
                 }
 
                 if(pressed1 && pressed2){
-
                     answer2.setBackground(Color.RED);
                     answer3.setBackground(Color.RED);
                     answer4.setBackground(Color.RED);
@@ -702,7 +699,7 @@ public class GUI{
                     answer8.setBackground(Color.RED);
                     answer1.setBackground(Color.RED);
 
-                    switch(player1Index){
+                    switch(rightAnswerIndex){
                         case 0:
                             answer2.setBackground(Color.GREEN);
                             break;
@@ -717,20 +714,16 @@ public class GUI{
                             break;
                     }
 
-                    switch(player2Index){
-                        case 0:
-                            answer6.setBackground(Color.GREEN);
-                            break;
-                        case 1:
-                            answer7.setBackground(Color.GREEN);
-                            break;
-                        case 2:
-                            answer8.setBackground(Color.GREEN);
-                            break;
-                        case 3:
-                            answer1.setBackground(Color.GREEN);
-                            break;
+                    if(rightAnswerIndex == playerTwoOrder.get(0)) {
+                        answer6.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(1)) {
+                        answer7.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(2)) {
+                        answer8.setBackground(Color.GREEN);
+                    } else {
+                        answer1.setBackground(Color.GREEN);
                     }
+
                     frame.setVisible(false);
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                     if(status == FetchNextQuestionStatus.GAME_FINISHED){
@@ -899,15 +892,19 @@ public class GUI{
         JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
         JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
 
-        int player1Index = game.getCurrentQuestion(player1).getRightAnswerIndex();
-        //game.getCurrentQuestion(player1).shuffleAnswers();
-        int player2Index = game.getCurrentQuestion(player2).getRightAnswerIndex();
+        int rightAnswerIndex = game.getCurrentQuestion(player1).getRightAnswerIndex();
 
+        ArrayList<Integer> playerTwoOrder = new ArrayList<>();
+        playerTwoOrder.add(0);
+        playerTwoOrder.add(1);
+        playerTwoOrder.add(2);
+        playerTwoOrder.add(3);
+        Collections.shuffle(playerTwoOrder);
 
-        JButton answer6 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(0));
-        JButton answer7 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(1));
-        JButton answer8 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(2));
-        answer1 = new JButton(game.getCurrentQuestion(player2).getAnswerAtIndex(3));
+        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(0)));
+        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(1)));
+        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(2)));
+        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(3)));
 
 
 
@@ -966,7 +963,7 @@ public class GUI{
                             break;
                     }
                     if(pressed2) {
-                        game.answerQuestion(player2, answerIndex);
+                        game.answerQuestion(player2, playerTwoOrder.get(answerIndex));
                     }
                 }
 
@@ -981,7 +978,7 @@ public class GUI{
                     answer8.setBackground(Color.RED);
                     answer1.setBackground(Color.RED);
 
-                    switch(player1Index){
+                    switch(rightAnswerIndex){
                         case 0:
                             answer2.setBackground(Color.GREEN);
                             break;
@@ -996,19 +993,14 @@ public class GUI{
                             break;
                     }
 
-                    switch(player2Index){
-                        case 0:
-                            answer6.setBackground(Color.GREEN);
-                            break;
-                        case 1:
-                            answer7.setBackground(Color.GREEN);
-                            break;
-                        case 2:
-                            answer8.setBackground(Color.GREEN);
-                            break;
-                        case 3:
-                            answer1.setBackground(Color.GREEN);
-                            break;
+                    if(rightAnswerIndex == playerTwoOrder.get(0)) {
+                        answer6.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(1)) {
+                        answer7.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(2)) {
+                        answer8.setBackground(Color.GREEN);
+                    } else {
+                        answer1.setBackground(Color.GREEN);
                     }
 
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
@@ -2480,15 +2472,19 @@ public class GUI{
         JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
         JButton answer5 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
 
-        int player1Index = game.getCurrentQuestion(player1).getRightAnswerIndex();
-        //game.getCurrentQuestion(player1).shuffleAnswers();
-        int player2Index = game.getCurrentQuestion(player2).getRightAnswerIndex();
+        int rightAnswerIndex = game.getCurrentQuestion(player1).getRightAnswerIndex();
 
+        ArrayList<Integer> playerTwoOrder = new ArrayList<>();
+        playerTwoOrder.add(0);
+        playerTwoOrder.add(1);
+        playerTwoOrder.add(2);
+        playerTwoOrder.add(3);
+        Collections.shuffle(playerTwoOrder);
 
-        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
-        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
-        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
-        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
+        JButton answer6 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(0)));
+        JButton answer7 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(1)));
+        JButton answer8 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(2)));
+        answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(playerTwoOrder.get(3)));
 
 
 
@@ -2551,7 +2547,7 @@ public class GUI{
                             break;
                     }
                     if(pressed2) {
-                        game.answerQuestion(player2, answerIndex, betPlayer2);
+                        game.answerQuestion(player2, playerTwoOrder.get(answerIndex), betPlayer2);
                     }
                 }
 
@@ -2566,7 +2562,7 @@ public class GUI{
                     answer8.setBackground(Color.RED);
                     answer1.setBackground(Color.RED);
 
-                    switch(player1Index){
+                    switch(rightAnswerIndex){
                         case 0:
                             answer2.setBackground(Color.GREEN);
                             break;
@@ -2581,19 +2577,14 @@ public class GUI{
                             break;
                     }
 
-                    switch(player2Index){
-                        case 0:
-                            answer6.setBackground(Color.GREEN);
-                            break;
-                        case 1:
-                            answer7.setBackground(Color.GREEN);
-                            break;
-                        case 2:
-                            answer8.setBackground(Color.GREEN);
-                            break;
-                        case 3:
-                            answer1.setBackground(Color.GREEN);
-                            break;
+                    if(rightAnswerIndex == playerTwoOrder.get(0)) {
+                        answer6.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(1)) {
+                        answer7.setBackground(Color.GREEN);
+                    } else if(rightAnswerIndex == playerTwoOrder.get(2)) {
+                        answer8.setBackground(Color.GREEN);
+                    } else {
+                        answer1.setBackground(Color.GREEN);
                     }
 
                     FetchNextQuestionStatus status = game.fetchNextQuestion(player1);

@@ -105,7 +105,6 @@ public class Question {
     }
 
     /**
-     *
      * @return the index of the right answer
      */
     public int getRightAnswerIndex() {
@@ -157,10 +156,10 @@ public class Question {
      *
      * @return a new Builder object by initializing it
      */
-    public static Builder builder() {
+    public static Builder<?> builder() {
         return new Builder() {
             @Override
-            public Builder getThis() {
+            public Builder<?> getThis() {
                 return this;
             }
         };

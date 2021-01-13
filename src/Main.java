@@ -7,6 +7,6 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException {
         Dimension dim = new Dimension(650, 500);
-        new GUI(dim); // πρέπει να περάσω το game σαν παράμετρο στο gui
+        new GUI(dim);
     }
 }

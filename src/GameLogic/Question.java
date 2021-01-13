@@ -99,8 +99,8 @@ public class Question {
      * @param answersList the answerList to be set
      */
     public void setAnswersList(ArrayList<String> answersList) {
-        for(int i = 0; i < answersList.size(); i++) {
-            this.addAnswer(answersList.get(i));
+        for(String currAnswer : answersList) {
+            this.addAnswer(currAnswer);
         }
     }
 
@@ -157,10 +157,10 @@ public class Question {
      *
      * @return a new Builder object by initializing it
      */
-    public static Builder builder() {
+    public static Builder<?> builder() {
         return new Builder() {
             @Override
-            public Builder getThis() {
+            public Builder<?> getThis() {
                 return this;
             }
         };
@@ -178,7 +178,7 @@ public class Question {
 
         /**
          * To be used due to limitations of a Generic (can't reference the this keyword)
-         * @return a refernce to itself (the this keyword)
+         * @return a reference to itself (the this keyword)
          */
         public abstract T getThis();
 

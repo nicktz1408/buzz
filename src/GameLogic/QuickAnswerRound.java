@@ -35,7 +35,7 @@ public class QuickAnswerRound extends FixedQuestionsRound{
     }
 
     /**
-     * Utility to calculate the score bestowed to/subtracted from the given plater
+     * Utility to calculate the score bestowed to/subtracted from the given player
      * @return the value of the points to be bestowed/subtracted
      */
     public double calculateScore(){

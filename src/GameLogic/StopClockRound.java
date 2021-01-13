@@ -33,7 +33,7 @@ public class StopClockRound extends FixedQuestionsRound{
     }
 
     /**
-     * Utility to calculate the score bestowed to the given plater
+     * Utility to calculate the score bestowed to the given player
      * @return the value of the points to be bestowed
      */
     public double calculateScore(int milli){

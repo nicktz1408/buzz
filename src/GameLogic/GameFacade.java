@@ -37,7 +37,7 @@ public class GameFacade {
      * Delegates the fetching the next Question of a given Player
      * @param player the given player
      * @return a status that indicates whether the game has proceeded to a new question, to a new round
-     * (if the previous round has finished) or wheter it has finished
+     * (if the previous round has finished) or whether it has finished
      */
     public FetchNextQuestionStatus fetchNextQuestion(GamePlayer player) {
         if(!this.getCurrentRound().fetchNextQuestion(player)) { // ran out of question for this round

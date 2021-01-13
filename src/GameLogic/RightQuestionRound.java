@@ -28,7 +28,7 @@ public class RightQuestionRound extends FixedQuestionsRound {
     }
 
     /**
-     * Utility to calculate the score bestowed to the given plater
+     * Utility to calculate the score bestowed to the given player
      * @return the value of the points to be bestowed
      */
     int calculateScore() {

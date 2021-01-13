@@ -126,7 +126,7 @@ public class ThermometerRound implements RoundInterface{
     }
 
     /**
-     * Utility function to calculate the score bestowed to the given plater
+     * Utility function to calculate the score bestowed to the given player
      * @return the value of the points to be bestowed
      */
     private int calculateScore() {

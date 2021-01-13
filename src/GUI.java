@@ -1,11 +1,10 @@
 import GameLogic.*;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import java.applet.Applet;
-import java.applet.AudioClip;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
@@ -49,8 +48,18 @@ public class GUI{
         signInButton = new JButton("Εγραφή νέου χρήστη");
         statisticsButton = new JButton("Στατιστικά");
         infoOfGame = new JButton("Σχετικά");
+        String imgName = "/Images/BuzzLogo.jpeg";
+        URL imageURL = getClass().getResource(imgName);
+        if (imageURL != null) {
+            icon = new ImageIcon(imageURL);
+            window.setIconImage(icon.getImage());
 
-        JLabel label = new JLabel("Μενού", SwingConstants.CENTER);
+        }
+        Image newImg = icon.getImage().getScaledInstance(120, 120,  java.awt.Image.SCALE_SMOOTH);
+        icon = new ImageIcon(newImg);
+        JLabel label = new JLabel(icon, SwingConstants.CENTER);
+
+
         window.add(label);
         window.add(playButton);
         window.add(signInButton);
@@ -64,22 +73,34 @@ public class GUI{
 
         playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                URL url = getClass().getResource("ButtonClick.wav");
-                AudioClip clip = Applet.newAudioClip(url);
-                clip.play();
+                Clip clip;
+                try {
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(GUI.class.getResource("ButtonClick.wav"));
+                    clip = AudioSystem.getClip();
+                    clip.open(audioIn);
+                    clip.start();
+                } catch (LineUnavailableException | IOException | UnsupportedAudioFileException lineUnavailableException) {
+                    lineUnavailableException.printStackTrace();
+                }
+
                 Dimension dim = new Dimension(200, 150);
                 player1 = new GamePlayer();
                 player2 = new GamePlayer();
                 startPlaying(dim);
-
             }
         });
 
         signInButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                URL url = getClass().getResource("ButtonClick.wav");
-                AudioClip clip = Applet.newAudioClip(url);
-                clip.play();
+                Clip clip;
+                try {
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(GUI.class.getResource("ButtonClick.wav"));
+                    clip = AudioSystem.getClip();
+                    clip.open(audioIn);
+                    clip.start();
+                } catch (LineUnavailableException | IOException | UnsupportedAudioFileException lineUnavailableException) {
+                    lineUnavailableException.printStackTrace();
+                }
                 Dimension dim = new Dimension(100, 50);
                 afterCheckSignIn(dim);
 
@@ -89,9 +110,15 @@ public class GUI{
         statisticsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                URL url = getClass().getResource("ButtonClick.wav");
-                AudioClip clip = Applet.newAudioClip(url);
-                clip.play();
+                Clip clip;
+                try {
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(GUI.class.getResource("ButtonClick.wav"));
+                    clip = AudioSystem.getClip();
+                    clip.open(audioIn);
+                    clip.start();
+                } catch (LineUnavailableException | IOException | UnsupportedAudioFileException lineUnavailableException) {
+                    lineUnavailableException.printStackTrace();
+                }
                 Dimension dim = new Dimension(650, 500);
                 try {
                     statisticsGui(dim);
@@ -105,9 +132,15 @@ public class GUI{
         infoOfGame.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                URL url = getClass().getResource("ButtonClick.wav");
-                AudioClip clip = Applet.newAudioClip(url);
-                clip.play();
+                Clip clip;
+                try {
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(GUI.class.getResource("ButtonClick.wav"));
+                    clip = AudioSystem.getClip();
+                    clip.open(audioIn);
+                    clip.start();
+                } catch (LineUnavailableException | IOException | UnsupportedAudioFileException lineUnavailableException) {
+                    lineUnavailableException.printStackTrace();
+                }
                 Dimension dim = new Dimension(650, 500);
                 info(dim);
             }
@@ -156,7 +189,10 @@ public class GUI{
             public void mouseClicked(MouseEvent e) {
                 try {
                     Desktop.getDesktop().browse(new URI("https://github.com/auth-csd-oop-2020/buzzquizworld-thelamogia"));
-                } catch (URISyntaxException | IOException ex) {
+                } catch (URISyntaxException uriSyntaxException) {
+                    uriSyntaxException.printStackTrace();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
                 }
             }
         });
@@ -168,7 +204,7 @@ public class GUI{
      * @param game reference to our GameFacade
      * @param solo true if 1 player, false if 2 players
      */
-    public void checktheTypeOfRound(GameFacade game, boolean solo){
+    public void checktheTypeOfRound(GameFacade game, boolean solo) {
         Dimension dim = new Dimension(800, 500);
         switch (game.getCurrentRound().getRoundName()){
             case 1:
@@ -494,7 +530,7 @@ public class GUI{
         answer5.addKeyListener(myListener);
 
 
-        //game.getCurrentQuestion(player1).shuffleAnswers();
+
         answer6.addKeyListener(myListener);
         answer7.addKeyListener(myListener);
         answer8.addKeyListener(myListener);
@@ -1225,6 +1261,9 @@ public class GUI{
                         answer4.setBackground(Color.GREEN);
                         break;
                 }
+
+                playSound(answerIndex == game.getCurrentQuestion(player1).getRightAnswerIndex());
+
                 game.answerQuestion(player1, answerIndex, betPlayer1);
                 FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                 if(status == FetchNextQuestionStatus.GAME_FINISHED){
@@ -1301,10 +1340,41 @@ public class GUI{
         panel1.add(label1);
         panel1.add(label5);
         panel1.add(label2);
+
+
+
+
+        JButton answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
+
+        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
+
+        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
+
+        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
         CountDown clock = new CountDown() {
             @Override
             public void onFinish() {
-                frame.setVisible(false);
+                answer1.setBackground(Color.RED);
+                answer2.setBackground(Color.RED);
+                answer3.setBackground(Color.RED);
+                answer4.setBackground(Color.RED);
+
+                switch(game.getCurrentQuestion(player1).getRightAnswerIndex()){
+                    case 0:
+                        answer1.setBackground(Color.GREEN);
+                        break;
+                    case 1:
+                        answer2.setBackground(Color.GREEN);
+                        break;
+                    case 2:
+                        answer3.setBackground(Color.GREEN);
+                        break;
+                    case 3:
+                        answer4.setBackground(Color.GREEN);
+                        break;
+                }
+
+                playSound(false);
                 FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
                 if (status == FetchNextQuestionStatus.GAME_FINISHED) {
                     frame.setVisible(false);
@@ -1322,7 +1392,14 @@ public class GUI{
                     player1 = new GamePlayer();
                     player2 = new GamePlayer();
                 } else {
-                    checktheTypeOfRound(game, true);
+                    new CountDown(1) {
+                        @Override
+                        public void onFinish() {
+                            frame.setVisible(false);
+                            checktheTypeOfRound(game, true);
+                        }
+                    };
+
                 }
             }};
         clock.setBorder(compound);
@@ -1350,13 +1427,7 @@ public class GUI{
 
 
         JPanel panel3 = new JPanel();
-        JButton answer1 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(0));
 
-        JButton answer2 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(1));
-
-        JButton answer3 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(2));
-
-        JButton answer4 = new JButton(game.getCurrentQuestion(player1).getAnswerAtIndex(3));
 
         panel3.add(answer1);
         panel3.add(answer2);
@@ -1408,6 +1479,7 @@ public class GUI{
                         answer4.setBackground(Color.GREEN);
                         break;
                 }
+                playSound(answerIndex == game.getCurrentQuestion(player1).getRightAnswerIndex());
 
                 int remaining = clock.getRemainingTime();
                 game.answerQuestion(player1, answerIndex, remaining);
@@ -1510,9 +1582,15 @@ public class GUI{
 
         show.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                URL url = getClass().getResource("ButtonClick.wav");
-                AudioClip clip = Applet.newAudioClip(url);
-                clip.play();
+                Clip clip;
+                try {
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(GUI.class.getResource("ButtonClick.wav"));
+                    clip = AudioSystem.getClip();
+                    clip.open(audioIn);
+                    clip.start();
+                } catch (LineUnavailableException | IOException | UnsupportedAudioFileException lineUnavailableException) {
+                    lineUnavailableException.printStackTrace();
+                }
                 String textFieldValue = (String) cb.getItemAt(cb.getSelectedIndex());
                 Player player = new Player(textFieldValue);
                 try {
@@ -1572,9 +1650,15 @@ public class GUI{
 
         play.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                URL url = getClass().getResource("ButtonClick.wav");
-                AudioClip clip = Applet.newAudioClip(url);
-                clip.play();
+                Clip clip;
+                try {
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(GUI.class.getResource("ButtonClick.wav"));
+                    clip = AudioSystem.getClip();
+                    clip.open(audioIn);
+                    clip.start();
+                } catch (LineUnavailableException | IOException | UnsupportedAudioFileException lineUnavailableException) {
+                    lineUnavailableException.printStackTrace();
+                }
                 if(r1.isSelected()){
                     GameFacade game = new GameFacadeDirector().buildSoloGame();
                     JPanel panel2 = new JPanel();
@@ -1591,9 +1675,15 @@ public class GUI{
                         window.setVisible(true);
                         run.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
-                                URL url = getClass().getResource("ButtonClick.wav");
-                                AudioClip clip = Applet.newAudioClip(url);
-                                clip.play();
+                                Clip clip;
+                                try {
+                                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(GUI.class.getResource("ButtonClick.wav"));
+                                    clip = AudioSystem.getClip();
+                                    clip.open(audioIn);
+                                    clip.start();
+                                } catch (LineUnavailableException | IOException | UnsupportedAudioFileException lineUnavailableException) {
+                                    lineUnavailableException.printStackTrace();
+                                }
                                 window.setVisible(false);
                                 String name = (String) cb.getItemAt(cb.getSelectedIndex());
                                 user1.setName(name);
@@ -1629,9 +1719,15 @@ public class GUI{
                         window.setVisible(true);
                         run.addActionListener(new ActionListener() {
                             public void actionPerformed(ActionEvent e) {
-                                URL url = getClass().getResource("ButtonClick.wav");
-                                AudioClip clip = Applet.newAudioClip(url);
-                                clip.play();
+                                Clip clip;
+                                try {
+                                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(GUI.class.getResource("ButtonClick.wav"));
+                                    clip = AudioSystem.getClip();
+                                    clip.open(audioIn);
+                                    clip.start();
+                                } catch (LineUnavailableException | IOException | UnsupportedAudioFileException lineUnavailableException) {
+                                    lineUnavailableException.printStackTrace();
+                                }
                                 String name1 = (String) cb.getItemAt(cb.getSelectedIndex());
                                 user1.setName(name1);
                                 String name2 = (String) cb2.getItemAt(cb2.getSelectedIndex());
@@ -1685,9 +1781,15 @@ public class GUI{
 
         SUBMIT.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                URL url = getClass().getResource("ButtonClick.wav");
-                AudioClip clip = Applet.newAudioClip(url);
-                clip.play();
+                Clip clip;
+                try {
+                    AudioInputStream audioIn = AudioSystem.getAudioInputStream(GUI.class.getResource("ButtonClick.wav"));
+                    clip = AudioSystem.getClip();
+                    clip.open(audioIn);
+                    clip.start();
+                } catch (LineUnavailableException | IOException | UnsupportedAudioFileException lineUnavailableException) {
+                    lineUnavailableException.printStackTrace();
+                }
                 String textFieldValue = text1.getText();
                 Player player = new Player(textFieldValue);
                 try {
@@ -1716,6 +1818,7 @@ public class GUI{
      */
     public void rightQuestionRound(Dimension dim, GameFacade game){
         JFrame frame = new JFrame("Buzz Game");
+
         frame.setResizable(true);
         frame.setSize(dim);
         frame.setMinimumSize(dim);
@@ -1826,6 +1929,10 @@ public class GUI{
                         answer4.setBackground(Color.GREEN);
                         break;
                 }
+
+                playSound(answerIndex == game.getCurrentQuestion(player1).getRightAnswerIndex());
+
+
 
                 game.answerQuestion(player1, answerIndex);
                 FetchNextQuestionStatus status = game.fetchNextQuestion(player1);
@@ -2694,5 +2801,25 @@ public class GUI{
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
+    }
+
+    /**
+     * In this method we start a wav file with sound when a player answers a question to understand if he/she replies correct or wrong
+     * @param isCorrect this variable is true when the player answers correct and false when answers wrong.
+     */
+    private void playSound(boolean isCorrect){
+        String audioFilename = "WrongAnswer.wav";
+        if(isCorrect) {
+            audioFilename = "CorrectAnswer.wav";
+        }
+        Clip clip;
+        try {
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(GUI.class.getResource(audioFilename));
+            clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+        } catch (LineUnavailableException | IOException | UnsupportedAudioFileException lineUnavailableException) {
+            lineUnavailableException.printStackTrace();
+        }
     }
 }

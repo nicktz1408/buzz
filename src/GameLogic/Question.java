@@ -105,7 +105,6 @@ public class Question {
     }
 
     /**
-     *
      * @return the index of the right answer
      */
     public int getRightAnswerIndex() {
